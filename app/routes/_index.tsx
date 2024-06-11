@@ -4,8 +4,8 @@ import tailwind from "./styles/tailwind.css?url";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "PetrichorMUD" },
+    { name: "description", content: "A modern take on a retro-style MUD" },
   ];
 };
 
