@@ -66,7 +66,7 @@ type NavigationProps = {
 };
 
 export function Navigation({ pid }: NavigationProps) {
-  const playerAuthenticated = pid && pid > 0;
+  const playerAuthenticated = Boolean(pid && pid > 0);
 
   return (
     <NavigationMenu>
@@ -120,37 +120,47 @@ export function Navigation({ pid }: NavigationProps) {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        {playerAuthenticated ? (
-          <></>
-        ) : (
-          <>
-            <ClientOnly
-              fallback={
-                <button type="button" className={navigationMenuTriggerStyle()}>
-                  Log In
-                </button>
-              }
-            >
-              {() => <LoginDialog />}
-            </ClientOnly>
-            <NavigationMenuItem>
-              <button type="button" className={navigationMenuTriggerStyle()}>
-                Create Account
+        <ClientOnly
+          fallback={
+            playerAuthenticated ? null : (
+              <button
+                id="fallback-login-button"
+                type="button"
+                className={navigationMenuTriggerStyle()}
+              >
+                Log In
               </button>
-            </NavigationMenuItem>
-          </>
+            )
+          }
+        >
+          {() => <LoginDialog pid={pid} />}
+        </ClientOnly>
+        {playerAuthenticated ? null : (
+          <NavigationMenuItem>
+            <button type="button" className={navigationMenuTriggerStyle()}>
+              Create Account
+            </button>
+          </NavigationMenuItem>
         )}
       </NavigationMenuList>
     </NavigationMenu>
   );
 }
 
-function LoginDialog() {
+type LoginDialogProps = {
+  pid?: number;
+};
+
+function LoginDialog({ pid }: LoginDialogProps) {
+  const authenticated = Boolean(pid && pid > 0);
+
   return (
     <Dialog>
-      <DialogTrigger className={navigationMenuTriggerStyle()}>
-        Log In
-      </DialogTrigger>
+      {authenticated ? null : (
+        <DialogTrigger className={navigationMenuTriggerStyle()}>
+          Log In
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px] p-6">
         <DialogHeader>
           <DialogTitle>Log In</DialogTitle>

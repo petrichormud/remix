@@ -3,6 +3,7 @@ import { Input } from "~/components/ui/input";
 import { useFetcher } from "@remix-run/react";
 
 export function LoginForm() {
+  // TODO: Make this a shared "auth" fetcher
   const fetcher = useFetcher({ key: "login" });
 
   return (
