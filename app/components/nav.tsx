@@ -10,6 +10,19 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "~/components/ui/dialog";
+import { Label } from "~/components/ui/label";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { ClientOnly } from "remix-utils/client-only";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -102,11 +115,15 @@ export function Navigation() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <NavigationMenuItem>
-          <button type="button" className={navigationMenuTriggerStyle()}>
-            Log In
-          </button>
-        </NavigationMenuItem>
+        <ClientOnly
+          fallback={
+            <button type="button" className={navigationMenuTriggerStyle()}>
+              Log In
+            </button>
+          }
+        >
+          {() => <LoginDialog />}
+        </ClientOnly>
         <NavigationMenuItem>
           <button type="button" className={navigationMenuTriggerStyle()}>
             Create Account
@@ -114,6 +131,45 @@ export function Navigation() {
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
+  );
+}
+
+function LoginDialog(): React.ReactNode {
+  return (
+    <Dialog>
+      <DialogTrigger className={navigationMenuTriggerStyle()}>
+        Log In
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] p-6">
+        <DialogHeader>
+          <DialogTitle>Log In</DialogTitle>
+          <DialogDescription>
+            Please enter your username and password to log in
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col gap-4">
+          <div>
+            <Label htmlFor="username" className="text-right">
+              Username
+            </Label>
+            <Input id="login-username" />
+          </div>
+          <div>
+            <Label htmlFor="password" className="text-right">
+              Password
+            </Label>
+            <Input id="login-password" type="password" />
+          </div>
+        </div>
+        <DialogFooter className="gap-2">
+          {/* // TODO: Make custom close  */}
+          <Button type="button" variant="outline">
+            Cancel
+          </Button>
+          <Button type="submit">Log In</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
