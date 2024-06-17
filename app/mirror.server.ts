@@ -1,5 +1,5 @@
 import { credentials } from "@grpc/grpc-js";
-import { MirrorClient } from "./proto/mirror_grpc_pb";
+import { MirrorClient } from "~/proto/mirror.grpc-client";
 
 export const client = new MirrorClient(
   "localhost:8009",

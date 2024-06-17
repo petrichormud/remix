@@ -13,4 +13,7 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  resolve: {
+    preserveSymlinks: true,
+  },
 });
