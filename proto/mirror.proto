@@ -1,0 +1,27 @@
+syntax = "proto3";
+package mirror;
+option go_package = "/proto";
+
+service Mirror {
+  rpc Register (RegisterRequest) returns (RegisterReply);
+  rpc Login (LoginRequest) returns (LoginReply);
+}
+
+message RegisterRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message RegisterReply {
+  int64 id = 1;
+}
+
+message LoginRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message LoginReply {
+  bool verified = 1;
+  int64 id = 2;
+}
