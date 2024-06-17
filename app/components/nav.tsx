@@ -19,10 +19,9 @@ import {
   DialogDescription,
   DialogFooter,
 } from "~/components/ui/dialog";
-import { Label } from "~/components/ui/label";
 import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
 import { ClientOnly } from "remix-utils/client-only";
+import { LoginForm } from "~/components/login";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -62,7 +61,13 @@ const components: { title: string; href: string; description: string }[] = [
   },
 ];
 
-export function Navigation() {
+type NavigationProps = {
+  pid?: number;
+};
+
+export function Navigation({ pid }: NavigationProps) {
+  const playerAuthenticated = pid && pid > 0;
+
   return (
     <NavigationMenu>
       <NavigationMenuList className="gap-[0.5]">
@@ -115,20 +120,26 @@ export function Navigation() {
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
-        <ClientOnly
-          fallback={
-            <button type="button" className={navigationMenuTriggerStyle()}>
-              Log In
-            </button>
-          }
-        >
-          {() => <LoginDialog />}
-        </ClientOnly>
-        <NavigationMenuItem>
-          <button type="button" className={navigationMenuTriggerStyle()}>
-            Create Account
-          </button>
-        </NavigationMenuItem>
+        {playerAuthenticated ? (
+          <></>
+        ) : (
+          <>
+            <ClientOnly
+              fallback={
+                <button type="button" className={navigationMenuTriggerStyle()}>
+                  Log In
+                </button>
+              }
+            >
+              {() => <LoginDialog />}
+            </ClientOnly>
+            <NavigationMenuItem>
+              <button type="button" className={navigationMenuTriggerStyle()}>
+                Create Account
+              </button>
+            </NavigationMenuItem>
+          </>
+        )}
       </NavigationMenuList>
     </NavigationMenu>
   );
@@ -147,26 +158,15 @@ function LoginDialog() {
             Please enter your username and password to log in
           </DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-4">
-          <div>
-            <Label htmlFor="username" className="text-right">
-              Username
-            </Label>
-            <Input id="login-username" />
-          </div>
-          <div>
-            <Label htmlFor="password" className="text-right">
-              Password
-            </Label>
-            <Input id="login-password" type="password" />
-          </div>
-        </div>
+        <LoginForm />
         <DialogFooter className="gap-2">
           {/* // TODO: Make custom close  */}
           <Button type="button" variant="outline">
             Cancel
           </Button>
-          <Button type="submit">Log In</Button>
+          <Button form="login" type="submit">
+            Log In
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

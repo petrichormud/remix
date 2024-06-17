@@ -2,7 +2,7 @@
 	--js_out=import_style=commonjs,binary:./app/proto \
 	--grpc_out=grpc_js:./app/proto \
 	-I ./proto \
-	proto/*.proto
+	./proto/*.proto
 
 protoc \
 	--plugin=protoc-gen-ts=./node_modules/.bin/protoc-gen-ts \
