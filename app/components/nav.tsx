@@ -134,7 +134,7 @@ export function Navigation() {
   );
 }
 
-function LoginDialog(): React.ReactNode {
+function LoginDialog() {
   return (
     <Dialog>
       <DialogTrigger className={navigationMenuTriggerStyle()}>
