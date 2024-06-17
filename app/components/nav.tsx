@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Link } from "@remix-run/react";
 
 import { cn } from "~/lib/utils";
 import {
@@ -53,7 +52,7 @@ const components: { title: string; href: string; description: string }[] = [
 export function Navigation() {
   return (
     <NavigationMenu>
-      <NavigationMenuList>
+      <NavigationMenuList className="gap-[0.5]">
         <NavigationMenuItem>
           <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -104,9 +103,14 @@ export function Navigation() {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link to="/docs" className={navigationMenuTriggerStyle()}>
-            Documentation
-          </Link>
+          <button type="button" className={navigationMenuTriggerStyle()}>
+            Log In
+          </button>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <button type="button" className={navigationMenuTriggerStyle()}>
+            Create Account
+          </button>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
