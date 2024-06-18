@@ -32,6 +32,7 @@ export function RegisterForm({
   useEffect(() => {
     if (fetcher.state === "idle" && fetcher.data?.ok && dialogOpen) {
       setDialogOpen(false);
+      fetcher.submit({}, { action: "/login/fetcher", method: "post" });
     }
   }, [fetcher]);
 

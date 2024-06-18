@@ -1,9 +1,11 @@
 import type {
   MetaFunction,
   LinksFunction,
+  ActionFunctionArgs,
   LoaderFunctionArgs,
 } from "@remix-run/node";
-import { Link } from "@remix-run/react";
+import { redirect } from "@remix-run/node";
+import { Link, Form } from "@remix-run/react";
 
 import {
   Card,
@@ -13,7 +15,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { getSession } from "~/sessions.server";
+import { getSession, commitSession } from "~/sessions.server";
 
 import tailwind from "~/styles/tailwind.css?url";
 
@@ -28,14 +30,22 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwind }];
 };
 
+export async function action({ request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  session.unset("pid");
+  return redirect("/", {
+    headers: {
+      "Set-Cookie": await commitSession(session),
+    },
+  });
+}
+
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  if (session.has("pid")) {
-    const pid = session.get("pid");
-    return { pid };
-  } else {
-    return { pid: 0 };
+  if (!session.has("pid")) {
+    return redirect("/");
   }
+  return null;
 }
 
 export default function Logout() {
@@ -56,7 +66,9 @@ export default function Logout() {
                   Go Back
                 </Button>
               </Link>
-              <Button>Log Out</Button>
+              <Form action="/logout" method="post">
+                <Button>Log Out</Button>
+              </Form>
             </CardFooter>
           </Card>
         </section>

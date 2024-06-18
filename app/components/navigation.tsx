@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ClientOnly } from "remix-utils/client-only";
 import { Link } from "@remix-run/react";
+import { ClientOnly } from "remix-utils/client-only";
 import { LogOut } from "lucide-react";
 
 import { cn } from "~/lib/utils";
@@ -173,15 +173,17 @@ export function Navigation({ pid }: NavigationProps) {
               <DropdownMenuLabel>Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log Out</span>
-                  {isMac ? (
-                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                  ) : (
-                    <DropdownMenuShortcut>⇧^Q</DropdownMenuShortcut>
-                  )}
-                </DropdownMenuItem>
+                <Link to="/logout">
+                  <DropdownMenuItem>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log Out</span>
+                    {isMac ? (
+                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                    ) : (
+                      <DropdownMenuShortcut>⇧^Q</DropdownMenuShortcut>
+                    )}
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
