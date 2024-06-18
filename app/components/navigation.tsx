@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { ClientOnly } from "remix-utils/client-only";
+import { Link } from "@remix-run/react";
+import { LogOut } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 import {
@@ -27,6 +29,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuGroup,
+  DropdownMenuShortcut,
 } from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
 import { LoginForm } from "~/components/login";
@@ -76,6 +80,7 @@ type NavigationProps = {
 
 export function Navigation({ pid }: NavigationProps) {
   const playerAuthenticated = Boolean(pid && pid > 0);
+  const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 
   return (
     <NavigationMenu>
@@ -164,13 +169,20 @@ export function Navigation({ pid }: NavigationProps) {
             <DropdownMenuTrigger className={navigationMenuTriggerStyle()}>
               Account
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="mr-6">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuContent className="w-56 mr-6">
+              <DropdownMenuLabel>Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log Out</span>
+                  {isMac ? (
+                    <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                  ) : (
+                    <DropdownMenuShortcut>⇧^Q</DropdownMenuShortcut>
+                  )}
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : null}

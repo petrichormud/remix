@@ -1,4 +1,3 @@
-import type React from "react";
 import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
 

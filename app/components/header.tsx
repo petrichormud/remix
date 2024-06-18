@@ -6,7 +6,7 @@ type HeaderProps = {
 
 export function Header({ pid }: HeaderProps) {
   return (
-    <header className="flex w-full items-center justify-end py-4 px-6">
+    <header className="flex w-full items-center justify-end py-2 px-6 border-b">
       <Navigation pid={pid} />
     </header>
   );
