@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ClientOnly } from "remix-utils/client-only";
 
 import { cn } from "~/lib/utils";
 import {
@@ -19,8 +20,15 @@ import {
   DialogDescription,
   DialogFooter,
 } from "~/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
-import { ClientOnly } from "remix-utils/client-only";
 import { LoginForm } from "~/components/login";
 import { RegisterForm } from "~/components/register";
 
@@ -151,6 +159,21 @@ export function Navigation({ pid }: NavigationProps) {
         >
           {() => <RegisterDialog pid={pid} />}
         </ClientOnly>
+        {playerAuthenticated ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger className={navigationMenuTriggerStyle()}>
+              Account
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="mr-6">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Billing</DropdownMenuItem>
+              <DropdownMenuItem>Team</DropdownMenuItem>
+              <DropdownMenuItem>Subscription</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : null}
       </NavigationMenuList>
     </NavigationMenu>
   );
@@ -167,12 +190,13 @@ type LoginDialogProps = {
 };
 
 function LoginDialog({ pid }: LoginDialogProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const authenticated = Boolean(pid && pid > 0);
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {authenticated ? null : (
         <DialogTrigger className={navigationMenuTriggerStyle()}>
           Log In
@@ -190,10 +214,17 @@ function LoginDialog({ pid }: LoginDialogProps) {
           setUsername={setUsername}
           password={password}
           setPassword={setPassword}
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
         />
         <DialogFooter className="gap-2">
-          {/* // TODO: Make custom close  */}
-          <Button type="button" variant="outline">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              setDialogOpen(false);
+            }}
+          >
             Cancel
           </Button>
           <Button
@@ -225,13 +256,14 @@ function registerFormDisabled(
 }
 
 function RegisterDialog({ pid }: LoginDialogProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const authenticated = Boolean(pid && pid > 0);
 
   return (
-    <Dialog>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {authenticated ? null : (
         <DialogTrigger className={navigationMenuTriggerStyle()}>
           Create Account
@@ -251,10 +283,17 @@ function RegisterDialog({ pid }: LoginDialogProps) {
           setPassword={setPassword}
           confirmPassword={confirmPassword}
           setConfirmPassword={setConfirmPassword}
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
         />
         <DialogFooter className="gap-2">
-          {/* // TODO: Make custom close  */}
-          <Button type="button" variant="outline">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              setDialogOpen(false);
+            }}
+          >
             Cancel
           </Button>
           <Button

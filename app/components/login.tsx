@@ -1,13 +1,18 @@
+import { useEffect } from "react";
+import { useFetcher, useLoaderData } from "@remix-run/react";
+
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
-import { useFetcher, useLoaderData } from "@remix-run/react";
 import { loader } from "~/routes/_index";
+import { action } from "~/routes/login";
 
 type LoginFormProps = {
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   password: string;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
+  dialogOpen: boolean;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function LoginForm({
@@ -15,11 +20,17 @@ export function LoginForm({
   setUsername,
   password,
   setPassword,
+  dialogOpen,
+  setDialogOpen,
 }: LoginFormProps) {
-  // TODO: Make this a shared "auth" fetcher
-  const fetcher = useFetcher({ key: "login" });
-
+  const fetcher = useFetcher<typeof action>({ key: "login" });
   const { loginError } = useLoaderData<typeof loader>();
+
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.ok && dialogOpen) {
+      setDialogOpen(false);
+    }
+  }, [fetcher]);
 
   return (
     <fetcher.Form

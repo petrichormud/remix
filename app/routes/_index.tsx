@@ -24,7 +24,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (session.has("pid")) {
     const pid = session.get("pid");
-    console.log("pid is ", pid);
     return { pid, loginError: session.get("loginError") || null };
   } else {
     return { pid: 0, loginError: session.get("loginError") || null };

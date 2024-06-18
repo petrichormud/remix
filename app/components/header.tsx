@@ -1,4 +1,4 @@
-import { Navigation } from "~/components/nav";
+import { Navigation } from "~/components/navigation";
 
 type HeaderProps = {
   pid?: number;

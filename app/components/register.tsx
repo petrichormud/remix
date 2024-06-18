@@ -1,8 +1,10 @@
 import type React from "react";
+import { useEffect } from "react";
+import { useFetcher } from "@remix-run/react";
 
+import { action } from "~/routes/players";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
-import { useFetcher } from "@remix-run/react";
 
 type RegisterFormProps = {
   username: string;
@@ -11,6 +13,8 @@ type RegisterFormProps = {
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   confirmPassword: string;
   setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
+  dialogOpen: boolean;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function RegisterForm({
@@ -20,8 +24,17 @@ export function RegisterForm({
   setPassword,
   confirmPassword,
   setConfirmPassword,
+  dialogOpen,
+  setDialogOpen,
 }: RegisterFormProps) {
-  const fetcher = useFetcher();
+  const fetcher = useFetcher<typeof action>({ key: "register" });
+
+  // TODO: Set this up to reset the fetcher state
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.ok && dialogOpen) {
+      setDialogOpen(false);
+    }
+  }, [fetcher]);
 
   return (
     <fetcher.Form
@@ -30,10 +43,8 @@ export function RegisterForm({
       id="register"
       className="flex flex-col gap-4"
     >
-      <div>
-        <Label htmlFor="register-username" className="text-right">
-          Username
-        </Label>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="register-username">Username</Label>
         <Input
           id="register-username"
           name="username"
@@ -44,10 +55,8 @@ export function RegisterForm({
           }}
         />
       </div>
-      <div>
-        <Label htmlFor="register-password" className="text-right">
-          Passphrase
-        </Label>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="register-password">Passphrase</Label>
         <Input
           id="register-password"
           name="password"
@@ -58,10 +67,8 @@ export function RegisterForm({
           }}
         />
       </div>
-      <div>
-        <Label htmlFor="register-confirm-password" className="text-right">
-          Confirm Passphrase
-        </Label>
+      <div className="flex flex-col gap-2">
+        <Label htmlFor="register-confirm-password">Confirm Passphrase</Label>
         <Input
           id="register-confirm-password"
           name="confirmPassword"
