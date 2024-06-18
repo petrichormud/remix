@@ -6,6 +6,7 @@ type SessionData = {
 
 type SessionFlashData = {
   loginError: string;
+  registerError: string;
   error: string;
 };
 

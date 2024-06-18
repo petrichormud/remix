@@ -22,6 +22,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { ClientOnly } from "remix-utils/client-only";
 import { LoginForm } from "~/components/login";
+import { RegisterForm } from "~/components/register";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -135,13 +136,21 @@ export function Navigation({ pid }: NavigationProps) {
         >
           {() => <LoginDialog pid={pid} />}
         </ClientOnly>
-        {playerAuthenticated ? null : (
-          <NavigationMenuItem>
-            <button type="button" className={navigationMenuTriggerStyle()}>
-              Create Account
-            </button>
-          </NavigationMenuItem>
-        )}
+        <ClientOnly
+          fallback={
+            playerAuthenticated ? null : (
+              <button
+                id="fallback-register-button"
+                type="button"
+                className={navigationMenuTriggerStyle()}
+              >
+                Create Account
+              </button>
+            )
+          }
+        >
+          {() => <RegisterDialog pid={pid} />}
+        </ClientOnly>
       </NavigationMenuList>
     </NavigationMenu>
   );
@@ -176,6 +185,38 @@ function LoginDialog({ pid }: LoginDialogProps) {
           </Button>
           <Button form="login" type="submit">
             Log In
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function RegisterDialog({ pid }: LoginDialogProps) {
+  const authenticated = Boolean(pid && pid > 0);
+
+  return (
+    <Dialog>
+      {authenticated ? null : (
+        <DialogTrigger className={navigationMenuTriggerStyle()}>
+          Create Account
+        </DialogTrigger>
+      )}
+      <DialogContent className="sm:max-w-[425px] p-6">
+        <DialogHeader>
+          <DialogTitle>Create Account</DialogTitle>
+          <DialogDescription>
+            Please enter a username and password to create an account
+          </DialogDescription>
+        </DialogHeader>
+        <RegisterForm />
+        <DialogFooter className="gap-2">
+          {/* // TODO: Make custom close  */}
+          <Button type="button" variant="outline">
+            Cancel
+          </Button>
+          <Button form="register" type="submit">
+            Let's Go!
           </Button>
         </DialogFooter>
       </DialogContent>
