@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 
 import { cn } from "~/lib/utils";
 import {
@@ -156,11 +156,19 @@ export function Navigation({ pid }: NavigationProps) {
   );
 }
 
+function loginFormDisabled(username: string, password: string): boolean {
+  if (username.length == 0) return true;
+  if (password.length == 0) return true;
+  return false;
+}
+
 type LoginDialogProps = {
   pid?: number;
 };
 
 function LoginDialog({ pid }: LoginDialogProps) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const authenticated = Boolean(pid && pid > 0);
 
   return (
@@ -177,13 +185,22 @@ function LoginDialog({ pid }: LoginDialogProps) {
             Please enter your username and password to log in
           </DialogDescription>
         </DialogHeader>
-        <LoginForm />
+        <LoginForm
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+        />
         <DialogFooter className="gap-2">
           {/* // TODO: Make custom close  */}
           <Button type="button" variant="outline">
             Cancel
           </Button>
-          <Button form="login" type="submit">
+          <Button
+            form="login"
+            type="submit"
+            disabled={loginFormDisabled(username, password)}
+          >
             Log In
           </Button>
         </DialogFooter>
@@ -192,7 +209,25 @@ function LoginDialog({ pid }: LoginDialogProps) {
   );
 }
 
+function registerFormDisabled(
+  username: string,
+  password: string,
+  confirmPassword: string
+): boolean {
+  if (
+    username.length == 0 ||
+    password.length == 0 ||
+    confirmPassword.length == 0
+  )
+    return true;
+  if (password != confirmPassword) return true;
+  return false;
+}
+
 function RegisterDialog({ pid }: LoginDialogProps) {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const authenticated = Boolean(pid && pid > 0);
 
   return (
@@ -209,13 +244,24 @@ function RegisterDialog({ pid }: LoginDialogProps) {
             Please enter a username and password to create an account
           </DialogDescription>
         </DialogHeader>
-        <RegisterForm />
+        <RegisterForm
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          confirmPassword={confirmPassword}
+          setConfirmPassword={setConfirmPassword}
+        />
         <DialogFooter className="gap-2">
           {/* // TODO: Make custom close  */}
           <Button type="button" variant="outline">
             Cancel
           </Button>
-          <Button form="register" type="submit">
+          <Button
+            form="register"
+            type="submit"
+            disabled={registerFormDisabled(username, password, confirmPassword)}
+          >
             Let's Go!
           </Button>
         </DialogFooter>
