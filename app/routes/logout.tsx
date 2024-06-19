@@ -57,7 +57,7 @@ export default function Logout() {
             <CardHeader>
               <CardTitle>Log Out</CardTitle>
               <CardDescription>
-                Are you sure you'd like to log out?
+                Are you sure you&apos;d like to log out?
               </CardDescription>
             </CardHeader>
             <CardFooter className="flex gap-2 justify-end">

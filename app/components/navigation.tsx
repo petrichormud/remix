@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
-import { LogOut } from "lucide-react";
+import {
+  LogOut,
+  UserPlus,
+  Mail,
+  MessageSquare,
+  PlusCircle,
+} from "lucide-react";
 
 import { cn } from "~/lib/utils";
 import {
@@ -30,7 +36,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuGroup,
-  DropdownMenuShortcut,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
 import { LoginForm } from "~/components/login";
@@ -80,7 +89,6 @@ type NavigationProps = {
 
 export function Navigation({ pid }: NavigationProps) {
   const playerAuthenticated = Boolean(pid && pid > 0);
-  const isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 
   return (
     <NavigationMenu>
@@ -172,16 +180,34 @@ export function Navigation({ pid }: NavigationProps) {
             <DropdownMenuContent className="w-56 mr-6">
               <DropdownMenuLabel>Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  <span>Invite users</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuItem>
+                      <Mail className="mr-2 h-4 w-4" />
+                      <span>Email</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <MessageSquare className="mr-2 h-4 w-4" />
+                      <span>Message</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <PlusCircle className="mr-2 h-4 w-4" />
+                      <span>More...</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
               <DropdownMenuGroup>
                 <Link to="/logout">
                   <DropdownMenuItem>
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Log Out</span>
-                    {isMac ? (
-                      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                    ) : (
-                      <DropdownMenuShortcut>⇧^Q</DropdownMenuShortcut>
-                    )}
                   </DropdownMenuItem>
                 </Link>
               </DropdownMenuGroup>
@@ -315,7 +341,7 @@ function RegisterDialog({ pid }: LoginDialogProps) {
             type="submit"
             disabled={registerFormDisabled(username, password, confirmPassword)}
           >
-            Let's Go!
+            Let&apos;s Go!
           </Button>
         </DialogFooter>
       </DialogContent>
