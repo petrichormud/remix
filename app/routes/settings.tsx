@@ -12,7 +12,6 @@ import { SidebarNav } from "~/components/sidebar-nav";
 import { Separator } from "~/components/ui/separator";
 
 import tailwind from "~/styles/tailwind.css?url";
-import styles from "~/styles/styles.css?url";
 
 export const meta: MetaFunction = () => {
   return [
@@ -22,10 +21,7 @@ export const meta: MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: tailwind },
-    { rel: "stylesheet", href: styles },
-  ];
+  return [{ rel: "stylesheet", href: tailwind }];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
@@ -50,7 +46,7 @@ const sidebarNavItems = [
   },
   {
     title: "Notifications",
-    to: "/examples/forms/notifications",
+    to: "/settings/notifications",
   },
 ];
 
