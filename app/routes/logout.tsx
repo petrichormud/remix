@@ -5,7 +5,7 @@ import type {
   LoaderFunctionArgs,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Link, Form } from "@remix-run/react";
+import { Link, Form, useSearchParams } from "@remix-run/react";
 
 import {
   Card,
@@ -49,6 +49,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Logout() {
+  const [searchParams] = useSearchParams();
+  const from = searchParams.get("from");
+  const to = from ? from : "/";
+
   return (
     <>
       <main className="h-screen w-screen">
@@ -61,7 +65,7 @@ export default function Logout() {
               </CardDescription>
             </CardHeader>
             <CardFooter className="flex gap-2 justify-end">
-              <Link to="/">
+              <Link to={to}>
                 <Button type="button" variant="outline">
                   Go Back
                 </Button>
