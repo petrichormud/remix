@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
-import {
-  LogOut,
-  UserPlus,
-  Mail,
-  MessageSquare,
-  PlusCircle,
-} from "lucide-react";
 
 import { cn } from "~/lib/utils";
 import {
@@ -28,19 +20,6 @@ import {
   DialogDescription,
   DialogFooter,
 } from "~/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  DropdownMenuGroup,
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
-} from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
 import { LoginForm } from "~/components/login";
 import { RegisterForm } from "~/components/register";
@@ -172,48 +151,6 @@ export function Navigation({ pid }: NavigationProps) {
         >
           {() => <RegisterDialog pid={pid} />}
         </ClientOnly>
-        {playerAuthenticated ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger className={navigationMenuTriggerStyle()}>
-              Account
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56 mr-6">
-              <DropdownMenuLabel>Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>
-                  <UserPlus className="mr-2 h-4 w-4" />
-                  <span>Invite users</span>
-                </DropdownMenuSubTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem>
-                      <Mail className="mr-2 h-4 w-4" />
-                      <span>Email</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <MessageSquare className="mr-2 h-4 w-4" />
-                      <span>Message</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <PlusCircle className="mr-2 h-4 w-4" />
-                      <span>More...</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuPortal>
-              </DropdownMenuSub>
-              <DropdownMenuGroup>
-                <Link to="/logout">
-                  <DropdownMenuItem>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log Out</span>
-                  </DropdownMenuItem>
-                </Link>
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : null}
       </NavigationMenuList>
     </NavigationMenu>
   );

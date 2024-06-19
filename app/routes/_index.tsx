@@ -8,6 +8,7 @@ import { useLoaderData } from "@remix-run/react";
 import { getSession } from "~/sessions.server";
 
 import tailwind from "~/styles/tailwind.css?url";
+import styles from "~/styles/styles.css?url";
 
 export const meta: MetaFunction = () => {
   return [
@@ -17,7 +18,10 @@ export const meta: MetaFunction = () => {
 };
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: tailwind }];
+  return [
+    { rel: "stylesheet", href: tailwind },
+    { rel: "stylesheet", href: styles },
+  ];
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
