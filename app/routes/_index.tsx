@@ -4,7 +4,7 @@ import type {
   LoaderFunctionArgs,
 } from "@remix-run/node";
 import { Header } from "~/components/header";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useFetcher } from "@remix-run/react";
 import { getSession } from "~/sessions.server";
 
 import tailwind from "~/styles/tailwind.css?url";
@@ -31,11 +31,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function Index() {
+  const fetcher = useFetcher<{ theme: "light" | "dark" }>({ key: "theme" });
   const { pid } = useLoaderData<typeof loader>();
   return (
     <>
       <Header pid={pid} />
-      <main></main>
+      <main className={fetcher.data?.theme === "dark" ? "dark" : ""}></main>
     </>
   );
 }
