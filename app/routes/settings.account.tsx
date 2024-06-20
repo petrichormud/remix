@@ -295,7 +295,6 @@ function Theme() {
       <RadioGroup
         onValueChange={(theme) => {
           if (theme === "light" || theme === "dark") {
-            console.log("theme is " + theme);
             setTheme(theme);
           }
           fetcher.submit({ theme }, { method: "post", action: "/test-theme" });
