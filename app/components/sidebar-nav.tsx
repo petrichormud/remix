@@ -3,7 +3,6 @@ import type { LucideIcon } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 import { buttonVariants } from "~/components/ui/button";
-import { Separator } from "~/components/ui/separator";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -12,19 +11,9 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
     to: string;
     title: string;
   }[];
-  after?: {
-    Icon: LucideIcon;
-    to: string;
-    title: string;
-  }[];
 }
 
-export function SidebarNav({
-  className,
-  items,
-  after = [],
-  ...props
-}: SidebarNavProps) {
+export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   const { pathname } = useLocation();
 
   return (
@@ -36,23 +25,6 @@ export function SidebarNav({
       {...props}
     >
       {items.map((item) => (
-        <Link
-          key={item.to}
-          to={item.to}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            pathname === item.to
-              ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent hover:underline",
-            "justify-start"
-          )}
-        >
-          <item.Icon className="mr-2 h-4 w-4" />
-          {item.title}
-        </Link>
-      ))}
-      {after.length ? <Separator /> : null}
-      {after.map((item) => (
         <Link
           key={item.to}
           to={item.to}

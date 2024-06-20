@@ -29,7 +29,7 @@ export function LoginForm({
       setDialogOpen(false);
       fetcher.submit({}, { action: "/login/fetcher", method: "post" });
     }
-  }, [fetcher]);
+  }, [fetcher, dialogOpen, setDialogOpen]);
 
   return (
     <fetcher.Form

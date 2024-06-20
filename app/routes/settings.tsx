@@ -47,6 +47,11 @@ const sidebarNavItems = [
     title: "Notifications",
     to: "/settings/notifications",
   },
+  {
+    Icon: Lock,
+    title: "Passphrase",
+    to: "/settings/passphrase",
+  },
 ];
 
 export default function Settings() {
@@ -66,16 +71,7 @@ export default function Settings() {
           <Separator className="my-6" />
           <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
             <aside className="-mx-4 lg:w-1/5">
-              <SidebarNav
-                items={sidebarNavItems}
-                after={[
-                  {
-                    Icon: Lock,
-                    title: "Passphrase",
-                    to: "/settings/passphrase",
-                  },
-                ]}
-              />
+              <SidebarNav items={sidebarNavItems} />
             </aside>
             <div className="flex-1 lg:max-w-2xl">
               <Outlet />
