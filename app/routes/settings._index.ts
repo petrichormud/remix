@@ -9,5 +9,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     return redirect("/");
   }
 
-  return redirect("/settings/emails");
+  // TODO: Get this declarative in a shared constant
+  return redirect("/settings/account");
 };

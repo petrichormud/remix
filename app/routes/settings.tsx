@@ -5,7 +5,7 @@ import type {
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { Mail, Bell, Lock } from "lucide-react";
+import { UserCog, Bell, Lock } from "lucide-react";
 
 import { Header } from "~/components/header";
 import { getSession } from "~/sessions.server";
@@ -38,9 +38,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 const sidebarNavItems = [
   {
-    Icon: Mail,
-    title: "Emails",
-    to: "/settings/emails",
+    Icon: UserCog,
+    title: "Account",
+    to: "/settings/account",
   },
   {
     Icon: Bell,

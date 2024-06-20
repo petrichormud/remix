@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Mail } from "lucide-react";
 import { useFetcher } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
 
@@ -18,7 +18,7 @@ import { Button, buttonVariants } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 
-export default function SettingsEmails() {
+export default function AccountSettings() {
   return (
     <div className="space-y-6">
       <div>
@@ -27,6 +27,13 @@ export default function SettingsEmails() {
           Manage your account settings here.
         </p>
         <Separator />
+      </div>
+      <div className="space-y-2 md:w-[24rem]">
+        <Label>Username</Label>
+        <Input value="test" disabled />
+        <p className="text-xs leading-none text-muted-foreground">
+          Your username cannot be changed.
+        </p>
       </div>
       <div className="space-y-2 md:w-[24rem]">
         <Label>Emails</Label>
@@ -43,7 +50,7 @@ type EmailProps = {
   verified: boolean;
 };
 
-function Email({ email }: EmailProps) {
+function Email({ email, verified }: EmailProps) {
   const [inner, setInner] = useState(email);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -52,9 +59,23 @@ function Email({ email }: EmailProps) {
       fallback={
         <Button
           variant="outline"
-          className="w-full md:h-8 justify-start font-normal"
+          className={cn(
+            "w-full md:h-8 justify-start font-normal",
+            verified ? "" : "bg-amber-200 hover:bg-amber-300"
+          )}
         >
-          {email}
+          {verified ? (
+            email
+          ) : (
+            <>
+              <Mail className="mr-2 h-4 w-4" />
+              <span>{email}</span>
+              <div className="ml-auto flex justify-end items-center gap-1 text-amber-700">
+                <CircleAlert className="w-4 h-4" />
+                <span className="text-sm">Unverified</span>
+              </div>
+            </>
+          )}
         </Button>
       }
     >
@@ -63,10 +84,21 @@ function Email({ email }: EmailProps) {
           <DialogTrigger
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "w-full md:h-8 justify-start font-normal"
+              "w-full md:h-8 justify-start font-normal",
+              verified ? "" : "bg-amber-200 hover:bg-amber-300"
             )}
           >
-            {email}
+            {verified ? (
+              email
+            ) : (
+              <>
+                <span>{email}</span>
+                <div className="ml-auto flex justify-end items-center gap-1 text-amber-700">
+                  <CircleAlert className="w-4 h-4" />
+                  <span className="text-sm">Unverified</span>
+                </div>
+              </>
+            )}
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px] p-6">
             <DialogHeader>
@@ -98,30 +130,6 @@ function Email({ email }: EmailProps) {
         </Dialog>
       )}
     </ClientOnly>
-  );
-}
-
-type EmailButtonProps = {
-  email: string;
-  verified: boolean;
-};
-
-function EmailButton({ email, verified }: EmailButtonProps) {
-  return (
-    <>
-      {verified ? null : (
-        <Button
-          variant="outline"
-          className="w-full md:h-8 justify-start font-normal bg-amber-200 hover:bg-amber-300"
-        >
-          <span>{email}</span>
-          <div className="ml-auto flex justify-end items-center gap-1 text-amber-700">
-            <CircleAlert className="w-4 h-4" />
-            <span className="text-sm">Unverified</span>
-          </div>
-        </Button>
-      )}
-    </>
   );
 }
 
