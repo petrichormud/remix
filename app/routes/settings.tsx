@@ -5,6 +5,7 @@ import type {
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
+import { Mail, Bell, Lock } from "lucide-react";
 
 import { Header } from "~/components/header";
 import { getSession } from "~/sessions.server";
@@ -37,14 +38,12 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 const sidebarNavItems = [
   {
+    Icon: Mail,
     title: "Emails",
     to: "/settings/emails",
   },
   {
-    title: "Passphrase",
-    to: "/settings/passphrase",
-  },
-  {
+    Icon: Bell,
     title: "Notifications",
     to: "/settings/notifications",
   },
@@ -67,7 +66,16 @@ export default function Settings() {
           <Separator className="my-6" />
           <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
             <aside className="-mx-4 lg:w-1/5">
-              <SidebarNav items={sidebarNavItems} />
+              <SidebarNav
+                items={sidebarNavItems}
+                after={[
+                  {
+                    Icon: Lock,
+                    title: "Passphrase",
+                    to: "/settings/passphrase",
+                  },
+                ]}
+              />
             </aside>
             <div className="flex-1 lg:max-w-2xl">
               <Outlet />

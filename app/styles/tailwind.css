@@ -74,3 +74,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+.gradient-guy {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.gradient-guy::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  background: linear-gradient(to bottom, yellow, orange, red, purple);
+  transition: transform 0.4s;
+  z-index: -1;
+}
+.gradient-guy:hover::before {
+  transform: translateY(-50%);
+}
