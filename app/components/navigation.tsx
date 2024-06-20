@@ -81,14 +81,8 @@ export function Navigation({ pid }: NavigationProps) {
                 <NavigationMenuLink asChild>
                   <Link to="/">
                     <div className="gradient-guy flex h-full w-full select-none flex-col justify-end rounded-md p-6 no-underline outline-none focus:shadow-md">
-                      <div className="mb-2 mt-4 text-lg font-medium">
-                        shadcn/ui
-                      </div>
-                      <p className="text-sm leading-tight text-muted-foreground">
-                        Beautifully designed components that you can copy and
-                        paste into your apps. Accessible. Customizable. Open
-                        Source.
-                      </p>
+                      <div className="mb-2 mt-4 text-lg font-medium"></div>
+                      <p className="text-sm leading-tight text-muted-foreground"></p>
                     </div>
                   </Link>
                 </NavigationMenuLink>
