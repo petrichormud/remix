@@ -13,6 +13,14 @@ import {
   DialogDescription,
   DialogFooter,
 } from "~/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogTitle,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogFooter,
+} from "~/components/ui/alert-dialog";
 import { Separator } from "~/components/ui/separator";
 import { Button, buttonVariants } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
@@ -53,6 +61,7 @@ type EmailProps = {
 function Email({ email, verified }: EmailProps) {
   const [inner, setInner] = useState(email);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   return (
     <ClientOnly
@@ -80,56 +89,95 @@ function Email({ email, verified }: EmailProps) {
       }
     >
       {() => (
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger
-            className={cn(
-              buttonVariants({ variant: "outline" }),
-              "w-full md:h-8 justify-start font-normal",
-              verified ? "" : "bg-amber-200 hover:bg-amber-300"
-            )}
-          >
-            {verified ? (
-              email
-            ) : (
-              <>
-                <span>{email}</span>
-                <div className="ml-auto flex justify-end items-center gap-1 text-amber-700">
-                  <CircleAlert className="w-4 h-4" />
-                  <span className="text-sm">Unverified</span>
-                </div>
-              </>
-            )}
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] p-6">
-            <DialogHeader>
-              <DialogTitle>{email}</DialogTitle>
-              <DialogDescription></DialogDescription>
-            </DialogHeader>
-            <EmailForm
-              inner={inner}
-              setInner={setInner}
-              dialogOpen={dialogOpen}
-              setDialogOpen={setDialogOpen}
-            />
-            <DialogFooter className="items-center">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => {
-                  setInner(email);
-                  setDialogOpen(false);
-                }}
-              >
-                Never Mind
-              </Button>
-              <Button form="email" type="submit" disabled>
-                Save
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <>
+          <EditEmailDialog
+            email={email}
+            verified={verified}
+            inner={inner}
+            setInner={setInner}
+            dialogOpen={dialogOpen}
+            setDialogOpen={setDialogOpen}
+            setDeleteDialogOpen={setDeleteDialogOpen}
+          />
+          <DeleteEmailDialog
+            dialogOpen={deleteDialogOpen}
+            setDialogOpen={setDeleteDialogOpen}
+          />
+        </>
       )}
     </ClientOnly>
+  );
+}
+
+type EditEmailDialogProps = {
+  email: string;
+  verified: boolean;
+  inner: string;
+  setInner: React.Dispatch<React.SetStateAction<string>>;
+  dialogOpen: boolean;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function EditEmailDialog({
+  email,
+  verified,
+  inner,
+  setInner,
+  dialogOpen,
+  setDialogOpen,
+  setDeleteDialogOpen,
+}: EditEmailDialogProps) {
+  return (
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger
+        className={cn(
+          buttonVariants({ variant: "outline" }),
+          "w-full md:h-8 justify-start font-normal",
+          verified ? "" : "bg-amber-200 hover:bg-amber-300"
+        )}
+      >
+        {verified ? (
+          email
+        ) : (
+          <>
+            <span>{email}</span>
+            <div className="ml-auto flex justify-end items-center gap-1 text-amber-700">
+              <CircleAlert className="w-4 h-4" />
+              <span className="text-sm">Unverified</span>
+            </div>
+          </>
+        )}
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] p-6">
+        <DialogHeader>
+          <DialogTitle>{email}</DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <EmailForm
+          inner={inner}
+          setInner={setInner}
+          dialogOpen={dialogOpen}
+          setDialogOpen={setDialogOpen}
+          setDeleteDialogOpen={setDeleteDialogOpen}
+        />
+        <DialogFooter className="items-center">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              setInner(email);
+              setDialogOpen(false);
+            }}
+          >
+            Never Mind
+          </Button>
+          <Button form="email" type="submit" disabled>
+            Save
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -138,9 +186,15 @@ type EmailFormProps = {
   setInner: React.Dispatch<React.SetStateAction<string>>;
   dialogOpen: boolean;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export function EmailForm({ inner, setInner, setDialogOpen }: EmailFormProps) {
+export function EmailForm({
+  inner,
+  setInner,
+  setDialogOpen,
+  setDeleteDialogOpen,
+}: EmailFormProps) {
   const fetcher = useFetcher();
 
   // useEffect(() => {
@@ -172,11 +226,54 @@ export function EmailForm({ inner, setInner, setDialogOpen }: EmailFormProps) {
           className="text-xs text-rose-700 p-0 m-0"
           onClick={() => {
             setDialogOpen(false);
+            setDeleteDialogOpen(true);
           }}
         >
           Want to delete this email? Click here
         </Button>
       </div>
     </fetcher.Form>
+  );
+}
+
+type DeleteEmailDialogProps = {
+  dialogOpen: boolean;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+function DeleteEmailDialog({
+  dialogOpen,
+  setDialogOpen,
+}: DeleteEmailDialogProps) {
+  return (
+    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This is permanent and cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => {
+              setDialogOpen(false);
+            }}
+          >
+            Never Mind
+          </Button>
+          <Button
+            form="delete-email"
+            type="submit"
+            variant="destructive"
+            disabled
+          >
+            I&apos;m Sure, Delete This Email
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
