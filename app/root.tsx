@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Links,
   Meta,
@@ -5,6 +6,8 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+
+import { ThemeContext } from "~/context/theme";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -26,5 +29,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />;
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  console.log("theme is " + theme);
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      <Outlet />
+    </ThemeContext.Provider>
+  );
 }

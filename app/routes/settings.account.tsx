@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { CircleAlert, Mail } from "lucide-react";
 import { useFetcher } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
 
+import { ThemeContext } from "~/context/theme";
 import { cn } from "~/lib/utils";
 import {
   Dialog,
@@ -286,15 +287,20 @@ type ThemeInput = {
 
 function Theme() {
   const fetcher = useFetcher<ThemeInput>({ key: "theme" });
+  const { theme, setTheme } = useContext(ThemeContext);
 
   return (
     <div className="space-y-2">
       <Label>Theme</Label>
       <RadioGroup
         onValueChange={(theme) => {
+          if (theme === "light" || theme === "dark") {
+            console.log("theme is " + theme);
+            setTheme(theme);
+          }
           fetcher.submit({ theme }, { method: "post", action: "/test-theme" });
         }}
-        defaultValue={fetcher.data?.theme || "light"}
+        defaultValue={theme}
         className="flex gap-4 items-center"
       >
         <div className="sm:min-w-60">
