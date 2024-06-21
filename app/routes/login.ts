@@ -1,7 +1,7 @@
 import { type ActionFunctionArgs, json } from "@remix-run/node";
 
-import { getSession, commitSession } from "~/sessions.server";
-import { client } from "~/mirror.server";
+import { getSession, commitSession } from "~/lib/sessions.server";
+import { client } from "~/lib/mirror.server";
 import { LoginReply } from "~/proto/mirror";
 
 type Credentials = {

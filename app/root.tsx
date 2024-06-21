@@ -4,32 +4,31 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
 } from "@remix-run/react";
-import type { LoaderFunction } from "@remix-run/node";
-import {
-  ThemeProvider,
-  useTheme,
-  PreventFlashOnWrongTheme,
-} from "remix-themes";
+import { type LoaderFunction, json } from "@remix-run/node";
 
 import { cn } from "~/lib/utils";
-import { themeSessionResolver } from "~/sessions.server";
+import { THEME_DARK, useTheme, ThemeScript } from "~/lib/theme";
+import { getTheme } from "~/lib/theme.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { getTheme } = await themeSessionResolver(request);
-  return {
-    theme: getTheme(),
-  };
+  const theme = getTheme(request);
+  return json({
+    theme,
+  });
 };
 
 function Document({ children }: { children: React.ReactNode }) {
-  const data = useLoaderData<typeof loader>();
-  const [theme] = useTheme();
+  const theme = useTheme();
 
   return (
-    <html lang="en" data-theme={theme ?? ""} className={cn(theme ? theme : "")}>
+    <html
+      lang="en"
+      className={cn({ dark: theme === THEME_DARK })}
+      data-theme={theme}
+    >
       <head>
+        <ThemeScript />
         <meta charSet="utf-8" />
         <meta
           name="viewport"
@@ -37,7 +36,6 @@ function Document({ children }: { children: React.ReactNode }) {
         />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
         <Meta />
-        <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
       </head>
       <body>
@@ -58,14 +56,5 @@ function App() {
 }
 
 export default function AppWithProviders() {
-  const { theme } = useLoaderData<typeof loader>();
-  return (
-    <ThemeProvider
-      specifiedTheme={theme}
-      themeAction="/action/set-theme"
-      disableTransitionOnThemeChange
-    >
-      <App />
-    </ThemeProvider>
-  );
+  return <App />;
 }

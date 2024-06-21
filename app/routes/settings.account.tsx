@@ -2,9 +2,9 @@ import { useState } from "react";
 import { CircleAlert, Mail } from "lucide-react";
 import { useFetcher } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
-import { Theme, useTheme } from "remix-themes";
 
 import { cn } from "~/lib/utils";
+import { type Theme, THEME_DARK, THEME_LIGHT, useTheme } from "~/lib/theme";
 import {
   Dialog,
   DialogTrigger,
@@ -282,26 +282,23 @@ function DeleteEmailDialog({
 }
 
 function ThemeForm() {
-  const fetcher = useFetcher<{ theme: "light" | "dark" }>({ key: "theme" });
-  const [theme, setTheme] = useTheme();
+  const fetcher = useFetcher<{ theme: Theme }>({ key: "theme" });
+  const theme = useTheme();
 
   return (
     <div className="space-y-2">
       <Label>Theme</Label>
       <RadioGroup
         onValueChange={(theme) => {
-          if (theme === "light") setTheme(Theme.LIGHT);
-          if (theme === "dark") setTheme(Theme.DARK);
           fetcher.submit(
             { theme },
             {
               method: "post",
               action: "/action/set-theme",
-              encType: "application/json",
             }
           );
         }}
-        defaultValue={theme ?? "light"}
+        defaultValue={theme === THEME_DARK ? THEME_DARK : THEME_LIGHT}
         className="flex gap-4 items-center"
       >
         <div className="sm:min-w-60">
