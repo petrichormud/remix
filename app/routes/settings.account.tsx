@@ -282,8 +282,9 @@ function DeleteEmailDialog({
 }
 
 function ThemeForm() {
-  const theme = useTheme();
+  const usedTheme = useTheme();
   const fetcher = useFetcher<{ theme: Theme }>({ key: "theme" });
+  const theme = fetcher.formData?.get("theme") ?? usedTheme;
 
   return (
     <div className="space-y-2">
@@ -298,7 +299,7 @@ function ThemeForm() {
             }
           );
         }}
-        defaultValue={theme === THEME_DARK ? THEME_DARK : THEME_LIGHT}
+        value={theme === THEME_DARK ? THEME_DARK : THEME_LIGHT}
         className="flex gap-4 items-center"
       >
         <div className="sm:min-w-60">
