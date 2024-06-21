@@ -1,8 +1,7 @@
+import type { ReactNode } from "react";
 import { Link, useLocation } from "@remix-run/react";
-import { CircleUser, LogOut, Settings } from "lucide-react";
+import { LogOut, Settings } from "lucide-react";
 
-import { cn } from "~/lib/utils";
-import { navigationMenuTriggerStyle } from "~/components/ui/navigation-menu";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,23 +11,13 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "~/components/ui/dropdown-menu";
-import { Button } from "~/components/ui/button";
 
-export function PlayerDropdown() {
+export function AccountMenu({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          className={cn(navigationMenuTriggerStyle(), "px-2")}
-          variant="link"
-          size="icon"
-        >
-          <CircleUser className="h-6 w-6" />
-          <span className="sr-only">Toggle player dropdown</span>
-        </Button>
-      </DropdownMenuTrigger>
+      <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 mr-6">
         <DropdownMenuLabel>Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
