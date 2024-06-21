@@ -8,6 +8,24 @@ import {
   NavigationMenuTrigger,
 } from "~/components/ui/navigation-menu";
 
+const gettingStarted = [
+  {
+    title: "New to MUDs?",
+    to: "/docs",
+    description: "If you're brand-new or just curious, start here",
+  },
+  {
+    title: "Creating a Character",
+    to: "/docs",
+    description: "Hey, you. You're finally awake.",
+  },
+  {
+    title: "The World",
+    to: "/docs",
+    description: "A world rife with unchecked powers",
+  },
+];
+
 export function GettingStarted() {
   return (
     <NavigationMenuItem>
@@ -24,15 +42,13 @@ export function GettingStarted() {
               </Link>
             </NavigationMenuLink>
           </li>
-          <ListItem href="/docs" title="Introduction">
-            Re-usable components built using Radix UI and Tailwind CSS.
-          </ListItem>
-          <ListItem href="/docs/installation" title="Installation">
-            How to install dependencies and structure your app.
-          </ListItem>
-          <ListItem href="/docs/primitives/typography" title="Typography">
-            Styles for headings, paragraphs, lists...etc
-          </ListItem>
+          {gettingStarted.map(({ title, to, description }) => {
+            return (
+              <ListItem key={title} title={title} to={to}>
+                {description}
+              </ListItem>
+            );
+          })}
         </ul>
       </NavigationMenuContent>
     </NavigationMenuItem>

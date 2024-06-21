@@ -7,39 +7,37 @@ import {
 
 const mechanics: { title: string; href: string; description: string }[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
+    title: "Movement",
+    href: "/docs",
     description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+      "Everything movement. Run, jump, climb, swim and crawl your way around (and underneath) the City.",
   },
   {
-    title: "Hover Card",
-    href: "/docs/primitives/hover-card",
-    description:
-      "For sighted users to preview content available behind a link.",
+    title: "Combat",
+    href: "/docs",
+    description: "For when diplomacy just won't cut it.",
   },
   {
-    title: "Progress",
-    href: "/docs/primitives/progress",
+    title: "Crafting",
+    href: "/docs",
     description:
-      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+      "Create clothing, weapons, food, music, and thaumaturgic disasters alike.",
   },
   {
-    title: "Scroll-area",
-    href: "/docs/primitives/scroll-area",
-    description: "Visually or semantically separates content.",
+    title: "Social & Survival",
+    href: "/docs",
+    description:
+      "How you'll survive harsh environmens and equally harsh social encounters.",
   },
   {
-    title: "Tabs",
-    href: "/docs/primitives/tabs",
-    description:
-      "A set of layered sections of content—known as tab panels—that are displayed one at a time.",
+    title: "Skills",
+    href: "/docs",
+    description: "The primary way characters interact with the world.",
   },
   {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
-    description:
-      "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    title: "Classes",
+    href: "/docs",
+    description: "Some archetypes you know and love, along with some new.",
   },
 ];
 
@@ -53,7 +51,7 @@ export function Mechanics() {
             <ListItem
               key={mechanic.title}
               title={mechanic.title}
-              href={mechanic.href}
+              to={mechanic.href}
             >
               {mechanic.description}
             </ListItem>
