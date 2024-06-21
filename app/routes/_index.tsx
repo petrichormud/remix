@@ -5,7 +5,8 @@ import type {
 } from "@remix-run/node";
 import { Header } from "~/components/header";
 import { useLoaderData, useFetcher } from "@remix-run/react";
-import { getSession } from "~/sessions.server";
+
+import { getSession } from "~/lib/sessions.server";
 
 import tailwind from "~/styles/tailwind.css?url";
 

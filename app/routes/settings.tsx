@@ -7,8 +7,8 @@ import { redirect } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { UserCog, Bell, Lock } from "lucide-react";
 
+import { getSession } from "~/lib/sessions.server";
 import { Header } from "~/components/header";
-import { getSession } from "~/sessions.server";
 import { SidebarNav } from "~/components/sidebar-nav";
 import { Separator } from "~/components/ui/separator";
 

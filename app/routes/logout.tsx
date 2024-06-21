@@ -7,6 +7,7 @@ import type {
 import { redirect } from "@remix-run/node";
 import { Link, Form, useSearchParams } from "@remix-run/react";
 
+import { getSession, commitSession } from "~/lib/sessions.server";
 import {
   Card,
   CardDescription,
@@ -15,7 +16,6 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { getSession, commitSession } from "~/sessions.server";
 
 import tailwind from "~/styles/tailwind.css?url";
 

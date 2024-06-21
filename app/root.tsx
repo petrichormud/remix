@@ -8,11 +8,11 @@ import {
 import { type LoaderFunction, json } from "@remix-run/node";
 
 import { cn } from "~/lib/utils";
-import { THEME_DARK, useTheme, ThemeScript } from "~/lib/theme";
+import { THEME_DARK, useTheme } from "~/lib/theme";
 import { getTheme } from "~/lib/theme.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const theme = getTheme(request);
+  const theme = await getTheme(request);
   return json({
     theme,
   });
@@ -28,7 +28,6 @@ function Document({ children }: { children: React.ReactNode }) {
       data-theme={theme}
     >
       <head>
-        <ThemeScript />
         <meta charSet="utf-8" />
         <meta
           name="viewport"

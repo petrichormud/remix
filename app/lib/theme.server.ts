@@ -9,13 +9,14 @@ const cookie = createCookie("theme", {
 
 export async function getTheme(request: Request) {
   const header = request.headers.get("Cookie");
-  const { theme } = await cookie.parse(header);
+  const vals = await cookie.parse(header);
+  const theme = vals?.theme;
 
   if (isTheme(theme)) {
     return theme;
   }
 
-  return "system";
+  return THEME_SYSTEM;
 }
 
 export function serializeTheme(theme: Theme) {
