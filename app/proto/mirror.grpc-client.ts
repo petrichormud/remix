@@ -4,6 +4,10 @@
 import { Mirror } from "./mirror";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
+import type { SetPlayerSettingsThemeReply } from "./mirror";
+import type { SetPlayerSettingsThemeRequest } from "./mirror";
+import type { PlayerSettingsReply } from "./mirror";
+import type { PlayerSettingsRequest } from "./mirror";
 import type { LoginReply } from "./mirror";
 import type { LoginRequest } from "./mirror";
 import type { RegisterReply } from "./mirror";
@@ -27,6 +31,20 @@ export interface IMirrorClient {
     login(input: LoginRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: LoginReply) => void): grpc.ClientUnaryCall;
     login(input: LoginRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: LoginReply) => void): grpc.ClientUnaryCall;
     login(input: LoginRequest, callback: (err: grpc.ServiceError | null, value?: LoginReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: PlayerSettings(mirror.PlayerSettingsRequest) returns (mirror.PlayerSettingsReply);
+     */
+    playerSettings(input: PlayerSettingsRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void): grpc.ClientUnaryCall;
+    playerSettings(input: PlayerSettingsRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void): grpc.ClientUnaryCall;
+    playerSettings(input: PlayerSettingsRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void): grpc.ClientUnaryCall;
+    playerSettings(input: PlayerSettingsRequest, callback: (err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: SetPlayerSettingsTheme(mirror.SetPlayerSettingsThemeRequest) returns (mirror.SetPlayerSettingsThemeReply);
+     */
+    setPlayerSettingsTheme(input: SetPlayerSettingsThemeRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void): grpc.ClientUnaryCall;
+    setPlayerSettingsTheme(input: SetPlayerSettingsThemeRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void): grpc.ClientUnaryCall;
+    setPlayerSettingsTheme(input: SetPlayerSettingsThemeRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void): grpc.ClientUnaryCall;
+    setPlayerSettingsTheme(input: SetPlayerSettingsThemeRequest, callback: (err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void): grpc.ClientUnaryCall;
 }
 /**
  * @generated from protobuf service mirror.Mirror
@@ -50,5 +68,19 @@ export class MirrorClient extends grpc.Client implements IMirrorClient {
     login(input: LoginRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: LoginReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: LoginReply) => void), callback?: ((err: grpc.ServiceError | null, value?: LoginReply) => void)): grpc.ClientUnaryCall {
         const method = Mirror.methods[1];
         return this.makeUnaryRequest<LoginRequest, LoginReply>(`/${Mirror.typeName}/${method.name}`, (value: LoginRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): LoginReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: PlayerSettings(mirror.PlayerSettingsRequest) returns (mirror.PlayerSettingsReply);
+     */
+    playerSettings(input: PlayerSettingsRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void)): grpc.ClientUnaryCall {
+        const method = Mirror.methods[2];
+        return this.makeUnaryRequest<PlayerSettingsRequest, PlayerSettingsReply>(`/${Mirror.typeName}/${method.name}`, (value: PlayerSettingsRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PlayerSettingsReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: SetPlayerSettingsTheme(mirror.SetPlayerSettingsThemeRequest) returns (mirror.SetPlayerSettingsThemeReply);
+     */
+    setPlayerSettingsTheme(input: SetPlayerSettingsThemeRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void), callback?: ((err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void)): grpc.ClientUnaryCall {
+        const method = Mirror.methods[3];
+        return this.makeUnaryRequest<SetPlayerSettingsThemeRequest, SetPlayerSettingsThemeReply>(`/${Mirror.typeName}/${method.name}`, (value: SetPlayerSettingsThemeRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): SetPlayerSettingsThemeReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }
