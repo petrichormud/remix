@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs, json } from "@remix-run/node";
+import { type ActionFunctionArgs, json, redirect } from "@remix-run/node";
 
 import { getSession, commitSession } from "~/lib/sessions.server";
 import { client } from "~/lib/mirror.server";
@@ -13,7 +13,7 @@ type Credentials = {
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (session.has("pid")) {
-    return json({ ok: true });
+    return redirect("/");
   }
 
   const form = await request.formData();
@@ -27,9 +27,10 @@ export async function action({ request }: ActionFunctionArgs) {
     !confirmPassword ||
     password !== confirmPassword
   ) {
-    return json({ ok: false });
+    return json({ error: true });
   }
 
+  // TODO: Get this into a function on mirror.server
   const promise = new Promise<RegisterReply>((resolve, reject) => {
     client.register({ username, password }, (err, reply) => {
       if (err) {
@@ -39,7 +40,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
       if (!reply) {
         // TODO: Create an error here
-        reject("login reply is null");
+        reject("register reply is null");
         return;
       }
 
@@ -51,27 +52,16 @@ export async function action({ request }: ActionFunctionArgs) {
     const reply = await promise;
     const pid = Number(reply.id);
     if (pid <= 0) {
-      return json({ ok: false });
+      return json({ error: true });
     }
     session.set("pid", pid);
-    return json(
-      { ok: true },
-      {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
+    return redirect("/", {
+      headers: { "Set-Cookie": await commitSession(session) },
+    });
   } catch (err) {
-    session.flash("registerError", "Could not log you in, sorry!");
     return json(
-      { ok: false },
-      {
-        status: 401,
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      }
+      { error: true },
+      { headers: { "Set-Cookie": await commitSession(session) } }
     );
   }
 }

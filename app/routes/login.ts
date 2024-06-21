@@ -1,4 +1,4 @@
-import { type ActionFunctionArgs, json } from "@remix-run/node";
+import { type ActionFunctionArgs, json, redirect } from "@remix-run/node";
 
 import type { LoginReply } from "~/proto/mirror";
 import { getSession, commitSession } from "~/lib/sessions.server";
@@ -14,25 +14,17 @@ type Credentials = {
 export async function action({ request }: ActionFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (session.has("pid")) {
-    const pid = session.get("pid");
-    return json({ pid, ok: true });
+    return redirect("/");
   }
 
   const form = await request.formData();
   const { username, password }: Credentials = Object.fromEntries(form);
 
   if (!username || !password) {
-    return json(
-      { ok: false },
-      {
-        status: 401,
-        headers: {
-          "Content-Length": "0",
-        },
-      }
-    );
+    return json({ error: true });
   }
 
+  // TODO: Get this in a function
   const loginPromise = new Promise<LoginReply>((resolve, reject) => {
     client.login({ username, password }, (err, reply) => {
       if (err) {
@@ -52,16 +44,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
   try {
     const headers = new Headers();
-
     const loginReply = await loginPromise;
     const pid = Number(loginReply.id);
     if (pid <= 0) {
-      return json(
-        { ok: false },
-        {
-          status: 401,
-        }
-      );
+      return json({ error: true });
     }
     session.set("pid", pid);
     headers.append("Set-Cookie", await commitSession(session));
@@ -74,16 +60,8 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
 
-    return json({ pid, ok: true }, { headers });
+    return redirect("/", { headers });
   } catch (err) {
-    return json(
-      { ok: false },
-      {
-        status: 401,
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
+    return json({ error: true });
   }
 }

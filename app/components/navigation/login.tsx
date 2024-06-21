@@ -1,4 +1,4 @@
-import { type ReactNode, useState, useEffect } from "react";
+import { type ReactNode, useState } from "react";
 import { useFetcher } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
 
@@ -26,6 +26,7 @@ export function LoginDialog({ children }: { children: ReactNode }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const fetcher = useFetcher<typeof action>({ key: "login" });
 
   return (
     <ClientOnly fallback={children}>
@@ -38,14 +39,13 @@ export function LoginDialog({ children }: { children: ReactNode }) {
               <DialogDescription>
                 Please enter your username and password to log in
               </DialogDescription>
+              {fetcher.data?.error ? "Sorry, couldn't log you in." : null}
             </DialogHeader>
             <LoginForm
               username={username}
               setUsername={setUsername}
               password={password}
               setPassword={setPassword}
-              dialogOpen={dialogOpen}
-              setDialogOpen={setDialogOpen}
             />
             <DialogFooter className="gap-2">
               <Button
@@ -77,8 +77,6 @@ type LoginFormProps = {
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   password: string;
   setPassword: React.Dispatch<React.SetStateAction<string>>;
-  dialogOpen: boolean;
-  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function LoginForm({
@@ -86,17 +84,8 @@ function LoginForm({
   setUsername,
   password,
   setPassword,
-  dialogOpen,
-  setDialogOpen,
 }: LoginFormProps) {
   const fetcher = useFetcher<typeof action>({ key: "login" });
-
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data?.ok && dialogOpen) {
-      setDialogOpen(false);
-      fetcher.submit({}, { action: "/login/fetcher", method: "post" });
-    }
-  }, [fetcher, dialogOpen, setDialogOpen]);
 
   return (
     <fetcher.Form

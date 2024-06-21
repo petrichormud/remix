@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useFetcher } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
 
@@ -37,6 +37,8 @@ export function RegisterDialog({ children }: { children: React.ReactNode }) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // TODO: Handle error output from the action here
+
   return (
     <ClientOnly fallback={children}>
       {() => (
@@ -56,8 +58,6 @@ export function RegisterDialog({ children }: { children: React.ReactNode }) {
               setPassword={setPassword}
               confirmPassword={confirmPassword}
               setConfirmPassword={setConfirmPassword}
-              dialogOpen={dialogOpen}
-              setDialogOpen={setDialogOpen}
             />
             <DialogFooter className="gap-2">
               <Button
@@ -95,8 +95,6 @@ type RegisterFormProps = {
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   confirmPassword: string;
   setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
-  dialogOpen: boolean;
-  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function RegisterForm({
@@ -106,18 +104,8 @@ function RegisterForm({
   setPassword,
   confirmPassword,
   setConfirmPassword,
-  dialogOpen,
-  setDialogOpen,
 }: RegisterFormProps) {
   const fetcher = useFetcher<typeof action>({ key: "register" });
-
-  // TODO: Set this up to reset the fetcher state
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data?.ok && dialogOpen) {
-      setDialogOpen(false);
-      fetcher.submit({}, { action: "/login/fetcher", method: "post" });
-    }
-  }, [fetcher, dialogOpen, setDialogOpen]);
 
   return (
     <fetcher.Form
