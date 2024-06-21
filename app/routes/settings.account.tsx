@@ -282,8 +282,8 @@ function DeleteEmailDialog({
 }
 
 function ThemeForm() {
-  const fetcher = useFetcher<{ theme: Theme }>({ key: "theme" });
   const theme = useTheme();
+  const fetcher = useFetcher<{ theme: Theme }>({ key: "theme" });
 
   return (
     <div className="space-y-2">

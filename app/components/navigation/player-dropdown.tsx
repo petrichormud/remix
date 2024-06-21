@@ -25,7 +25,7 @@ export function PlayerDropdown() {
           variant="link"
           size="icon"
         >
-          <CircleUser className="h-5 w-5" />
+          <CircleUser className="h-6 w-6" />
           <span className="sr-only">Toggle player dropdown</span>
         </Button>
       </DropdownMenuTrigger>
