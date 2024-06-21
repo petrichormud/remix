@@ -1,5 +1,7 @@
-import { LogIn, CircleUser } from "lucide-react";
+import { LogIn, CircleUser, Waves } from "lucide-react";
+import { Link } from "@remix-run/react";
 
+import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import { LoginDialog } from "~/components/navigation/login";
 import { AccountMenu } from "~/components/navigation/account-menu";
@@ -8,13 +10,22 @@ import { SiteNavigation } from "~/components/navigation/site";
 
 type HeaderProps = {
   pid?: number;
+  noBlur?: boolean;
 };
 
-export function Header({ pid }: HeaderProps) {
+export function Header({ pid, noBlur = false }: HeaderProps) {
   return (
-    <header className="bg-background/70 backdrop-filter backdrop-blur-lg sticky top-0 flex w-full items-center justify-center py-2 px-6 border-b">
+    <header
+      className={cn(
+        "bg-background sticky top-0 flex w-full items-center justify-center py-2 px-6 border-b",
+        !noBlur && "bg-background/70 backdrop-filter backdrop-blur-lg"
+      )}
+    >
       <section className="flex w-full max-w-screen-2xl items-center justify-end">
         <div className="mr-auto flex items-center gap-1">
+          <Link to="/">
+            <Waves className="h-6 w-6" />
+          </Link>
           {pid ? (
             <AccountMenu>
               <Button type="button" variant="link">

@@ -4,7 +4,7 @@ import type {
   LinksFunction,
   LoaderFunctionArgs,
 } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
 import { Check, Bell, ArrowRight, Inbox, Users, Trash } from "lucide-react";
 
 import { Separator } from "~/components/ui/separator";
@@ -61,7 +61,7 @@ export default function Index() {
   const { pid } = useLoaderData<typeof loader>();
   return (
     <>
-      <Header pid={pid} />
+      <Header pid={pid} noBlur />
       <main className="flex flex-col items-center">
         <TestHeroTwo />
         <TestGettingStarted />
@@ -80,12 +80,14 @@ function TestHeroTwo() {
         <div className="px-6 pb-24 pt-10 sm:pb-32 lg:col-span-7 lg:px-0 lg:pb-56 lg:pt-48 xl:col-span-6">
           <div className="mx-auto max-w-2xl lg:mx-0">
             <div className="hidden sm:mt-32 sm:flex lg:mt-16">
-              <div className="rounded-full px-3 py-1 text-sm leading-6 text-muted-foreground ring-1 ring-muted-foreground/10 hover:ring-muted-foreground/20">
-                There&apos;s a change log. Here is where changes get posted.
-                <Button type="button" variant="link">
-                  Read More <ArrowRight className="ml-2 h-3 w-3" />
-                </Button>
-              </div>
+              <Link to="#changelog">
+                <div className="rounded-full px-3 py-1 text-sm leading-6 text-muted-foreground ring-1 ring-muted-foreground/10 hover:ring-muted-foreground/20">
+                  There&apos;s a change log. Here is where changes get posted.
+                  <Button type="button" variant="link">
+                    Read More <ArrowRight className="ml-2 h-3 w-3" />
+                  </Button>
+                </div>
+              </Link>
             </div>
             <h1 className="mt-24 text-4xl font-bold tracking-tight text-primary sm:mt-10 sm:text-6xl">
               A World Rife With Unchecked Powers
@@ -360,7 +362,7 @@ function ChangelogSection() {
     },
   ];
   return (
-    <div className="w-full sm:py-24 lg:py-32">
+    <div id="changelog" className="w-full sm:py-24 lg:py-32">
       <div className="mx-auto max-w-screen-2xl md:flex md:justify-between md:gap-24">
         <div className="md:grow w-full py-12 px-24">
           <header>

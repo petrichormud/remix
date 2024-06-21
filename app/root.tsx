@@ -40,7 +40,7 @@ function Document({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
-      className={cn({ dark: theme === THEME_DARK })}
+      className={cn({ dark: theme === THEME_DARK }, "scroll-smooth")}
       data-theme={theme}
     >
       <head>
