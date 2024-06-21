@@ -1,8 +1,10 @@
 import { type ActionFunctionArgs, json } from "@remix-run/node";
 
+import type { LoginReply } from "~/proto/mirror";
 import { getSession, commitSession } from "~/lib/sessions.server";
-import { client } from "~/lib/mirror.server";
-import { LoginReply } from "~/proto/mirror";
+import { client, playerSettings } from "~/lib/mirror.server";
+import { serializeTheme } from "~/lib/theme.server";
+import { isTheme } from "~/lib/theme";
 
 type Credentials = {
   username?: string;
@@ -49,6 +51,8 @@ export async function action({ request }: ActionFunctionArgs) {
   });
 
   try {
+    const headers = new Headers();
+
     const loginReply = await loginPromise;
     const pid = Number(loginReply.id);
     if (pid <= 0) {
@@ -60,14 +64,17 @@ export async function action({ request }: ActionFunctionArgs) {
       );
     }
     session.set("pid", pid);
-    return json(
-      { pid, ok: true },
-      {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
+    headers.append("Set-Cookie", await commitSession(session));
+
+    const playerSettingsReply = await playerSettings(pid);
+    if (isTheme(playerSettingsReply.theme)) {
+      headers.append(
+        "Set-Cookie",
+        await serializeTheme(playerSettingsReply.theme)
+      );
+    }
+
+    return json({ pid, ok: true }, { headers });
   } catch (err) {
     return json(
       { ok: false },

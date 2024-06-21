@@ -10,9 +10,25 @@ import { type LoaderFunction, json } from "@remix-run/node";
 import { cn } from "~/lib/utils";
 import { THEME_DARK, useTheme } from "~/lib/theme";
 import { getTheme } from "~/lib/theme.server";
+import { getSession } from "~/lib/sessions.server";
+import { playerSettings } from "~/lib/mirror.server";
 
 export const loader: LoaderFunction = async ({ request }) => {
   const theme = await getTheme(request);
+  const session = await getSession(request.headers.get("Cookie"));
+  if (session.has("pid")) {
+    const pid = session.get("pid");
+    if (pid) {
+      try {
+        const settings = await playerSettings(pid);
+        if (settings.theme !== theme) {
+          return json({ theme: settings.theme });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
   return json({
     theme,
   });
