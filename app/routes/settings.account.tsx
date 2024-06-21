@@ -1,9 +1,9 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { CircleAlert, Mail } from "lucide-react";
 import { useFetcher } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
+import { Theme, useTheme } from "remix-themes";
 
-import { ThemeContext } from "~/context/theme";
 import { cn } from "~/lib/utils";
 import {
   Dialog,
@@ -51,7 +51,7 @@ export default function AccountSettings() {
         <Email email="email@web.site" verified />
         <Email email="email@web.site" verified={false} />
       </div>
-      <Theme />
+      <ThemeForm />
     </div>
   );
 }
@@ -281,25 +281,27 @@ function DeleteEmailDialog({
   );
 }
 
-type ThemeInput = {
-  theme: "light" | "dark";
-};
-
-function Theme() {
-  const fetcher = useFetcher<ThemeInput>({ key: "theme" });
-  const { theme, setTheme } = useContext(ThemeContext);
+function ThemeForm() {
+  const fetcher = useFetcher<{ theme: "light" | "dark" }>({ key: "theme" });
+  const [theme, setTheme] = useTheme();
 
   return (
     <div className="space-y-2">
       <Label>Theme</Label>
       <RadioGroup
         onValueChange={(theme) => {
-          if (theme === "light" || theme === "dark") {
-            setTheme(theme);
-          }
-          fetcher.submit({ theme }, { method: "post", action: "/test-theme" });
+          if (theme === "light") setTheme(Theme.LIGHT);
+          if (theme === "dark") setTheme(Theme.DARK);
+          fetcher.submit(
+            { theme },
+            {
+              method: "post",
+              action: "/action/set-theme",
+              encType: "application/json",
+            }
+          );
         }}
-        defaultValue={theme}
+        defaultValue={theme ?? "light"}
         className="flex gap-4 items-center"
       >
         <div className="sm:min-w-60">

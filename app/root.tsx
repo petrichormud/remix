@@ -1,17 +1,34 @@
-import { useState } from "react";
 import {
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
+import type { LoaderFunction } from "@remix-run/node";
+import {
+  ThemeProvider,
+  useTheme,
+  PreventFlashOnWrongTheme,
+} from "remix-themes";
 
-import { ThemeContext } from "~/context/theme";
+import { cn } from "~/lib/utils";
+import { themeSessionResolver } from "~/sessions.server";
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const { getTheme } = await themeSessionResolver(request);
+  return {
+    theme: getTheme(),
+  };
+};
 
 function Document({ children }: { children: React.ReactNode }) {
+  const data = useLoaderData<typeof loader>();
+  const [theme] = useTheme();
+
   return (
-    <html lang="en" className="dark">
+    <html lang="en" data-theme={theme ?? ""} className={cn(theme ? theme : "")}>
       <head>
         <meta charSet="utf-8" />
         <meta
@@ -20,6 +37,7 @@ function Document({ children }: { children: React.ReactNode }) {
         />
         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
         <Meta />
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
         <Links />
       </head>
       <body>
@@ -31,25 +49,6 @@ function Document({ children }: { children: React.ReactNode }) {
   );
 }
 
-// export function Layout({ children }: { children: React.ReactNode }) {
-//   return (
-//     <html lang="en" className="dark">
-//       <head>
-//         <meta charSet="utf-8" />
-//         <meta name="viewport" content="width=device-width, initial-scale=1" />
-//         <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-//         <Meta />
-//         <Links />
-//       </head>
-//       <body>
-//         {children}
-//         <ScrollRestoration />
-//         <Scripts />
-//       </body>
-//     </html>
-//   );
-// }
-
 function App() {
   return (
     <Document>
@@ -59,10 +58,14 @@ function App() {
 }
 
 export default function AppWithProviders() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const { theme } = useLoaderData<typeof loader>();
   return (
-    <ThemeContext.Provider value={{ theme, setTheme }}>
+    <ThemeProvider
+      specifiedTheme={theme}
+      themeAction="/action/set-theme"
+      disableTransitionOnThemeChange
+    >
       <App />
-    </ThemeContext.Provider>
+    </ThemeProvider>
   );
 }
