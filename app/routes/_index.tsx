@@ -7,6 +7,8 @@ import type {
 import { useLoaderData, Link } from "@remix-run/react";
 import { Check, Bell, ArrowRight, Inbox, Users, Trash } from "lucide-react";
 
+import { Header } from "~/components/header";
+import { Footer } from "~/components/footer";
 import { Separator } from "~/components/ui/separator";
 import {
   Select,
@@ -20,7 +22,6 @@ import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Switch } from "~/components/ui/switch";
 import { Input } from "~/components/ui/input";
-import { Header } from "~/components/header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import {
   Card,
@@ -68,7 +69,7 @@ export default function Index() {
         <Newsletter />
         <ChangelogSection />
       </main>
-      <footer></footer>
+      <Footer />
     </>
   );
 }
