@@ -7,6 +7,9 @@ import type {
 import { useLoaderData, Link } from "@remix-run/react";
 import { Check, Bell, ArrowRight, Inbox, Users, Trash } from "lucide-react";
 
+import { getSession } from "~/lib/sessions.server";
+import { playerPermissions } from "~/lib/mirror.server";
+import { PlayerPermissions } from "~/lib/permissions";
 import { Header } from "~/components/header";
 import { Footer } from "~/components/footer";
 import { Separator } from "~/components/ui/separator";
@@ -31,7 +34,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { getSession } from "~/lib/sessions.server";
 
 import tailwind from "~/styles/tailwind.css?url";
 
@@ -50,18 +52,22 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (session.has("pid")) {
     const pid = session.get("pid");
-    return { pid };
+    if (!pid) {
+      return { pid: 0, permissionNames: [] };
+    }
+    const permissionsReply = await playerPermissions(pid);
+    return { pid, permissionNames: permissionsReply.names };
   } else {
-    return { pid: 0 };
+    return { pid: 0, permissionNames: [] };
   }
 }
 
 export default function Index() {
-  // TODO: Move this loader into the Header component
-  const { pid } = useLoaderData<typeof loader>();
+  const { pid, permissionNames } = useLoaderData<typeof loader>();
+  const permissions = pid ? new PlayerPermissions(permissionNames) : undefined;
   return (
     <>
-      <Header pid={pid} noBlur />
+      <Header pid={pid} permissions={permissions} noBlur />
       <main className="flex flex-col items-center">
         <TestHeroTwo />
         <TestGettingStarted />

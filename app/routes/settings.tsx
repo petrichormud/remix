@@ -29,9 +29,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (session.has("pid")) {
     const pid = session.get("pid");
+    if (!pid) {
+      return redirect("/");
+    }
     return { pid };
   } else {
-    // TODO: Render a login page here instead
     return redirect("/");
   }
 }

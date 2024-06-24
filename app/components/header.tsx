@@ -2,6 +2,7 @@ import { LogIn, CircleUser, Waves } from "lucide-react";
 import { Link } from "@remix-run/react";
 
 import { cn } from "~/lib/utils";
+import { PlayerPermissions } from "~/lib/permissions";
 import { Button } from "~/components/ui/button";
 import { LoginDialog } from "~/components/navigation/login";
 import { AccountMenu } from "~/components/navigation/account-menu";
@@ -10,10 +11,11 @@ import { SiteNavigation } from "~/components/navigation/site";
 
 type HeaderProps = {
   pid?: number;
+  permissions?: PlayerPermissions;
   noBlur?: boolean;
 };
 
-export function Header({ pid, noBlur = false }: HeaderProps) {
+export function Header({ pid, permissions, noBlur = false }: HeaderProps) {
   return (
     <header
       className={cn(
@@ -27,7 +29,7 @@ export function Header({ pid, noBlur = false }: HeaderProps) {
             <Waves className="h-6 w-6" />
           </Link>
           {pid ? (
-            <AccountMenu>
+            <AccountMenu permissions={permissions}>
               <Button type="button" variant="link">
                 <CircleUser className="mr-2 h-5 w-5" />
                 Account

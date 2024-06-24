@@ -115,6 +115,80 @@ export interface SetPlayerSettingsThemeReply {
      */
     theme: string;
 }
+/**
+ * @generated from protobuf message mirror.PlayerPermissionsRequest
+ */
+export interface PlayerPermissionsRequest {
+    /**
+     * @generated from protobuf field: int64 pid = 1;
+     */
+    pid: bigint;
+}
+/**
+ * @generated from protobuf message mirror.PlayerPermissionsReply
+ */
+export interface PlayerPermissionsReply {
+    /**
+     * @generated from protobuf field: int64 pid = 1;
+     */
+    pid: bigint;
+    /**
+     * @generated from protobuf field: repeated string names = 2;
+     */
+    names: string[];
+}
+/**
+ * @generated from protobuf message mirror.GrantPlayerPermissionRequest
+ */
+export interface GrantPlayerPermissionRequest {
+    /**
+     * @generated from protobuf field: int64 pid = 1;
+     */
+    pid: bigint;
+    /**
+     * @generated from protobuf field: int64 ipid = 2;
+     */
+    ipid: bigint;
+    /**
+     * @generated from protobuf field: string name = 3;
+     */
+    name: string;
+}
+/**
+ * @generated from protobuf message mirror.GrantPlayerPermissionReply
+ */
+export interface GrantPlayerPermissionReply {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+}
+/**
+ * @generated from protobuf message mirror.RevokePlayerPermissionRequest
+ */
+export interface RevokePlayerPermissionRequest {
+    /**
+     * @generated from protobuf field: int64 pid = 1;
+     */
+    pid: bigint;
+    /**
+     * @generated from protobuf field: int64 ipid = 2;
+     */
+    ipid: bigint;
+    /**
+     * @generated from protobuf field: string name = 3;
+     */
+    name: string;
+}
+/**
+ * @generated from protobuf message mirror.RevokePlayerPermissionReply
+ */
+export interface RevokePlayerPermissionReply {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+}
 // @generated message type with reflection information, may provide speed optimized methods
 class RegisterRequest$Type extends MessageType<RegisterRequest> {
     constructor() {
@@ -555,6 +629,328 @@ class SetPlayerSettingsThemeReply$Type extends MessageType<SetPlayerSettingsThem
  * @generated MessageType for protobuf message mirror.SetPlayerSettingsThemeReply
  */
 export const SetPlayerSettingsThemeReply = new SetPlayerSettingsThemeReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayerPermissionsRequest$Type extends MessageType<PlayerPermissionsRequest> {
+    constructor() {
+        super("mirror.PlayerPermissionsRequest", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<PlayerPermissionsRequest>): PlayerPermissionsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pid = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<PlayerPermissionsRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayerPermissionsRequest): PlayerPermissionsRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 pid */ 1:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayerPermissionsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 pid = 1; */
+        if (message.pid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.pid);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.PlayerPermissionsRequest
+ */
+export const PlayerPermissionsRequest = new PlayerPermissionsRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayerPermissionsReply$Type extends MessageType<PlayerPermissionsReply> {
+    constructor() {
+        super("mirror.PlayerPermissionsReply", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "names", kind: "scalar", repeat: 2 /*RepeatType.UNPACKED*/, T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<PlayerPermissionsReply>): PlayerPermissionsReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pid = 0n;
+        message.names = [];
+        if (value !== undefined)
+            reflectionMergePartial<PlayerPermissionsReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayerPermissionsReply): PlayerPermissionsReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 pid */ 1:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                case /* repeated string names */ 2:
+                    message.names.push(reader.string());
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayerPermissionsReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 pid = 1; */
+        if (message.pid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.pid);
+        /* repeated string names = 2; */
+        for (let i = 0; i < message.names.length; i++)
+            writer.tag(2, WireType.LengthDelimited).string(message.names[i]);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.PlayerPermissionsReply
+ */
+export const PlayerPermissionsReply = new PlayerPermissionsReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GrantPlayerPermissionRequest$Type extends MessageType<GrantPlayerPermissionRequest> {
+    constructor() {
+        super("mirror.GrantPlayerPermissionRequest", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "ipid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 3, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<GrantPlayerPermissionRequest>): GrantPlayerPermissionRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pid = 0n;
+        message.ipid = 0n;
+        message.name = "";
+        if (value !== undefined)
+            reflectionMergePartial<GrantPlayerPermissionRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GrantPlayerPermissionRequest): GrantPlayerPermissionRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 pid */ 1:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                case /* int64 ipid */ 2:
+                    message.ipid = reader.int64().toBigInt();
+                    break;
+                case /* string name */ 3:
+                    message.name = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GrantPlayerPermissionRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 pid = 1; */
+        if (message.pid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.pid);
+        /* int64 ipid = 2; */
+        if (message.ipid !== 0n)
+            writer.tag(2, WireType.Varint).int64(message.ipid);
+        /* string name = 3; */
+        if (message.name !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.name);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.GrantPlayerPermissionRequest
+ */
+export const GrantPlayerPermissionRequest = new GrantPlayerPermissionRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class GrantPlayerPermissionReply$Type extends MessageType<GrantPlayerPermissionReply> {
+    constructor() {
+        super("mirror.GrantPlayerPermissionReply", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<GrantPlayerPermissionReply>): GrantPlayerPermissionReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<GrantPlayerPermissionReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: GrantPlayerPermissionReply): GrantPlayerPermissionReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: GrantPlayerPermissionReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.GrantPlayerPermissionReply
+ */
+export const GrantPlayerPermissionReply = new GrantPlayerPermissionReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RevokePlayerPermissionRequest$Type extends MessageType<RevokePlayerPermissionRequest> {
+    constructor() {
+        super("mirror.RevokePlayerPermissionRequest", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "ipid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 3, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<RevokePlayerPermissionRequest>): RevokePlayerPermissionRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pid = 0n;
+        message.ipid = 0n;
+        message.name = "";
+        if (value !== undefined)
+            reflectionMergePartial<RevokePlayerPermissionRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RevokePlayerPermissionRequest): RevokePlayerPermissionRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 pid */ 1:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                case /* int64 ipid */ 2:
+                    message.ipid = reader.int64().toBigInt();
+                    break;
+                case /* string name */ 3:
+                    message.name = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RevokePlayerPermissionRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 pid = 1; */
+        if (message.pid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.pid);
+        /* int64 ipid = 2; */
+        if (message.ipid !== 0n)
+            writer.tag(2, WireType.Varint).int64(message.ipid);
+        /* string name = 3; */
+        if (message.name !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.name);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.RevokePlayerPermissionRequest
+ */
+export const RevokePlayerPermissionRequest = new RevokePlayerPermissionRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class RevokePlayerPermissionReply$Type extends MessageType<RevokePlayerPermissionReply> {
+    constructor() {
+        super("mirror.RevokePlayerPermissionReply", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<RevokePlayerPermissionReply>): RevokePlayerPermissionReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<RevokePlayerPermissionReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RevokePlayerPermissionReply): RevokePlayerPermissionReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: RevokePlayerPermissionReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.RevokePlayerPermissionReply
+ */
+export const RevokePlayerPermissionReply = new RevokePlayerPermissionReply$Type();
 /**
  * @generated ServiceType for protobuf service mirror.Mirror
  */
@@ -562,5 +958,8 @@ export const Mirror = new ServiceType("mirror.Mirror", [
     { name: "Register", options: {}, I: RegisterRequest, O: RegisterReply },
     { name: "Login", options: {}, I: LoginRequest, O: LoginReply },
     { name: "PlayerSettings", options: {}, I: PlayerSettingsRequest, O: PlayerSettingsReply },
-    { name: "SetPlayerSettingsTheme", options: {}, I: SetPlayerSettingsThemeRequest, O: SetPlayerSettingsThemeReply }
+    { name: "SetPlayerSettingsTheme", options: {}, I: SetPlayerSettingsThemeRequest, O: SetPlayerSettingsThemeReply },
+    { name: "PlayerPermissions", options: {}, I: PlayerPermissionsRequest, O: PlayerPermissionsReply },
+    { name: "GrantPlayerPermission", options: {}, I: GrantPlayerPermissionRequest, O: GrantPlayerPermissionReply },
+    { name: "RevokePlayerPermission", options: {}, I: RevokePlayerPermissionRequest, O: RevokePlayerPermissionReply }
 ]);

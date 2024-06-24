@@ -2,6 +2,7 @@ import { type ReactNode, useState } from "react";
 import { Link } from "@remix-run/react";
 import { LogOut, Settings } from "lucide-react";
 
+import { PlayerPermissions } from "~/lib/permissions";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +14,12 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { LogoutDialog } from "~/components/navigation/logout";
 
-export function AccountMenu({ children }: { children: ReactNode }) {
+type AccountMenuProps = {
+  children: ReactNode;
+  permissions?: PlayerPermissions;
+};
+
+export function AccountMenu({ children, permissions }: AccountMenuProps) {
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
   return (
@@ -30,6 +36,16 @@ export function AccountMenu({ children }: { children: ReactNode }) {
                 <span>Settings</span>
               </DropdownMenuItem>
             </Link>
+            {permissions &&
+            permissions.has("grant-all") &&
+            permissions.has("revoke-all") ? (
+              <Link to="/permissions">
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Permissions</span>
+                </DropdownMenuItem>
+              </Link>
+            ) : null}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>

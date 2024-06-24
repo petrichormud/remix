@@ -4,6 +4,7 @@ import { MirrorClient } from "~/proto/mirror.grpc-client";
 import type {
   PlayerSettingsReply,
   SetPlayerSettingsThemeReply,
+  PlayerPermissionsReply,
 } from "~/proto/mirror";
 import type { Theme } from "~/lib/theme";
 
@@ -42,6 +43,25 @@ export async function setPlayerSettingsTheme(pid: number, theme: Theme) {
       if (!reply) {
         // TODO: Create an error here
         reject("setPlayerSettingsThemeReply is null");
+        return;
+      }
+
+      resolve(reply);
+    });
+  });
+}
+
+export async function playerPermissions(pid: number) {
+  return new Promise<PlayerPermissionsReply>((resolve, reject) => {
+    client.playerPermissions({ pid: BigInt(pid) }, (err, reply) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!reply) {
+        // TODO: Create an error here
+        reject("playerPermissionsReply is null");
         return;
       }
 

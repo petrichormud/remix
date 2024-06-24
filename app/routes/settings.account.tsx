@@ -200,13 +200,6 @@ export function EmailForm({
 }: EmailFormProps) {
   const fetcher = useFetcher();
 
-  // useEffect(() => {
-  //   if (fetcher.state === "idle" && fetcher.data?.ok && dialogOpen) {
-  //     setDialogOpen(false);
-  //     fetcher.submit({}, { action: "/login/fetcher", method: "post" });
-  //   }
-  // }, [fetcher, dialogOpen, setDialogOpen]);
-
   return (
     <fetcher.Form
       method="post"
