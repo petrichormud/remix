@@ -10,6 +10,8 @@ import type { GrantPlayerPermissionReply } from "./mirror";
 import type { GrantPlayerPermissionRequest } from "./mirror";
 import type { PlayerPermissionsReply } from "./mirror";
 import type { PlayerPermissionsRequest } from "./mirror";
+import type { PlayersReply } from "./mirror";
+import type { PlayersRequest } from "./mirror";
 import type { SetPlayerSettingsThemeReply } from "./mirror";
 import type { SetPlayerSettingsThemeRequest } from "./mirror";
 import type { PlayerSettingsReply } from "./mirror";
@@ -51,6 +53,13 @@ export interface IMirrorClient {
     setPlayerSettingsTheme(input: SetPlayerSettingsThemeRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void): grpc.ClientUnaryCall;
     setPlayerSettingsTheme(input: SetPlayerSettingsThemeRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void): grpc.ClientUnaryCall;
     setPlayerSettingsTheme(input: SetPlayerSettingsThemeRequest, callback: (err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: Players(mirror.PlayersRequest) returns (mirror.PlayersReply);
+     */
+    players(input: PlayersRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PlayersReply) => void): grpc.ClientUnaryCall;
+    players(input: PlayersRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: PlayersReply) => void): grpc.ClientUnaryCall;
+    players(input: PlayersRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PlayersReply) => void): grpc.ClientUnaryCall;
+    players(input: PlayersRequest, callback: (err: grpc.ServiceError | null, value?: PlayersReply) => void): grpc.ClientUnaryCall;
     /**
      * @generated from protobuf rpc: PlayerPermissions(mirror.PlayerPermissionsRequest) returns (mirror.PlayerPermissionsReply);
      */
@@ -111,24 +120,31 @@ export class MirrorClient extends grpc.Client implements IMirrorClient {
         return this.makeUnaryRequest<SetPlayerSettingsThemeRequest, SetPlayerSettingsThemeReply>(`/${Mirror.typeName}/${method.name}`, (value: SetPlayerSettingsThemeRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): SetPlayerSettingsThemeReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
+     * @generated from protobuf rpc: Players(mirror.PlayersRequest) returns (mirror.PlayersReply);
+     */
+    players(input: PlayersRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayersReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayersReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PlayersReply) => void)): grpc.ClientUnaryCall {
+        const method = Mirror.methods[4];
+        return this.makeUnaryRequest<PlayersRequest, PlayersReply>(`/${Mirror.typeName}/${method.name}`, (value: PlayersRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PlayersReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
      * @generated from protobuf rpc: PlayerPermissions(mirror.PlayerPermissionsRequest) returns (mirror.PlayerPermissionsReply);
      */
     playerPermissions(input: PlayerPermissionsRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerPermissionsReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerPermissionsReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PlayerPermissionsReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[4];
+        const method = Mirror.methods[5];
         return this.makeUnaryRequest<PlayerPermissionsRequest, PlayerPermissionsReply>(`/${Mirror.typeName}/${method.name}`, (value: PlayerPermissionsRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PlayerPermissionsReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: GrantPlayerPermission(mirror.GrantPlayerPermissionRequest) returns (mirror.GrantPlayerPermissionReply);
      */
     grantPlayerPermission(input: GrantPlayerPermissionRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GrantPlayerPermissionReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GrantPlayerPermissionReply) => void), callback?: ((err: grpc.ServiceError | null, value?: GrantPlayerPermissionReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[5];
+        const method = Mirror.methods[6];
         return this.makeUnaryRequest<GrantPlayerPermissionRequest, GrantPlayerPermissionReply>(`/${Mirror.typeName}/${method.name}`, (value: GrantPlayerPermissionRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): GrantPlayerPermissionReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: RevokePlayerPermission(mirror.RevokePlayerPermissionRequest) returns (mirror.RevokePlayerPermissionReply);
      */
     revokePlayerPermission(input: RevokePlayerPermissionRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RevokePlayerPermissionReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RevokePlayerPermissionReply) => void), callback?: ((err: grpc.ServiceError | null, value?: RevokePlayerPermissionReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[6];
+        const method = Mirror.methods[7];
         return this.makeUnaryRequest<RevokePlayerPermissionRequest, RevokePlayerPermissionReply>(`/${Mirror.typeName}/${method.name}`, (value: RevokePlayerPermissionRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): RevokePlayerPermissionReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

@@ -3,7 +3,6 @@ import {
   type ColumnDef,
   type SortingState,
   type ColumnFiltersState,
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -12,7 +11,8 @@ import {
 } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
-import { DataTablePagination } from "~/components/ui/data-table/pagination";
+import { DataTablePagination } from "~/components/ui/data-table-pagination";
+import { DataTable } from "~/components/ui/data-table";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import {
@@ -23,21 +23,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "~/components/ui/table";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function PlayersDataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
@@ -97,56 +89,7 @@ export function DataTable<TData, TValue>({
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
       </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No players to display.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+      <DataTable table={table} columns={columns} />
       <div className="pt-2">
         <DataTablePagination table={table} />
       </div>

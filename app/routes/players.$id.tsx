@@ -29,12 +29,12 @@ export const links: LinksFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (!session.has("pid")) return redirect("/");
-
   const pid = session.get("pid");
   if (!pid) {
     return redirect("/");
   }
 
+  // TODO: Add an API to the permissions object for parsing these authorized views
   const permissionsReply = await playerPermissions(pid);
   if (
     !permissionsReply.names.includes("grant-all") ||

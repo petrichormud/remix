@@ -11,7 +11,7 @@ import {
   DialogFooter,
 } from "~/components/ui/dialog";
 import { Button } from "~/components/ui/button";
-import { RegisterForm } from "~/components/register";
+import { RegisterForm } from "~/components/navigation/register";
 
 type PlayButtonProps = {
   pid?: number;
@@ -73,8 +73,6 @@ function RegisterDialog({ children }: { children: React.ReactNode }) {
           setPassword={setPassword}
           confirmPassword={confirmPassword}
           setConfirmPassword={setConfirmPassword}
-          dialogOpen={dialogOpen}
-          setDialogOpen={setDialogOpen}
         />
         <DialogFooter className="gap-2">
           <Button

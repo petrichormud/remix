@@ -116,6 +116,37 @@ export interface SetPlayerSettingsThemeReply {
     theme: string;
 }
 /**
+ * @generated from protobuf message mirror.PlayersRequest
+ */
+export interface PlayersRequest {
+}
+/**
+ * @generated from protobuf message mirror.PlayersReply
+ */
+export interface PlayersReply {
+    /**
+     * @generated from protobuf field: repeated mirror.PlayersReplyPlayer players = 1;
+     */
+    players: PlayersReplyPlayer[];
+}
+/**
+ * @generated from protobuf message mirror.PlayersReplyPlayer
+ */
+export interface PlayersReplyPlayer {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+    /**
+     * @generated from protobuf field: string username = 2;
+     */
+    username: string;
+    /**
+     * @generated from protobuf field: string primary_email = 3;
+     */
+    primaryEmail: string;
+}
+/**
  * @generated from protobuf message mirror.PlayerPermissionsRequest
  */
 export interface PlayerPermissionsRequest {
@@ -630,6 +661,141 @@ class SetPlayerSettingsThemeReply$Type extends MessageType<SetPlayerSettingsThem
  */
 export const SetPlayerSettingsThemeReply = new SetPlayerSettingsThemeReply$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class PlayersRequest$Type extends MessageType<PlayersRequest> {
+    constructor() {
+        super("mirror.PlayersRequest", []);
+    }
+    create(value?: PartialMessage<PlayersRequest>): PlayersRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<PlayersRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayersRequest): PlayersRequest {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: PlayersRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.PlayersRequest
+ */
+export const PlayersRequest = new PlayersRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayersReply$Type extends MessageType<PlayersReply> {
+    constructor() {
+        super("mirror.PlayersReply", [
+            { no: 1, name: "players", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => PlayersReplyPlayer }
+        ]);
+    }
+    create(value?: PartialMessage<PlayersReply>): PlayersReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.players = [];
+        if (value !== undefined)
+            reflectionMergePartial<PlayersReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayersReply): PlayersReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated mirror.PlayersReplyPlayer players */ 1:
+                    message.players.push(PlayersReplyPlayer.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayersReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated mirror.PlayersReplyPlayer players = 1; */
+        for (let i = 0; i < message.players.length; i++)
+            PlayersReplyPlayer.internalBinaryWrite(message.players[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.PlayersReply
+ */
+export const PlayersReply = new PlayersReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayersReplyPlayer$Type extends MessageType<PlayersReplyPlayer> {
+    constructor() {
+        super("mirror.PlayersReplyPlayer", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "username", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "primary_email", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<PlayersReplyPlayer>): PlayersReplyPlayer {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        message.username = "";
+        message.primaryEmail = "";
+        if (value !== undefined)
+            reflectionMergePartial<PlayersReplyPlayer>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayersReplyPlayer): PlayersReplyPlayer {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                case /* string username */ 2:
+                    message.username = reader.string();
+                    break;
+                case /* string primary_email */ 3:
+                    message.primaryEmail = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayersReplyPlayer, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        /* string username = 2; */
+        if (message.username !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.username);
+        /* string primary_email = 3; */
+        if (message.primaryEmail !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.primaryEmail);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.PlayersReplyPlayer
+ */
+export const PlayersReplyPlayer = new PlayersReplyPlayer$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class PlayerPermissionsRequest$Type extends MessageType<PlayerPermissionsRequest> {
     constructor() {
         super("mirror.PlayerPermissionsRequest", [
@@ -959,6 +1125,7 @@ export const Mirror = new ServiceType("mirror.Mirror", [
     { name: "Login", options: {}, I: LoginRequest, O: LoginReply },
     { name: "PlayerSettings", options: {}, I: PlayerSettingsRequest, O: PlayerSettingsReply },
     { name: "SetPlayerSettingsTheme", options: {}, I: SetPlayerSettingsThemeRequest, O: SetPlayerSettingsThemeReply },
+    { name: "Players", options: {}, I: PlayersRequest, O: PlayersReply },
     { name: "PlayerPermissions", options: {}, I: PlayerPermissionsRequest, O: PlayerPermissionsReply },
     { name: "GrantPlayerPermission", options: {}, I: GrantPlayerPermissionRequest, O: GrantPlayerPermissionReply },
     { name: "RevokePlayerPermission", options: {}, I: RevokePlayerPermissionRequest, O: RevokePlayerPermissionReply }

@@ -4,15 +4,26 @@ import {
   type LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Link } from "@remix-run/react";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowUp, ArrowDown, ArrowUpDown, MoreHorizontal } from "lucide-react";
 
+import type { PlayersReplyPlayer } from "~/proto/mirror";
 import { getSession } from "~/lib/sessions.server";
-import { playerPermissions } from "~/lib/mirror.server";
+import { players, playerPermissions } from "~/lib/mirror.server";
 import { PlayerPermissions } from "~/lib/permissions";
 import { Header } from "~/components/header";
-import { columns } from "~/components/players/columns";
-import { players } from "~/components/players/data";
-import { DataTable } from "~/components/players/data-table";
+import { PlayersDataTable } from "~/components/players/data-table";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 
 import tailwind from "~/styles/tailwind.css?url";
 
@@ -30,7 +41,6 @@ export const links: LinksFunction = () => {
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (!session.has("pid")) return redirect("/");
-
   const pid = session.get("pid");
   if (!pid) {
     return redirect("/");
@@ -44,7 +54,16 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect("/");
   }
 
-  return { pid, permissionNames: permissionsReply.names, players };
+  const playersReply = await players();
+  const playerRows: Player[] = playersReply.players.map(({ id, ...player }) => {
+    return { id: Number(id), ...player };
+  });
+
+  return {
+    pid,
+    permissionNames: permissionsReply.names,
+    players: playerRows,
+  };
 }
 
 export default function Index() {
@@ -55,8 +74,98 @@ export default function Index() {
     <>
       <Header pid={pid} permissions={permissions} />
       <main className="container mx-auto py-10">
-        <DataTable columns={columns} data={players} />
+        <PlayersDataTable columns={columns} data={players} />
       </main>
     </>
   );
 }
+
+function SortArrow({ dir }: { dir: string | boolean }) {
+  if (dir === "asc") {
+    return <ArrowUp className="h-4 w-4" />;
+  } else if (dir === "desc") {
+    return <ArrowDown className="h-4 w-4" />;
+  } else {
+    return <ArrowUpDown className="h-4 w-4" />;
+  }
+}
+
+type Player = Omit<PlayersReplyPlayer, "id"> & { id: number };
+
+const columns: ColumnDef<Player>[] = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "username",
+    header: "Username",
+  },
+  {
+    accessorKey: "primaryEmail",
+    header: ({ column }) => {
+      return (
+        <>
+          <span>Primary Email</span>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="ml-2 p-2"
+          >
+            <SortArrow dir={column.getIsSorted()} />
+          </Button>
+        </>
+      );
+    },
+  },
+  {
+    accessorKey: "currentCharacter",
+    header: "Current Character",
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => {
+      const { original: player } = row;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <Link to={`/players/${player.id}`}>
+              <DropdownMenuItem>Go to player</DropdownMenuItem>
+            </Link>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>Grant Permissions</DropdownMenuItem>
+            <DropdownMenuItem>Revoke Permissions</DropdownMenuItem>
+            <DropdownMenuItem>Revoke All Permissions</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+];

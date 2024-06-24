@@ -97,7 +97,7 @@ type RegisterFormProps = {
   setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function RegisterForm({
+export function RegisterForm({
   username,
   setUsername,
   password,
