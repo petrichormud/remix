@@ -31,7 +31,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-
 import { getSession } from "~/lib/sessions.server";
 
 import tailwind from "~/styles/tailwind.css?url";
@@ -51,9 +50,9 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
   if (session.has("pid")) {
     const pid = session.get("pid");
-    return { pid, loginError: session.get("loginError") || null };
+    return { pid };
   } else {
-    return { pid: 0, loginError: session.get("loginError") || null };
+    return { pid: 0 };
   }
 }
 
