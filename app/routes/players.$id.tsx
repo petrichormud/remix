@@ -10,7 +10,7 @@ import { Lock } from "lucide-react";
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
 import { Header } from "~/components/header";
-import { SidebarNav } from "~/components/sidebar-nav";
+import { SidebarNav } from "~/components/ui/sidebar-nav";
 import { Separator } from "~/components/ui/separator";
 
 import tailwind from "~/styles/tailwind.css?url";
