@@ -10,6 +10,9 @@ import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
 import { PlayerPermissions } from "~/lib/permissions";
 import { Header } from "~/components/header";
+import { columns } from "~/components/players/columns";
+import { players } from "~/components/players/data";
+import { DataTable } from "~/components/players/data-table";
 
 import tailwind from "~/styles/tailwind.css?url";
 
@@ -26,32 +29,34 @@ export const links: LinksFunction = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  if (session.has("pid")) {
-    const pid = session.get("pid");
-    if (!pid) {
-      return redirect("/");
-    }
-    const permissionsReply = await playerPermissions(pid);
-    if (
-      !permissionsReply.names.includes("grant-all") ||
-      !permissionsReply.names.includes("revoke-all")
-    ) {
-      return redirect("/");
-    }
-    return { pid, permissionNames: permissionsReply.names };
-  } else {
+  if (!session.has("pid")) return redirect("/");
+
+  const pid = session.get("pid");
+  if (!pid) {
     return redirect("/");
   }
+
+  const permissionsReply = await playerPermissions(pid);
+  if (
+    !permissionsReply.names.includes("grant-all") ||
+    !permissionsReply.names.includes("revoke-all")
+  ) {
+    return redirect("/");
+  }
+
+  return { pid, permissionNames: permissionsReply.names, players };
 }
 
 export default function Index() {
-  const { pid, permissionNames } = useLoaderData<typeof loader>();
+  const { pid, permissionNames, players } = useLoaderData<typeof loader>();
   const permissions = new PlayerPermissions(permissionNames);
 
   return (
     <>
       <Header pid={pid} permissions={permissions} />
-      <main>Permissions</main>
+      <main className="container mx-auto py-10">
+        <DataTable columns={columns} data={players} />
+      </main>
     </>
   );
 }

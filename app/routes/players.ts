@@ -1,8 +1,8 @@
 import { type ActionFunctionArgs, json, redirect } from "@remix-run/node";
 
+import type { RegisterReply } from "~/proto/mirror";
 import { getSession, commitSession } from "~/lib/sessions.server";
 import { client } from "~/lib/mirror.server";
-import { RegisterReply } from "~/proto/mirror";
 
 type Credentials = {
   username?: string;

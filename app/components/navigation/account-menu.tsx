@@ -1,6 +1,6 @@
 import { type ReactNode, useState } from "react";
 import { Link } from "@remix-run/react";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut, Settings, Users } from "lucide-react";
 
 import { PlayerPermissions } from "~/lib/permissions";
 import {
@@ -36,17 +36,22 @@ export function AccountMenu({ children, permissions }: AccountMenuProps) {
                 <span>Settings</span>
               </DropdownMenuItem>
             </Link>
-            {permissions &&
-            permissions.has("grant-all") &&
-            permissions.has("revoke-all") ? (
-              <Link to="/permissions">
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Permissions</span>
-                </DropdownMenuItem>
-              </Link>
-            ) : null}
           </DropdownMenuGroup>
+          {permissions &&
+          permissions.has("grant-all") &&
+          permissions.has("revoke-all") ? (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <Link to="/players">
+                  <DropdownMenuItem>
+                    <Users className="mr-2 h-4 w-4" />
+                    <span>Players</span>
+                  </DropdownMenuItem>
+                </Link>
+              </DropdownMenuGroup>
+            </>
+          ) : null}
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem onClick={() => setLogoutDialogOpen(true)}>

@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
 
 import { action } from "~/routes/players";
@@ -12,8 +11,6 @@ type RegisterFormProps = {
   setPassword: React.Dispatch<React.SetStateAction<string>>;
   confirmPassword: string;
   setConfirmPassword: React.Dispatch<React.SetStateAction<string>>;
-  dialogOpen: boolean;
-  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export function RegisterForm({
@@ -23,18 +20,8 @@ export function RegisterForm({
   setPassword,
   confirmPassword,
   setConfirmPassword,
-  dialogOpen,
-  setDialogOpen,
 }: RegisterFormProps) {
   const fetcher = useFetcher<typeof action>({ key: "register" });
-
-  // TODO: Set this up to reset the fetcher state
-  useEffect(() => {
-    if (fetcher.state === "idle" && fetcher.data?.ok && dialogOpen) {
-      setDialogOpen(false);
-      fetcher.submit({}, { action: "/login/fetcher", method: "post" });
-    }
-  }, [fetcher, dialogOpen, setDialogOpen]);
 
   return (
     <fetcher.Form
