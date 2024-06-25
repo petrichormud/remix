@@ -1,6 +1,8 @@
 import { type LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useRouteLoaderData } from "@remix-run/react";
 
+import { loader as rootPlayersLoader } from "~/routes/players.$id";
+import { PlayerPermissions } from "~/lib/permissions";
 import {
   playerPermissions,
   playerPermissionDefinitions,
@@ -22,7 +24,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 export default function PlayerPermissionsComponent() {
-  const { definitions } = useLoaderData<typeof loader>();
+  const { definitions, playerPermissionNames } = useLoaderData<typeof loader>();
+  const data =
+    useRouteLoaderData<typeof rootPlayersLoader>("routes/players.$id");
+  const viewerPermissions = new PlayerPermissions(data?.permissionNames || []);
+  const playerPermissions = new PlayerPermissions(playerPermissionNames);
 
   const permissionsByCategory: {
     [index: string]: PlayerPermissionDefinitionsReplyPermission[];
@@ -51,6 +57,9 @@ export default function PlayerPermissionsComponent() {
                   key={name}
                   title={title}
                   about={about}
+                  granted={playerPermissions.has(name)}
+                  canGrant={viewerPermissions.canGrant(name)}
+                  canRevoke={viewerPermissions.canRevoke(name)}
                 />
               );
             })}
@@ -64,19 +73,26 @@ export default function PlayerPermissionsComponent() {
 type AdminPlayerPermissionProps = {
   title: string;
   about: string;
+  granted: boolean;
+  canGrant: boolean;
+  canRevoke: boolean;
 };
 
 function PlayerPermissionComponent({
   title,
   about,
+  granted,
+  canGrant,
+  canRevoke,
 }: AdminPlayerPermissionProps) {
+  const disabled = granted ? !canRevoke : !canGrant;
   return (
     <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
       <div className="space-y-1">
         <h4 className="text-sm leading-none">{title}</h4>
         <p className="text-xs text-muted-foreground">{about}</p>
       </div>
-      <Switch />
+      <Switch checked={granted} disabled={disabled} />
     </div>
   );
 }
