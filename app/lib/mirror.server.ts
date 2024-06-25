@@ -1,11 +1,12 @@
 import { credentials } from "@grpc/grpc-js";
 
 import { MirrorClient } from "~/proto/mirror.grpc-client";
-import type {
-  PlayerSettingsReply,
-  SetPlayerSettingsThemeReply,
-  PlayersReply,
-  PlayerPermissionsReply,
+import {
+  type PlayerSettingsReply,
+  type SetPlayerSettingsThemeReply,
+  type PlayersReply,
+  type PlayerPermissionDefinitionsReply,
+  type PlayerPermissionsReply,
 } from "~/proto/mirror";
 import type { Theme } from "~/lib/theme";
 
@@ -63,6 +64,25 @@ export async function players() {
       if (!reply) {
         // TODO: Create an error here
         reject("playersReply is null");
+        return;
+      }
+
+      resolve(reply);
+    });
+  });
+}
+
+export async function playerPermissionDefinitions() {
+  return new Promise<PlayerPermissionDefinitionsReply>((resolve, reject) => {
+    client.playerPermissionDefinitions({}, (err, reply) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!reply) {
+        // TODO: Create an error here
+        reject("playerPermissionDefinitionsReply is null");
         return;
       }
 

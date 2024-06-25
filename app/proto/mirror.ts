@@ -147,6 +147,41 @@ export interface PlayersReplyPlayer {
     primaryEmail: string;
 }
 /**
+ * @generated from protobuf message mirror.PlayerPermissionDefinitionsRequest
+ */
+export interface PlayerPermissionDefinitionsRequest {
+}
+/**
+ * @generated from protobuf message mirror.PlayerPermissionDefinitionsReply
+ */
+export interface PlayerPermissionDefinitionsReply {
+    /**
+     * @generated from protobuf field: repeated mirror.PlayerPermissionDefinitionsReplyPermission permissions = 1;
+     */
+    permissions: PlayerPermissionDefinitionsReplyPermission[];
+}
+/**
+ * @generated from protobuf message mirror.PlayerPermissionDefinitionsReplyPermission
+ */
+export interface PlayerPermissionDefinitionsReplyPermission {
+    /**
+     * @generated from protobuf field: string name = 1;
+     */
+    name: string;
+    /**
+     * @generated from protobuf field: string title = 2;
+     */
+    title: string;
+    /**
+     * @generated from protobuf field: string about = 3;
+     */
+    about: string;
+    /**
+     * @generated from protobuf field: string category = 4;
+     */
+    category: string;
+}
+/**
  * @generated from protobuf message mirror.PlayerPermissionsRequest
  */
 export interface PlayerPermissionsRequest {
@@ -796,6 +831,149 @@ class PlayersReplyPlayer$Type extends MessageType<PlayersReplyPlayer> {
  */
 export const PlayersReplyPlayer = new PlayersReplyPlayer$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class PlayerPermissionDefinitionsRequest$Type extends MessageType<PlayerPermissionDefinitionsRequest> {
+    constructor() {
+        super("mirror.PlayerPermissionDefinitionsRequest", []);
+    }
+    create(value?: PartialMessage<PlayerPermissionDefinitionsRequest>): PlayerPermissionDefinitionsRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<PlayerPermissionDefinitionsRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayerPermissionDefinitionsRequest): PlayerPermissionDefinitionsRequest {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: PlayerPermissionDefinitionsRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.PlayerPermissionDefinitionsRequest
+ */
+export const PlayerPermissionDefinitionsRequest = new PlayerPermissionDefinitionsRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayerPermissionDefinitionsReply$Type extends MessageType<PlayerPermissionDefinitionsReply> {
+    constructor() {
+        super("mirror.PlayerPermissionDefinitionsReply", [
+            { no: 1, name: "permissions", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => PlayerPermissionDefinitionsReplyPermission }
+        ]);
+    }
+    create(value?: PartialMessage<PlayerPermissionDefinitionsReply>): PlayerPermissionDefinitionsReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.permissions = [];
+        if (value !== undefined)
+            reflectionMergePartial<PlayerPermissionDefinitionsReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayerPermissionDefinitionsReply): PlayerPermissionDefinitionsReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated mirror.PlayerPermissionDefinitionsReplyPermission permissions */ 1:
+                    message.permissions.push(PlayerPermissionDefinitionsReplyPermission.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayerPermissionDefinitionsReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated mirror.PlayerPermissionDefinitionsReplyPermission permissions = 1; */
+        for (let i = 0; i < message.permissions.length; i++)
+            PlayerPermissionDefinitionsReplyPermission.internalBinaryWrite(message.permissions[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.PlayerPermissionDefinitionsReply
+ */
+export const PlayerPermissionDefinitionsReply = new PlayerPermissionDefinitionsReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PlayerPermissionDefinitionsReplyPermission$Type extends MessageType<PlayerPermissionDefinitionsReplyPermission> {
+    constructor() {
+        super("mirror.PlayerPermissionDefinitionsReplyPermission", [
+            { no: 1, name: "name", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 2, name: "title", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "about", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "category", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<PlayerPermissionDefinitionsReplyPermission>): PlayerPermissionDefinitionsReplyPermission {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.name = "";
+        message.title = "";
+        message.about = "";
+        message.category = "";
+        if (value !== undefined)
+            reflectionMergePartial<PlayerPermissionDefinitionsReplyPermission>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PlayerPermissionDefinitionsReplyPermission): PlayerPermissionDefinitionsReplyPermission {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string name */ 1:
+                    message.name = reader.string();
+                    break;
+                case /* string title */ 2:
+                    message.title = reader.string();
+                    break;
+                case /* string about */ 3:
+                    message.about = reader.string();
+                    break;
+                case /* string category */ 4:
+                    message.category = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PlayerPermissionDefinitionsReplyPermission, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string name = 1; */
+        if (message.name !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.name);
+        /* string title = 2; */
+        if (message.title !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.title);
+        /* string about = 3; */
+        if (message.about !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.about);
+        /* string category = 4; */
+        if (message.category !== "")
+            writer.tag(4, WireType.LengthDelimited).string(message.category);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.PlayerPermissionDefinitionsReplyPermission
+ */
+export const PlayerPermissionDefinitionsReplyPermission = new PlayerPermissionDefinitionsReplyPermission$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class PlayerPermissionsRequest$Type extends MessageType<PlayerPermissionsRequest> {
     constructor() {
         super("mirror.PlayerPermissionsRequest", [
@@ -1126,6 +1304,7 @@ export const Mirror = new ServiceType("mirror.Mirror", [
     { name: "PlayerSettings", options: {}, I: PlayerSettingsRequest, O: PlayerSettingsReply },
     { name: "SetPlayerSettingsTheme", options: {}, I: SetPlayerSettingsThemeRequest, O: SetPlayerSettingsThemeReply },
     { name: "Players", options: {}, I: PlayersRequest, O: PlayersReply },
+    { name: "PlayerPermissionDefinitions", options: {}, I: PlayerPermissionDefinitionsRequest, O: PlayerPermissionDefinitionsReply },
     { name: "PlayerPermissions", options: {}, I: PlayerPermissionsRequest, O: PlayerPermissionsReply },
     { name: "GrantPlayerPermission", options: {}, I: GrantPlayerPermissionRequest, O: GrantPlayerPermissionReply },
     { name: "RevokePlayerPermission", options: {}, I: RevokePlayerPermissionRequest, O: RevokePlayerPermissionReply }

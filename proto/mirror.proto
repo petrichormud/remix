@@ -8,6 +8,7 @@ service Mirror {
   rpc PlayerSettings (PlayerSettingsRequest) returns (PlayerSettingsReply);
   rpc SetPlayerSettingsTheme (SetPlayerSettingsThemeRequest) returns (SetPlayerSettingsThemeReply);
   rpc Players (PlayersRequest) returns (PlayersReply);
+  rpc PlayerPermissionDefinitions (PlayerPermissionDefinitionsRequest) returns (PlayerPermissionDefinitionsReply);
   rpc PlayerPermissions (PlayerPermissionsRequest) returns (PlayerPermissionsReply);
   rpc GrantPlayerPermission (GrantPlayerPermissionRequest) returns (GrantPlayerPermissionReply);
   rpc RevokePlayerPermission (RevokePlayerPermissionRequest) returns (RevokePlayerPermissionReply);
@@ -63,6 +64,19 @@ message PlayersReplyPlayer {
   int64 id = 1;
   string username = 2;
   string primary_email = 3;
+}
+
+message PlayerPermissionDefinitionsRequest {}
+
+message PlayerPermissionDefinitionsReply {
+  repeated PlayerPermissionDefinitionsReplyPermission permissions = 1;
+}
+
+message PlayerPermissionDefinitionsReplyPermission {
+  string name = 1;
+  string title = 2;
+  string about = 3;
+  string category = 4;
 }
 
 message PlayerPermissionsRequest {
