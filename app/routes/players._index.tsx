@@ -21,7 +21,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 
@@ -135,10 +134,6 @@ const columns: ColumnDef<Player>[] = [
             <Link to={`/players/${player.id}`}>
               <DropdownMenuItem>Go to player</DropdownMenuItem>
             </Link>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Grant Permissions</DropdownMenuItem>
-            <DropdownMenuItem>Revoke Permissions</DropdownMenuItem>
-            <DropdownMenuItem>Revoke All Permissions</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
