@@ -1,14 +1,82 @@
-import { type LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { useLoaderData, useRouteLoaderData } from "@remix-run/react";
+import {
+  type LoaderFunctionArgs,
+  type ActionFunctionArgs,
+  redirect,
+} from "@remix-run/node";
+import {
+  useLoaderData,
+  useRouteLoaderData,
+  useFetcher,
+  useParams,
+} from "@remix-run/react";
 
 import { loader as rootPlayersLoader } from "~/routes/players.$id";
+import { getSession } from "~/lib/sessions.server";
 import { PlayerPermissions } from "~/lib/permissions";
 import {
   playerPermissions,
   playerPermissionDefinitions,
+  grantPlayerPermission,
+  revokePlayerPermission,
 } from "~/lib/mirror.server";
 import { Switch } from "~/components/ui/switch";
 import type { PlayerPermissionDefinitionsReplyPermission } from "~/proto/mirror";
+
+type PermissionActionInput = {
+  name?: string;
+  grant?: string;
+};
+
+export async function action({ params, request }: ActionFunctionArgs) {
+  const session = await getSession(request.headers.get("Cookie"));
+  if (!session.has("pid")) {
+    return redirect("/");
+  }
+  const pid = session.get("pid");
+  if (!pid) {
+    return redirect("/");
+  }
+  const playerPermissionsReply = await playerPermissions(pid);
+  const permissions = new PlayerPermissions(playerPermissionsReply.names);
+  const { id } = params;
+  if (!id) {
+    return redirect("/");
+  }
+
+  const form = await request.formData();
+  const { name, grant }: PermissionActionInput = Object.fromEntries(form);
+  if (!name) {
+    return redirect("/");
+  }
+
+  if (grant === "true") {
+    if (!permissions.canGrant(name)) {
+      return redirect("/");
+    }
+    const grantPlayerPermissionReply = await grantPlayerPermission(
+      parseInt(id),
+      pid,
+      name
+    );
+    if (grantPlayerPermissionReply.id) {
+      return { ok: true, grant: grant === "true" };
+    }
+  } else {
+    if (!permissions.canRevoke(name)) {
+      return redirect("/");
+    }
+    const revokePlayerPermissionReply = await revokePlayerPermission(
+      parseInt(id),
+      pid,
+      name
+    );
+    if (revokePlayerPermissionReply.id) {
+      return { ok: true, grant: grant === "true" };
+    }
+  }
+
+  return null;
+}
 
 export async function loader({ params }: LoaderFunctionArgs) {
   const { id } = params;
@@ -55,6 +123,7 @@ export default function PlayerPermissionsComponent() {
               return (
                 <PlayerPermissionComponent
                   key={name}
+                  name={name}
                   title={title}
                   about={about}
                   granted={playerPermissions.has(name)}
@@ -72,6 +141,7 @@ export default function PlayerPermissionsComponent() {
 
 type AdminPlayerPermissionProps = {
   title: string;
+  name: string;
   about: string;
   granted: boolean;
   canGrant: boolean;
@@ -79,20 +149,38 @@ type AdminPlayerPermissionProps = {
 };
 
 function PlayerPermissionComponent({
+  name,
   title,
   about,
   granted,
   canGrant,
   canRevoke,
 }: AdminPlayerPermissionProps) {
+  const { id } = useParams();
   const disabled = granted ? !canRevoke : !canGrant;
+
+  const fetcher = useFetcher<{ name: string; grant: boolean }>();
+  const calculatedGranted = fetcher.data?.grant || granted;
+
   return (
     <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
       <div className="space-y-1">
         <h4 className="text-sm leading-none">{title}</h4>
         <p className="text-xs text-muted-foreground">{about}</p>
       </div>
-      <Switch checked={granted} disabled={disabled} />
+      <Switch
+        checked={calculatedGranted}
+        onCheckedChange={(checked) => {
+          if (disabled) return;
+          if (!id) return;
+
+          fetcher.submit(
+            { name, grant: checked },
+            { method: "post", action: `/players/${id}/permissions` }
+          );
+        }}
+        disabled={disabled}
+      />
     </div>
   );
 }

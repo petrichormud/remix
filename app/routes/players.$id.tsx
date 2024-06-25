@@ -7,6 +7,7 @@ import {
 import { Outlet, useLoaderData, useParams } from "@remix-run/react";
 import { Lock } from "lucide-react";
 
+import { PlayerPermissions } from "~/lib/permissions";
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
 import { Header } from "~/components/header";
@@ -57,16 +58,17 @@ const sidebarNavItems = [
 ];
 
 export default function Players() {
-  const { pid } = useLoaderData<typeof loader>();
+  const { pid, permissionNames } = useLoaderData<typeof loader>();
   const { id } = useParams();
   if (!id) {
     // TODO: Raise an error here
     return <></>;
   }
+  const permissions = new PlayerPermissions(permissionNames);
 
   return (
     <>
-      <Header pid={pid} />
+      <Header pid={pid} permissions={permissions} />
       <main className="flex justify-center items-center">
         <div className="w-full max-w-screen-2xl space-y-6 p-10 pb-16">
           <div className="space-y-0.5">

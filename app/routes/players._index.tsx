@@ -6,7 +6,7 @@ import {
 } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUp, ArrowDown, ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import type { PlayersReplyPlayer } from "~/proto/mirror";
 import { getSession } from "~/lib/sessions.server";
@@ -80,16 +80,6 @@ export default function Index() {
   );
 }
 
-function SortArrow({ dir }: { dir: string | boolean }) {
-  if (dir === "asc") {
-    return <ArrowUp className="h-4 w-4" />;
-  } else if (dir === "desc") {
-    return <ArrowDown className="h-4 w-4" />;
-  } else {
-    return <ArrowUpDown className="h-4 w-4" />;
-  }
-}
-
 type Player = Omit<PlayersReplyPlayer, "id"> & { id: number };
 
 const columns: ColumnDef<Player>[] = [
@@ -121,21 +111,7 @@ const columns: ColumnDef<Player>[] = [
   },
   {
     accessorKey: "primaryEmail",
-    header: ({ column }) => {
-      return (
-        <>
-          <span>Primary Email</span>
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            className="ml-2 p-2"
-          >
-            <SortArrow dir={column.getIsSorted()} />
-          </Button>
-        </>
-      );
-    },
+    header: "Primary Email",
   },
   {
     accessorKey: "currentCharacter",

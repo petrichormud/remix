@@ -7,6 +7,7 @@ import {
   type PlayersReply,
   type PlayerPermissionDefinitionsReply,
   type PlayerPermissionsReply,
+  GrantPlayerPermissionReply,
 } from "~/proto/mirror";
 import type { Theme } from "~/lib/theme";
 
@@ -107,5 +108,57 @@ export async function playerPermissions(pid: number) {
 
       resolve(reply);
     });
+  });
+}
+
+export async function grantPlayerPermission(
+  pid: number,
+  ipid: number,
+  name: string
+) {
+  return new Promise<GrantPlayerPermissionReply>((resolve, reject) => {
+    client.grantPlayerPermission(
+      { pid: BigInt(pid), ipid: BigInt(ipid), name },
+      (err, reply) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (!reply) {
+          // TODO: Create an error here
+          reject("grantPlayerPermissionReply is null");
+          return;
+        }
+
+        resolve(reply);
+      }
+    );
+  });
+}
+
+export async function revokePlayerPermission(
+  pid: number,
+  ipid: number,
+  name: string
+) {
+  return new Promise<GrantPlayerPermissionReply>((resolve, reject) => {
+    client.revokePlayerPermission(
+      { pid: BigInt(pid), ipid: BigInt(ipid), name },
+      (err, reply) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (!reply) {
+          // TODO: Create an error here
+          reject("revokePlayerPermissionReply is null");
+          return;
+        }
+
+        resolve(reply);
+      }
+    );
   });
 }
