@@ -72,7 +72,7 @@ export default function Index() {
   return (
     <>
       <Header pid={pid} permissions={permissions} />
-      <main className="container mx-auto py-10">
+      <main className="relative z-0 container mx-auto py-10">
         <PlayersDataTable columns={columns} data={players} />
       </main>
     </>
