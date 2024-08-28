@@ -7,7 +7,7 @@ import {
   json,
 } from "@remix-run/node";
 import { ClientOnly } from "remix-utils/client-only";
-import { CirclePlus, Check } from "lucide-react";
+import { CirclePlus, Check, Send } from "lucide-react";
 
 import { PlayerPermissions } from "~/lib/permissions";
 import { getSession } from "~/lib/sessions.server";
@@ -119,29 +119,39 @@ export default function Changelog() {
         </p>
         <Separator />
       </div>
-      {permissions.has("create-changelog-change") ? (
-        <PatchChangeDialog>
-          <Button>
-            <CirclePlus className="mr-2 h-4 w-4" />
-            New Change
-          </Button>
-        </PatchChangeDialog>
-      ) : null}
+      <div className="flex gap-2">
+        {permissions.has("create-changelog-change") ? (
+          <PatchChangeDialog>
+            <Button variant="outline">
+              <CirclePlus className="mr-2 h-4 w-4" />
+              New Change
+            </Button>
+          </PatchChangeDialog>
+        ) : null}
+        {permissions.has("release-changelog") ? (
+          <PatchChangeDialog>
+            <Button>
+              <Send className="mr-2 h-4 w-4" />
+              Release Patch
+            </Button>
+          </PatchChangeDialog>
+        ) : null}
+      </div>
       {patch.changes.map((change: SerializedPatchChange) => {
-        return <PatchChange key={change.id} change={change} />;
+        return <PatchChangeCard key={change.id} change={change} />;
       })}
     </div>
   );
 }
 
-interface PatchChangeProps {
+interface PatchChangeCardProps {
   change: SerializedPatchChange;
 }
 
-function PatchChange({ change }: PatchChangeProps) {
+function PatchChangeCard({ change }: PatchChangeCardProps) {
   return (
-    <div className="flex items-center rounded-lg border p-3 shadow-sm">
-      <Check className="mr-3 h-6 w-6" />
+    <div className="flex items-center gap-3 rounded-lg border p-3 shadow-sm">
+      <Check className="h-6 w-6" />
       <div className="space-y-1">
         <h4 className="text-sm leading-none">{change.title}</h4>
         <p className="text-xs text-muted-foreground">{change.text}</p>
