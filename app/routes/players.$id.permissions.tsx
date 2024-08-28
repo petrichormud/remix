@@ -121,7 +121,7 @@ export default function PlayerPermissionsComponent() {
             </h3>
             {permissions.map(({ name, title, about }) => {
               return (
-                <PlayerPermissionComponent
+                <PlayerPermissionCard
                   key={name}
                   name={name}
                   title={title}
@@ -139,23 +139,23 @@ export default function PlayerPermissionsComponent() {
   );
 }
 
-type AdminPlayerPermissionProps = {
+interface PlayerPermissionCardProps {
   title: string;
   name: string;
   about: string;
   granted: boolean;
   canGrant: boolean;
   canRevoke: boolean;
-};
+}
 
-function PlayerPermissionComponent({
+function PlayerPermissionCard({
   name,
   title,
   about,
   granted,
   canGrant,
   canRevoke,
-}: AdminPlayerPermissionProps) {
+}: PlayerPermissionCardProps) {
   const { id } = useParams();
   const disabled = granted ? !canRevoke : !canGrant;
 

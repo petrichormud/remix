@@ -2,6 +2,7 @@ import { credentials } from "@grpc/grpc-js";
 
 import { DataClient } from "~/proto/data.grpc-client";
 import type {
+  CreatePatchChangeReply,
   PatchesReply,
   ReleasedPatchesReply,
   MostRecentPatchReply,
@@ -12,6 +13,32 @@ export const client = new DataClient(
   "localhost:8008",
   credentials.createInsecure()
 );
+
+export async function createPatchChange(
+  pcid: number | string,
+  title: string,
+  text: string
+) {
+  return new Promise<CreatePatchChangeReply>((resolve, reject) => {
+    client.createPatchChange(
+      { pcid: BigInt(pcid), title, text },
+      (err, reply) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (!reply) {
+          // TODO: Create an error here
+          reject("createPatchChangeReply is null");
+          return;
+        }
+
+        resolve(reply);
+      }
+    );
+  });
+}
 
 export async function patches(kind: string) {
   return new Promise<PatchesReply>((resolve, reject) => {
