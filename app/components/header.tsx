@@ -1,4 +1,4 @@
-import { LogIn, CircleUser, Waves } from "lucide-react";
+import { LogIn, CircleUser, Waves, FileSliders } from "lucide-react";
 import { Link } from "@remix-run/react";
 
 import { cn } from "~/lib/utils";
@@ -6,6 +6,7 @@ import { PlayerPermissions } from "~/lib/permissions";
 import { Button } from "~/components/ui/button";
 import { LoginDialog } from "~/components/navigation/login";
 import { AccountMenu } from "~/components/navigation/account-menu";
+import { AdminMenu } from "~/components/navigation/admin-menu";
 import { ThemeToggle } from "~/components/navigation/theme-toggle";
 import { SiteNavigation } from "~/components/navigation/site";
 
@@ -29,12 +30,20 @@ export function Header({ pid, permissions, noBlur = false }: HeaderProps) {
             <Waves className="h-6 w-6" />
           </Link>
           {pid ? (
-            <AccountMenu permissions={permissions}>
-              <Button type="button" variant="link">
-                <CircleUser className="mr-2 h-5 w-5" />
-                Account
-              </Button>
-            </AccountMenu>
+            <>
+              <AccountMenu permissions={permissions}>
+                <Button type="button" variant="link">
+                  <CircleUser className="mr-2 h-5 w-5" />
+                  Account
+                </Button>
+              </AccountMenu>
+              <AdminMenu permissions={permissions}>
+                <Button type="button" variant="link">
+                  <FileSliders className="mr-2 h-5 w-5" />
+                  Admin
+                </Button>
+              </AdminMenu>
+            </>
           ) : (
             <LoginDialog>
               <Button type="button" variant="link">
