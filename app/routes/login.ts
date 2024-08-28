@@ -8,7 +8,7 @@ import { isTheme } from "~/lib/theme";
 
 type Credentials = {
   username?: string;
-  password?: string;
+  passphrase?: string;
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -18,15 +18,15 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const form = await request.formData();
-  const { username, password }: Credentials = Object.fromEntries(form);
+  const { username, passphrase }: Credentials = Object.fromEntries(form);
 
-  if (!username || !password) {
+  if (!username || !passphrase) {
     return json({ error: true });
   }
 
   // TODO: Get this in a function
   const loginPromise = new Promise<LoginReply>((resolve, reject) => {
-    client.login({ username, password }, (err, reply) => {
+    client.login({ username, passphrase }, (err, reply) => {
       if (err) {
         reject(err);
         return;

@@ -6,8 +6,8 @@ import { client } from "~/lib/mirror.server";
 
 type Credentials = {
   username?: string;
-  password?: string;
-  confirmPassword?: string;
+  passphrase?: string;
+  confirmPassphrase?: string;
 };
 
 export async function action({ request }: ActionFunctionArgs) {
@@ -17,22 +17,22 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const form = await request.formData();
-  const { username, password, confirmPassword }: Credentials =
+  const { username, passphrase, confirmPassphrase }: Credentials =
     Object.fromEntries(form);
 
   // TODO: Implement better error responses
   if (
     !username ||
-    !password ||
-    !confirmPassword ||
-    password !== confirmPassword
+    !passphrase ||
+    !confirmPassphrase ||
+    passphrase !== confirmPassphrase
   ) {
     return json({ error: true });
   }
 
   // TODO: Get this into a function on mirror.server
   const promise = new Promise<RegisterReply>((resolve, reject) => {
-    client.register({ username, password }, (err, reply) => {
+    client.register({ username, passphrase }, (err, reply) => {
       if (err) {
         reject(err);
         return;

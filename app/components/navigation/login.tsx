@@ -16,16 +16,16 @@ import {
 } from "~/components/ui/dialog";
 import { Button } from "~/components/ui/button";
 
-function loginFormDisabled(username: string, password: string): boolean {
+function loginFormDisabled(username: string, passphrase: string): boolean {
   if (username.length == 0) return true;
-  if (password.length == 0) return true;
+  if (passphrase.length == 0) return true;
   return false;
 }
 
 export function LoginDialog({ children }: { children: ReactNode }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [passphrase, setPassphrase] = useState("");
   const fetcher = useFetcher<typeof action>({ key: "login" });
 
   return (
@@ -37,15 +37,15 @@ export function LoginDialog({ children }: { children: ReactNode }) {
             <DialogHeader>
               <DialogTitle>Log In</DialogTitle>
               <DialogDescription>
-                Please enter your username and password to log in
+                Please enter your username and passphrase to log in
               </DialogDescription>
               {fetcher.data?.error ? "Sorry, couldn't log you in." : null}
             </DialogHeader>
             <LoginForm
               username={username}
               setUsername={setUsername}
-              password={password}
-              setPassword={setPassword}
+              passphrase={passphrase}
+              setPassphrase={setPassphrase}
             />
             <DialogFooter className="gap-2">
               <Button
@@ -60,7 +60,7 @@ export function LoginDialog({ children }: { children: ReactNode }) {
               <Button
                 form="login"
                 type="submit"
-                disabled={loginFormDisabled(username, password)}
+                disabled={loginFormDisabled(username, passphrase)}
               >
                 Log In
               </Button>
@@ -75,15 +75,15 @@ export function LoginDialog({ children }: { children: ReactNode }) {
 type LoginFormProps = {
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
-  password: string;
-  setPassword: React.Dispatch<React.SetStateAction<string>>;
+  passphrase: string;
+  setPassphrase: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function LoginForm({
   username,
   setUsername,
-  password,
-  setPassword,
+  passphrase,
+  setPassphrase,
 }: LoginFormProps) {
   const fetcher = useFetcher<typeof action>({ key: "login" });
 
@@ -108,16 +108,16 @@ function LoginForm({
         />
       </div>
       <div>
-        <Label htmlFor="login-password" className="text-right">
-          Password
+        <Label htmlFor="login-passphrase" className="text-right">
+          Passphrase
         </Label>
         <Input
-          id="login-password"
-          name="password"
+          id="login-passphrase"
+          name="passphrase"
           type="password"
-          value={password}
+          value={passphrase}
           onChange={(e) => {
-            setPassword(e.target.value);
+            setPassphrase(e.target.value);
           }}
         />
       </div>

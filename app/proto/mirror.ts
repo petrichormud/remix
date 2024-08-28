@@ -20,9 +20,9 @@ export interface RegisterRequest {
      */
     username: string;
     /**
-     * @generated from protobuf field: string password = 2;
+     * @generated from protobuf field: string passphrase = 2;
      */
-    password: string;
+    passphrase: string;
 }
 /**
  * @generated from protobuf message mirror.RegisterReply
@@ -42,9 +42,9 @@ export interface LoginRequest {
      */
     username: string;
     /**
-     * @generated from protobuf field: string password = 2;
+     * @generated from protobuf field: string passphrase = 2;
      */
-    password: string;
+    passphrase: string;
 }
 /**
  * @generated from protobuf message mirror.LoginReply
@@ -260,13 +260,13 @@ class RegisterRequest$Type extends MessageType<RegisterRequest> {
     constructor() {
         super("mirror.RegisterRequest", [
             { no: 1, name: "username", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "password", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "passphrase", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<RegisterRequest>): RegisterRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.username = "";
-        message.password = "";
+        message.passphrase = "";
         if (value !== undefined)
             reflectionMergePartial<RegisterRequest>(this, message, value);
         return message;
@@ -279,8 +279,8 @@ class RegisterRequest$Type extends MessageType<RegisterRequest> {
                 case /* string username */ 1:
                     message.username = reader.string();
                     break;
-                case /* string password */ 2:
-                    message.password = reader.string();
+                case /* string passphrase */ 2:
+                    message.passphrase = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -297,9 +297,9 @@ class RegisterRequest$Type extends MessageType<RegisterRequest> {
         /* string username = 1; */
         if (message.username !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.username);
-        /* string password = 2; */
-        if (message.password !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.password);
+        /* string passphrase = 2; */
+        if (message.passphrase !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.passphrase);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -362,13 +362,13 @@ class LoginRequest$Type extends MessageType<LoginRequest> {
     constructor() {
         super("mirror.LoginRequest", [
             { no: 1, name: "username", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 2, name: "password", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+            { no: 2, name: "passphrase", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
     create(value?: PartialMessage<LoginRequest>): LoginRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.username = "";
-        message.password = "";
+        message.passphrase = "";
         if (value !== undefined)
             reflectionMergePartial<LoginRequest>(this, message, value);
         return message;
@@ -381,8 +381,8 @@ class LoginRequest$Type extends MessageType<LoginRequest> {
                 case /* string username */ 1:
                     message.username = reader.string();
                     break;
-                case /* string password */ 2:
-                    message.password = reader.string();
+                case /* string passphrase */ 2:
+                    message.passphrase = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -399,9 +399,9 @@ class LoginRequest$Type extends MessageType<LoginRequest> {
         /* string username = 1; */
         if (message.username !== "")
             writer.tag(1, WireType.LengthDelimited).string(message.username);
-        /* string password = 2; */
-        if (message.password !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.password);
+        /* string passphrase = 2; */
+        if (message.passphrase !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.passphrase);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

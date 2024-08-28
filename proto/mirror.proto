@@ -16,7 +16,7 @@ service Mirror {
 
 message RegisterRequest {
   string username = 1;
-  string password = 2;
+  string passphrase = 2;
 }
 
 message RegisterReply {
@@ -25,7 +25,7 @@ message RegisterReply {
 
 message LoginRequest {
   string username = 1;
-  string password = 2;
+  string passphrase = 2;
 }
 
 message LoginReply {

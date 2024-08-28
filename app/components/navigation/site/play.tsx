@@ -37,24 +37,24 @@ export function PlayButton({ pid }: PlayButtonProps) {
 
 function registerFormDisabled(
   username: string,
-  password: string,
-  confirmPassword: string
+  passphrase: string,
+  confirmPassphrase: string
 ): boolean {
   if (
     username.length == 0 ||
-    password.length == 0 ||
-    confirmPassword.length == 0
+    passphrase.length == 0 ||
+    confirmPassphrase.length == 0
   )
     return true;
-  if (password != confirmPassword) return true;
+  if (passphrase != confirmPassphrase) return true;
   return false;
 }
 
 function RegisterDialog({ children }: { children: React.ReactNode }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passphrase, setPassphrase] = useState("");
+  const [confirmPassphrase, setConfirmPassphrase] = useState("");
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -63,16 +63,16 @@ function RegisterDialog({ children }: { children: React.ReactNode }) {
         <DialogHeader>
           <DialogTitle>Create Account</DialogTitle>
           <DialogDescription>
-            Please enter a username and password to create an account
+            Please enter a username and passphrase to create an account
           </DialogDescription>
         </DialogHeader>
         <RegisterForm
           username={username}
           setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-          confirmPassword={confirmPassword}
-          setConfirmPassword={setConfirmPassword}
+          passphrase={passphrase}
+          setPassphrase={setPassphrase}
+          confirmPassphrase={confirmPassphrase}
+          setConfirmPassphrase={setConfirmPassphrase}
         />
         <DialogFooter className="gap-2">
           <Button
@@ -87,7 +87,11 @@ function RegisterDialog({ children }: { children: React.ReactNode }) {
           <Button
             form="register"
             type="submit"
-            disabled={registerFormDisabled(username, password, confirmPassword)}
+            disabled={registerFormDisabled(
+              username,
+              passphrase,
+              confirmPassphrase
+            )}
           >
             Let&apos;s Go!
           </Button>
