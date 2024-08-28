@@ -11,6 +11,7 @@ import { patchByID } from "~/lib/data.server";
 import {
   patchVersion,
   serializePatch,
+  type SerializedPatch,
   type SerializedPatchChange,
 } from "~/lib/patches";
 import { Separator } from "~/components/ui/separator";
@@ -85,27 +86,30 @@ export default function Changelog() {
           </NewPatchChangeDialog>
         ) : null}
         {permissions.has("release-changelog") && !patch.released ? (
-          <NewPatchChangeDialog>
+          <ReleasePatchDialog>
             <Button>
               <Send className="mr-2 h-4 w-4" />
               Release Patch
             </Button>
-          </NewPatchChangeDialog>
+          </ReleasePatchDialog>
         ) : null}
       </div>
       {patch.changes.map((change: SerializedPatchChange) => {
-        return <PatchChangeCard key={change.id} change={change} />;
+        return (
+          <PatchChangeCard key={change.id} patch={patch} change={change} />
+        );
       })}
     </div>
   );
 }
 
 interface PatchChangeCardProps {
+  patch: SerializedPatch;
   change: SerializedPatchChange;
 }
 
 // TODO: Check permissions for delete/edit
-function PatchChangeCard({ change }: PatchChangeCardProps) {
+function PatchChangeCard({ patch, change }: PatchChangeCardProps) {
   return (
     <div className="flex items-center gap-3 rounded-lg border p-3 shadow-sm">
       <Check className="h-6 w-6" />
@@ -113,11 +117,13 @@ function PatchChangeCard({ change }: PatchChangeCardProps) {
         <h4 className="text-sm leading-none">{change.title}</h4>
         <p className="text-xs text-muted-foreground">{change.text}</p>
       </div>
-      <div className="ml-auto">
-        <DeletePatchChangeDialog id={change.id}>
-          <Button variant="destructive">Delete</Button>
-        </DeletePatchChangeDialog>
-      </div>
+      {patch.released ? null : (
+        <div className="ml-auto">
+          <DeletePatchChangeDialog id={change.id}>
+            <Button variant="destructive">Delete</Button>
+          </DeletePatchChangeDialog>
+        </div>
+      )}
     </div>
   );
 }
@@ -271,6 +277,51 @@ function DeletePatchChangeDialog({
               >
                 <input className="hidden aria-hidden" name="id" value={id} />
                 <Button variant="destructive">Delete</Button>
+              </Form>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+    </ClientOnly>
+  );
+}
+
+function ReleasePatchDialog({ children }: React.PropsWithChildren) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  // TODO: Add a fetcher key for catching errors
+  return (
+    <ClientOnly fallback={children}>
+      {() => (
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>{children}</DialogTrigger>
+          <DialogContent className="sm:max-w-[425px] p-6">
+            <DialogHeader>
+              <DialogTitle>Release this Patch?</DialogTitle>
+              <DialogDescription>
+                Once marked as released, this patch cannot be changed.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setDialogOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Form
+                action="release"
+                method="post"
+                className="ml-auto"
+                navigate={false}
+                fetcherKey="release-patch"
+                reloadDocument
+                replace
+              >
+                <Button>Mark Released</Button>
               </Form>
             </DialogFooter>
           </DialogContent>

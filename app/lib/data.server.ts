@@ -8,6 +8,7 @@ import type {
   ReleasedPatchesReply,
   MostRecentPatchReply,
   PatchReply,
+  MarkPatchReleasedReply,
 } from "~/proto/data";
 
 export const client = new DataClient(
@@ -51,7 +52,7 @@ export async function deletePatchChange(id: number | string) {
 
       if (!reply) {
         // TODO: Create an error here
-        reject("createPatchChangeReply is null");
+        reject("deletePatchChangeReply is null");
         return;
       }
 
@@ -128,6 +129,25 @@ export async function patchByID(id: number) {
       if (!reply) {
         // TODO: Create an error here
         reject("patchReply is null");
+        return;
+      }
+
+      resolve(reply);
+    });
+  });
+}
+
+export async function markPatchReleased(id: string | number) {
+  return new Promise<MarkPatchReleasedReply>((resolve, reject) => {
+    client.markPatchReleased({ id: BigInt(id) }, (err, reply) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!reply) {
+        // TODO: Create an error here
+        reject("markPatchReleasedReply is null");
         return;
       }
 

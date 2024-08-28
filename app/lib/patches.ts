@@ -16,7 +16,9 @@ export interface SerializedPatchChange {
   text: string;
 }
 
-export function patchVersion(patch: Patch | SerializedPatch): string {
+export function patchVersion(patch: Patch | SerializedPatch | null): string {
+  if (!patch) return "";
+
   return `${patch.major}.${patch.minor}.${patch.patch}`;
 }
 

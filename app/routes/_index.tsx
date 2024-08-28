@@ -10,8 +10,9 @@ import { Check, Bell, ArrowRight, Inbox, Users, Trash } from "lucide-react";
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
 import { releasedPatches } from "~/lib/data.server";
-import type { ReleasedPatchesReply, Patch } from "~/proto/data";
+import type { SerializedPatch } from "~/lib/patches";
 import { PlayerPermissions } from "~/lib/permissions";
+import { serializePatch, patchVersion } from "~/lib/patches";
 import { Header } from "~/components/header";
 import { Footer } from "~/components/footer";
 import { Separator } from "~/components/ui/separator";
@@ -52,8 +53,8 @@ export const links: LinksFunction = () => {
 
 // TODO: Share this permissions filtering
 export async function loader({ request }: LoaderFunctionArgs) {
-  const gamePatches = await releasedPatches("game");
-  const clientPatches = await releasedPatches("client");
+  const gamePatchesReply = await releasedPatches("game");
+  const clientPatchesReply = await releasedPatches("client");
   const session = await getSession(request.headers.get("Cookie"));
   if (session.has("pid")) {
     const pid = session.get("pid");
@@ -61,20 +62,35 @@ export async function loader({ request }: LoaderFunctionArgs) {
       return {
         pid: 0,
         permissionNames: [],
-        patches: { game: gamePatches, client: clientPatches },
+        patches: {
+          game: gamePatchesReply.patches.map((patch) => serializePatch(patch)),
+          client: clientPatchesReply.patches.map((patch) =>
+            serializePatch(patch)
+          ),
+        },
       };
     }
     const permissionsReply = await playerPermissions(pid);
     return {
       pid,
       permissionNames: permissionsReply.names,
-      patches: { game: gamePatches, client: clientPatches },
+      patches: {
+        game: gamePatchesReply.patches.map((patch) => serializePatch(patch)),
+        client: clientPatchesReply.patches.map((patch) =>
+          serializePatch(patch)
+        ),
+      },
     };
   } else {
     return {
       pid: 0,
       permissionNames: [],
-      patches: { game: gamePatches, client: clientPatches },
+      patches: {
+        game: gamePatchesReply.patches.map((patch) => serializePatch(patch)),
+        client: clientPatchesReply.patches.map((patch) =>
+          serializePatch(patch)
+        ),
+      },
     };
   }
 }
@@ -249,21 +265,23 @@ function Newsletter() {
 }
 
 type ChangelogPatchSelectProps = {
-  patches: Patch[];
+  patches: Array<SerializedPatch>;
   patch: string;
   setPatch: React.Dispatch<React.SetStateAction<string>>;
+  disabled?: boolean;
 };
 
 function ChangelogPatchSelect({
   patches,
   patch,
   setPatch,
+  disabled = false,
 }: ChangelogPatchSelectProps) {
   const versions = patches.map((patch) => {
     return `${patch.major}.${patch.minor}.${patch.patch}`;
   });
   return (
-    <Select value={patch} onValueChange={setPatch}>
+    <Select value={patch} onValueChange={setPatch} disabled={disabled}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select a patch" />
       </SelectTrigger>
@@ -283,20 +301,31 @@ function ChangelogPatchSelect({
 }
 
 interface ChangelogProps extends React.ComponentProps<typeof Card> {
+  // TODO: Move title down into the component so it can be Patch x.y.z
   title: string;
-  patches: Patch[];
+  patches: Array<SerializedPatch>;
 }
 
 function Changelog({ title, patches, className, ...props }: ChangelogProps) {
-  const [patch, setPatch] = useState("0.1.1");
+  const [patch, setPatch] = useState(patchVersion(patches[0]));
   const { pid } = useLoaderData<typeof loader>();
 
   if (!patches.length) {
     return (
       <Card className={className} {...props}>
-        <CardHeader className="p-4">{title}</CardHeader>
+        <CardHeader className="p-4">
+          <CardTitle>{title}</CardTitle>
+          <CardDescription>Future changelogs here!</CardDescription>
+        </CardHeader>
         <CardContent className="flex flex-col gap-4">
-          <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
+          <ChangelogPatchSelect
+            patches={patches}
+            patch={patch}
+            setPatch={setPatch}
+            disabled
+          />
+          <ChangelogNotifications pid={pid} />
+          <div className="h-48 mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
             <Check className="h-4 w-4" />
             <div className="space-y-1">
               <p className="text-sm font-medium leading-none">
@@ -308,6 +337,11 @@ function Changelog({ title, patches, className, ...props }: ChangelogProps) {
             </div>
           </div>
         </CardContent>
+        <CardFooter className="flex justify-end">
+          <Button className="px-0" variant="link">
+            <ArrowRight className="mr-2 h-4 w-4" /> View full changelog
+          </Button>
+        </CardFooter>
       </Card>
     );
   }
@@ -348,7 +382,7 @@ function Changelog({ title, patches, className, ...props }: ChangelogProps) {
   //     when: "2 months ago",
   //   },
   // ];
-  const initialPatchMap: { [index: string]: Patch } = {};
+  const initialPatchMap: { [index: string]: SerializedPatch } = {};
   const patchMap = patches.reduce((patchMap, patch) => {
     const version = `${patch.major}.${patch.minor}.${patch.patch}`;
     patchMap[version] = {
@@ -370,20 +404,7 @@ function Changelog({ title, patches, className, ...props }: ChangelogProps) {
           patch={patch}
           setPatch={setPatch}
         />
-        {pid ? (
-          <div className="flex items-center space-x-4 rounded-md border p-4">
-            <Bell />
-            <div className="flex-1 space-y-1">
-              <p className="text-sm font-medium leading-none">
-                Patch Notifications
-              </p>
-              <p className="text-sm text-muted-foreground">
-                Receive Patch Notifications
-              </p>
-            </div>
-            <Switch />
-          </div>
-        ) : null}
+        <ChangelogNotifications pid={pid} />
         <div className="h-48">
           {changes.map((change, index) => (
             <div
@@ -412,10 +433,31 @@ function Changelog({ title, patches, className, ...props }: ChangelogProps) {
   );
 }
 
+interface ChangelogNotificationsProps {
+  pid?: number;
+}
+
+function ChangelogNotifications({ pid }: ChangelogNotificationsProps) {
+  if (!pid) return null;
+
+  return (
+    <div className="flex items-center space-x-4 rounded-md border p-4">
+      <Bell />
+      <div className="flex-1 space-y-1">
+        <p className="text-sm font-medium leading-none">Patch Notifications</p>
+        <p className="text-sm text-muted-foreground">
+          Receive Patch Notifications
+        </p>
+      </div>
+      <Switch />
+    </div>
+  );
+}
+
 interface ChangelogSectionProps {
   patches: {
-    game: ReleasedPatchesReply;
-    client: ReleasedPatchesReply;
+    game: Array<SerializedPatch>;
+    client: Array<SerializedPatch>;
   };
 }
 
@@ -476,13 +518,10 @@ function ChangelogSection({ patches }: ChangelogSectionProps) {
             <TabsTrigger value="client-changelog">Client Changelog</TabsTrigger>
           </TabsList>
           <TabsContent value="game-changelog">
-            <Changelog patches={patches.game.patches} title="Changelog" />
+            <Changelog patches={patches.game} title="Changelog" />
           </TabsContent>
           <TabsContent value="client-changelog">
-            <Changelog
-              patches={patches.client.patches}
-              title="Client Changelog"
-            />
+            <Changelog patches={patches.client} title="Client Changelog" />
           </TabsContent>
         </Tabs>
       </div>
