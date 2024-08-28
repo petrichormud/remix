@@ -9,6 +9,11 @@ import { Check, Bell, ArrowRight, Inbox, Users, Trash } from "lucide-react";
 
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
+import { releasedPatches } from "~/lib/data.server";
+import type {
+  ReleasedPatchesReply,
+  ReleasedPatchesReplyPatch,
+} from "~/proto/data";
 import { PlayerPermissions } from "~/lib/permissions";
 import { Header } from "~/components/header";
 import { Footer } from "~/components/footer";
@@ -49,21 +54,35 @@ export const links: LinksFunction = () => {
 };
 
 export async function loader({ request }: LoaderFunctionArgs) {
+  const gamePatches = await releasedPatches("game");
+  const clientPatches = await releasedPatches("client");
   const session = await getSession(request.headers.get("Cookie"));
   if (session.has("pid")) {
     const pid = session.get("pid");
     if (!pid) {
-      return { pid: 0, permissionNames: [] };
+      return {
+        pid: 0,
+        permissionNames: [],
+        patches: { game: gamePatches, client: clientPatches },
+      };
     }
     const permissionsReply = await playerPermissions(pid);
-    return { pid, permissionNames: permissionsReply.names };
+    return {
+      pid,
+      permissionNames: permissionsReply.names,
+      patches: { game: gamePatches, client: clientPatches },
+    };
   } else {
-    return { pid: 0, permissionNames: [] };
+    return {
+      pid: 0,
+      permissionNames: [],
+      patches: { game: gamePatches, client: clientPatches },
+    };
   }
 }
 
 export default function Index() {
-  const { pid, permissionNames } = useLoaderData<typeof loader>();
+  const { pid, permissionNames, patches } = useLoaderData<typeof loader>();
   const permissions = pid ? new PlayerPermissions(permissionNames) : undefined;
   return (
     <>
@@ -72,7 +91,7 @@ export default function Index() {
         <TestHeroTwo />
         <TestGettingStarted />
         <Newsletter />
-        <ChangelogSection />
+        <ChangelogSection patches={patches} />
       </main>
       <Footer />
     </>
@@ -231,14 +250,20 @@ function Newsletter() {
   );
 }
 
-type CardProps = React.ComponentProps<typeof Card>;
-
-type ChangelogPatchSelect = {
+type ChangelogPatchSelectProps = {
+  patches: ReleasedPatchesReplyPatch[];
   patch: string;
   setPatch: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function ChangelogPatchSelect({ patch, setPatch }: ChangelogPatchSelect) {
+function ChangelogPatchSelect({
+  patches,
+  patch,
+  setPatch,
+}: ChangelogPatchSelectProps) {
+  const versions = patches.map((patch) => {
+    return `${patch.major}.${patch.minor}.${patch.patch}`;
+  });
   return (
     <Select value={patch} onValueChange={setPatch}>
       <SelectTrigger className="w-[180px]">
@@ -246,72 +271,107 @@ function ChangelogPatchSelect({ patch, setPatch }: ChangelogPatchSelect) {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectItem value="0.1.3">Patch 0.1.3</SelectItem>
-          <SelectItem value="0.1.2">Patch 0.1.2</SelectItem>
-          <SelectItem value="0.1.1">Patch 0.1.1</SelectItem>
+          {versions.map((version) => {
+            return (
+              <SelectItem key={version} value={version}>
+                Patch {version}
+              </SelectItem>
+            );
+          })}
         </SelectGroup>
       </SelectContent>
     </Select>
   );
 }
 
-function Changelog({ className, ...props }: CardProps) {
-  const [patch, setPatch] = useState("0.1.3");
+interface ChangelogProps extends React.ComponentProps<typeof Card> {
+  title: string;
+  patches: ReleasedPatchesReplyPatch[];
+}
+
+function Changelog({ title, patches, className, ...props }: ChangelogProps) {
+  const [patch, setPatch] = useState("0.1.1");
   const { pid } = useLoaderData<typeof loader>();
 
-  const threeChanges = [
-    {
-      title: "Updated movement",
-      description: "Everyone is now red; 10x faster!",
-      when: "1 hour ago",
-    },
-    {
-      title: "Removed the retroencabulator",
-      description: "It was too confusing, so we took it out.",
-      when: "2 hours ago",
-    },
-    {
-      title: "Added combat",
-      description: "All your based are belong to us",
-      when: "2 hours ago",
-    },
-  ];
-  const twoChanges = [
-    {
-      title: "Made rooms",
-      description: "Made some rooms",
-      when: "2 weeks ago",
-    },
-  ];
-  const oneChanges = [
-    {
-      title: "Added movement",
-      description: "You can move now",
-      when: "1 month ago",
-    },
-    {
-      title: "Added the retroencabulator",
-      description: "This won't be confusing at all.",
-      when: "2 months ago",
-    },
-  ];
-  const changelogs: {
-    [index: string]: { title: string; description: string; when: string }[];
-  } = {
-    "0.1.3": threeChanges,
-    "0.1.2": twoChanges,
-    "0.1.1": oneChanges,
-  };
-  const changes = changelogs[patch] || [];
+  if (!patches.length) {
+    return (
+      <Card className={className} {...props}>
+        <CardHeader className="p-4">{title}</CardHeader>
+        <CardContent className="flex flex-col gap-4">
+          <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
+            <Check className="h-4 w-4" />
+            <div className="space-y-1">
+              <p className="text-sm font-medium leading-none">
+                You&apos;re so early, there haven&apos;t been any changes yet!
+              </p>
+              <p className="text-sm text-muted-foreground overflow-hidden text-nowrap text-ellipsis">
+                Check back soon to see what&apos;s happening.
+              </p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // const threeChanges = [
+  //   {
+  //     title: "Updated movement",
+  //     description: "Everyone is now red; 10x faster!",
+  //     when: "1 hour ago",
+  //   },
+  //   {
+  //     title: "Removed the retroencabulator",
+  //     description: "It was too confusing, so we took it out.",
+  //     when: "2 hours ago",
+  //   },
+  //   {
+  //     title: "Added combat",
+  //     description: "All your based are belong to us",
+  //     when: "2 hours ago",
+  //   },
+  // ];
+  // const twoChanges = [
+  //   {
+  //     title: "Made rooms",
+  //     description: "Made some rooms",
+  //     when: "2 weeks ago",
+  //   },
+  // ];
+  // const oneChanges = [
+  //   {
+  //     title: "Added movement",
+  //     description: "You can move now",
+  //     when: "1 month ago",
+  //   },
+  //   {
+  //     title: "Added the retroencabulator",
+  //     description: "This won't be confusing at all.",
+  //     when: "2 months ago",
+  //   },
+  // ];
+  const initialPatchMap: { [index: string]: ReleasedPatchesReplyPatch } = {};
+  const patchMap = patches.reduce((patchMap, patch) => {
+    const version = `${patch.major}.${patch.minor}.${patch.patch}`;
+    patchMap[version] = {
+      ...patch,
+    };
+    return patchMap;
+  }, initialPatchMap);
+  const changes = patchMap[patch].changes || [];
 
   return (
     <Card className={className} {...props}>
       <CardHeader className="p-4">
-        <CardTitle>Changelog</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardDescription>Changes for patch {patch}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
-        <ChangelogPatchSelect patch={patch} setPatch={setPatch} />
+        <ChangelogPatchSelect
+          patches={patches}
+          patch={patch}
+          setPatch={setPatch}
+        />
         {pid ? (
           <div className="flex items-center space-x-4 rounded-md border p-4">
             <Bell />
@@ -327,7 +387,7 @@ function Changelog({ className, ...props }: CardProps) {
           </div>
         ) : null}
         <div className="h-48">
-          {changes.map((notification, index) => (
+          {changes.map((change, index) => (
             <div
               key={index}
               className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
@@ -335,10 +395,10 @@ function Changelog({ className, ...props }: CardProps) {
               <Check className="h-4 w-4" />
               <div className="space-y-1">
                 <p className="text-sm font-medium leading-none">
-                  {notification.title}
+                  {change.title}
                 </p>
                 <p className="text-sm text-muted-foreground overflow-hidden text-nowrap text-ellipsis">
-                  {notification.description}
+                  {change.text}
                 </p>
               </div>
             </div>
@@ -354,7 +414,14 @@ function Changelog({ className, ...props }: CardProps) {
   );
 }
 
-function ChangelogSection() {
+interface ChangelogSectionProps {
+  patches: {
+    game: ReleasedPatchesReply;
+    client: ReleasedPatchesReply;
+  };
+}
+
+function ChangelogSection({ patches }: ChangelogSectionProps) {
   const announcements = [
     {
       title: "Announcement One",
@@ -405,16 +472,19 @@ function ChangelogSection() {
             })}
           </div>
         </div>
-        <Tabs defaultValue="changelog" className="w-full md:max-w-[500px]">
+        <Tabs defaultValue="game-changelog" className="w-full md:max-w-[500px]">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="changelog">Changelog</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
+            <TabsTrigger value="game-changelog">Changelog</TabsTrigger>
+            <TabsTrigger value="client-changelog">Client Changelog</TabsTrigger>
           </TabsList>
-          <TabsContent value="changelog">
-            <Changelog />
+          <TabsContent value="game-changelog">
+            <Changelog patches={patches.game.patches} title="Changelog" />
           </TabsContent>
-          <TabsContent value="events">
-            <Changelog />
+          <TabsContent value="client-changelog">
+            <Changelog
+              patches={patches.client.patches}
+              title="Client Changelog"
+            />
           </TabsContent>
         </Tabs>
       </div>
