@@ -3,6 +3,7 @@ import { credentials } from "@grpc/grpc-js";
 import { DataClient } from "~/proto/data.grpc-client";
 import type {
   CreatePatchChangeReply,
+  DeletePatchChangeReply,
   PatchesReply,
   ReleasedPatchesReply,
   MostRecentPatchReply,
@@ -37,6 +38,25 @@ export async function createPatchChange(
         resolve(reply);
       }
     );
+  });
+}
+
+export async function deletePatchChange(id: number | string) {
+  return new Promise<DeletePatchChangeReply>((resolve, reject) => {
+    client.deletePatchChange({ id: BigInt(id) }, (err, reply) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!reply) {
+        // TODO: Create an error here
+        reject("createPatchChangeReply is null");
+        return;
+      }
+
+      resolve(reply);
+    });
   });
 }
 

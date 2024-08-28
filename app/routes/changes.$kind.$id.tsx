@@ -1,18 +1,13 @@
 import { useState } from "react";
 import { useLoaderData, useFetcher, Form } from "@remix-run/react";
-import {
-  type LoaderFunction,
-  type ActionFunction,
-  redirect,
-  json,
-} from "@remix-run/node";
+import { type LoaderFunction, redirect } from "@remix-run/node";
 import { ClientOnly } from "remix-utils/client-only";
 import { CirclePlus, Check, Send } from "lucide-react";
 
 import { PlayerPermissions } from "~/lib/permissions";
 import { getSession } from "~/lib/sessions.server";
-import { createPatchChange, patchByID } from "~/lib/data.server";
 import { playerPermissions } from "~/lib/mirror.server";
+import { patchByID } from "~/lib/data.server";
 import {
   patchVersion,
   serializePatch,
@@ -31,6 +26,7 @@ import {
 } from "~/components/ui/dialog";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
+import { action as newChangeAction } from "~/routes/changes.$kind.$id.changes";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -64,46 +60,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   };
 };
 
-interface NewChangeActionInput {
-  title?: string;
-  text?: string;
-}
-
-export const action: ActionFunction = async ({ request, params }) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  if (!session.has("pid")) {
-    return redirect("/");
-  }
-  const pid = session.get("pid");
-  if (!pid) {
-    return redirect("/");
-  }
-  const permissionsReply = await playerPermissions(pid);
-  const permissions = new PlayerPermissions(permissionsReply.names);
-  if (!params.id || !params.kind) {
-    return redirect("/");
-  }
-  const patchReply = await patchByID(parseInt(params.id));
-  if (!patchReply.patch) {
-    // TODO: Render a 500 page instead?
-    return redirect("/changes");
-  }
-  const form = await request.formData();
-  const { title, text }: NewChangeActionInput = Object.fromEntries(form);
-  if (!title) {
-    return json({ error: "title is required" });
-  }
-  if (!text) {
-    return json({ error: "text is required" });
-  }
-  if (!permissions.has("create-changelog-change")) {
-    return json({ error: "forbidden" });
-  }
-  await createPatchChange(params.id, title, text);
-
-  return null;
-};
-
 export default function Changelog() {
   const { patch, permissionNames } = useLoaderData<typeof loader>();
   const permissions = new PlayerPermissions(permissionNames);
@@ -120,21 +76,21 @@ export default function Changelog() {
         <Separator />
       </div>
       <div className="flex gap-2">
-        {permissions.has("create-changelog-change") ? (
-          <PatchChangeDialog>
+        {permissions.has("create-changelog-change") && !patch.released ? (
+          <NewPatchChangeDialog>
             <Button variant="outline">
               <CirclePlus className="mr-2 h-4 w-4" />
               New Change
             </Button>
-          </PatchChangeDialog>
+          </NewPatchChangeDialog>
         ) : null}
-        {permissions.has("release-changelog") ? (
-          <PatchChangeDialog>
+        {permissions.has("release-changelog") && !patch.released ? (
+          <NewPatchChangeDialog>
             <Button>
               <Send className="mr-2 h-4 w-4" />
               Release Patch
             </Button>
-          </PatchChangeDialog>
+          </NewPatchChangeDialog>
         ) : null}
       </div>
       {patch.changes.map((change: SerializedPatchChange) => {
@@ -148,6 +104,7 @@ interface PatchChangeCardProps {
   change: SerializedPatchChange;
 }
 
+// TODO: Check permissions for delete/edit
 function PatchChangeCard({ change }: PatchChangeCardProps) {
   return (
     <div className="flex items-center gap-3 rounded-lg border p-3 shadow-sm">
@@ -156,15 +113,22 @@ function PatchChangeCard({ change }: PatchChangeCardProps) {
         <h4 className="text-sm leading-none">{change.title}</h4>
         <p className="text-xs text-muted-foreground">{change.text}</p>
       </div>
+      <div className="ml-auto">
+        <DeletePatchChangeDialog id={change.id}>
+          <Button variant="destructive">Delete</Button>
+        </DeletePatchChangeDialog>
+      </div>
     </div>
   );
 }
 
-function PatchChangeDialog({ children }: React.PropsWithChildren) {
+function NewPatchChangeDialog({ children }: React.PropsWithChildren) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const fetcher = useFetcher<typeof action>({ key: "new-patch-change" });
+  const fetcher = useFetcher<typeof newChangeAction>({
+    key: "new-patch-change",
+  });
 
   return (
     <ClientOnly fallback={children}>
@@ -226,13 +190,14 @@ function PatchChangeForm({
 }: PatchChangeFormProps) {
   return (
     <Form
+      action="changes"
       method="post"
       id="new-patch-change"
       className="flex flex-col gap-4"
       navigate={false}
       fetcherKey="new-patch-change"
-      reloadDocument
       replace
+      reloadDocument
     >
       <div>
         <Label htmlFor="new-patch-change-title" className="text-right">
@@ -261,5 +226,56 @@ function PatchChangeForm({
         />
       </div>
     </Form>
+  );
+}
+
+interface DeletePatchChangeDialogProps extends React.PropsWithChildren {
+  id: string;
+}
+
+function DeletePatchChangeDialog({
+  id,
+  children,
+}: DeletePatchChangeDialogProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  // TODO: Add a fetcher key for catching errors
+  return (
+    <ClientOnly fallback={children}>
+      {() => (
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>{children}</DialogTrigger>
+          <DialogContent className="sm:max-w-[425px] p-6">
+            <DialogHeader>
+              <DialogTitle>Delete This Change?</DialogTitle>
+              <DialogDescription>This cannot be undone.</DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setDialogOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Form
+                action={`changes/${id}/destroy`}
+                method="post"
+                className="ml-auto"
+                navigate={false}
+                fetcherKey="delete-patch-change"
+                reloadDocument
+                replace
+              >
+                <input className="hidden aria-hidden" name="id" value={id} />
+                <Button variant="destructive">Delete</Button>
+              </Form>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+    </ClientOnly>
   );
 }
