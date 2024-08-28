@@ -44,7 +44,10 @@ export default function Changelog() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium">Patch {patchVersion(patch)}</h3>
+        <h3 className="text-lg font-medium">
+          {patch.kind === "game" ? "Game" : "Client"} Patch{" "}
+          {patchVersion(patch)}
+        </h3>
         <p className="text-sm text-muted-foreground pb-3">
           Manage and update this patch here.
         </p>

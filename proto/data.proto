@@ -21,7 +21,8 @@ message Patch {
   int64 minor = 3;
   int64 patch = 4;
   bool released = 5;
-  repeated PatchChange changes = 6;
+  string kind = 6;
+  repeated PatchChange changes = 7;
 }
 
 message PatchChange {

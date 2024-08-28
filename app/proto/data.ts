@@ -36,7 +36,11 @@ export interface Patch {
      */
     released: boolean;
     /**
-     * @generated from protobuf field: repeated data.PatchChange changes = 6;
+     * @generated from protobuf field: string kind = 6;
+     */
+    kind: string;
+    /**
+     * @generated from protobuf field: repeated data.PatchChange changes = 7;
      */
     changes: PatchChange[];
 }
@@ -274,7 +278,8 @@ class Patch$Type extends MessageType<Patch> {
             { no: 3, name: "minor", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
             { no: 4, name: "patch", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
             { no: 5, name: "released", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
-            { no: 6, name: "changes", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => PatchChange }
+            { no: 6, name: "kind", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 7, name: "changes", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => PatchChange }
         ]);
     }
     create(value?: PartialMessage<Patch>): Patch {
@@ -284,6 +289,7 @@ class Patch$Type extends MessageType<Patch> {
         message.minor = 0n;
         message.patch = 0n;
         message.released = false;
+        message.kind = "";
         message.changes = [];
         if (value !== undefined)
             reflectionMergePartial<Patch>(this, message, value);
@@ -309,7 +315,10 @@ class Patch$Type extends MessageType<Patch> {
                 case /* bool released */ 5:
                     message.released = reader.bool();
                     break;
-                case /* repeated data.PatchChange changes */ 6:
+                case /* string kind */ 6:
+                    message.kind = reader.string();
+                    break;
+                case /* repeated data.PatchChange changes */ 7:
                     message.changes.push(PatchChange.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
@@ -339,9 +348,12 @@ class Patch$Type extends MessageType<Patch> {
         /* bool released = 5; */
         if (message.released !== false)
             writer.tag(5, WireType.Varint).bool(message.released);
-        /* repeated data.PatchChange changes = 6; */
+        /* string kind = 6; */
+        if (message.kind !== "")
+            writer.tag(6, WireType.LengthDelimited).string(message.kind);
+        /* repeated data.PatchChange changes = 7; */
         for (let i = 0; i < message.changes.length; i++)
-            PatchChange.internalBinaryWrite(message.changes[i], writer.tag(6, WireType.LengthDelimited).fork(), options).join();
+            PatchChange.internalBinaryWrite(message.changes[i], writer.tag(7, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);

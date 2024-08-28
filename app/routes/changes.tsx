@@ -67,14 +67,14 @@ export default function Changelogs() {
   const gamePatchNavItems = patches.game.map((patch) => {
     return {
       Icon: patch.released ? Check : Ellipsis,
-      title: `Patch ${patchVersion(patch)}`,
+      title: patchVersion(patch),
       to: `/changes/game/${patch.id}`,
     };
   });
   const clientPatchNavItems = patches.client.map((patch) => {
     return {
       Icon: patch.released ? Check : Ellipsis,
-      title: `Patch ${patchVersion(patch)}`,
+      title: patchVersion(patch),
       to: `/changes/client/${patch.id}`,
     };
   });

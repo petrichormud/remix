@@ -6,6 +6,7 @@ export interface SerializedPatch {
   minor: string;
   patch: string;
   released: boolean;
+  kind: string;
   changes: Array<SerializedPatchChange>;
 }
 
@@ -25,6 +26,7 @@ export function serializePatch({
   minor,
   patch,
   released,
+  kind,
   changes,
 }: Patch): SerializedPatch {
   return {
@@ -33,6 +35,7 @@ export function serializePatch({
     minor: minor.toString(),
     patch: patch.toString(),
     released,
+    kind,
     changes: changes.map((change) => serializePatchChange(change)),
   };
 }
