@@ -12,6 +12,52 @@ import type { PartialMessage } from "@protobuf-ts/runtime";
 import { reflectionMergePartial } from "@protobuf-ts/runtime";
 import { MessageType } from "@protobuf-ts/runtime";
 /**
+ * @generated from protobuf message data.Patch
+ */
+export interface Patch {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+    /**
+     * @generated from protobuf field: int64 major = 2;
+     */
+    major: bigint;
+    /**
+     * @generated from protobuf field: int64 minor = 3;
+     */
+    minor: bigint;
+    /**
+     * @generated from protobuf field: int64 patch = 4;
+     */
+    patch: bigint;
+    /**
+     * @generated from protobuf field: bool released = 5;
+     */
+    released: boolean;
+    /**
+     * @generated from protobuf field: repeated data.PatchChange changes = 6;
+     */
+    changes: PatchChange[];
+}
+/**
+ * @generated from protobuf message data.PatchChange
+ */
+export interface PatchChange {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+    /**
+     * @generated from protobuf field: string title = 2;
+     */
+    title: string;
+    /**
+     * @generated from protobuf field: string text = 3;
+     */
+    text: string;
+}
+/**
  * @generated from protobuf message data.CreatePatchRequest
  */
 export interface CreatePatchRequest {
@@ -40,6 +86,42 @@ export interface CreatePatchReply {
      * @generated from protobuf field: int64 id = 1;
      */
     id: bigint;
+}
+/**
+ * @generated from protobuf message data.PatchRequest
+ */
+export interface PatchRequest {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+}
+/**
+ * @generated from protobuf message data.PatchReply
+ */
+export interface PatchReply {
+    /**
+     * @generated from protobuf field: data.Patch patch = 1;
+     */
+    patch?: Patch;
+}
+/**
+ * @generated from protobuf message data.PatchesRequest
+ */
+export interface PatchesRequest {
+    /**
+     * @generated from protobuf field: string kind = 1;
+     */
+    kind: string;
+}
+/**
+ * @generated from protobuf message data.PatchesReply
+ */
+export interface PatchesReply {
+    /**
+     * @generated from protobuf field: repeated data.Patch patches = 1;
+     */
+    patches: Patch[];
 }
 /**
  * @generated from protobuf message data.DeletePatchRequest
@@ -161,52 +243,178 @@ export interface ReleasedPatchesRequest {
  */
 export interface ReleasedPatchesReply {
     /**
-     * @generated from protobuf field: repeated data.ReleasedPatchesReplyPatch patches = 1;
+     * @generated from protobuf field: repeated data.Patch patches = 1;
      */
-    patches: ReleasedPatchesReplyPatch[];
+    patches: Patch[];
 }
 /**
- * @generated from protobuf message data.ReleasedPatchesReplyPatch
+ * @generated from protobuf message data.MostRecentPatchRequest
  */
-export interface ReleasedPatchesReplyPatch {
+export interface MostRecentPatchRequest {
     /**
-     * @generated from protobuf field: int64 id = 1;
+     * @generated from protobuf field: string kind = 1;
      */
-    id: bigint;
-    /**
-     * @generated from protobuf field: int64 major = 2;
-     */
-    major: bigint;
-    /**
-     * @generated from protobuf field: int64 minor = 3;
-     */
-    minor: bigint;
-    /**
-     * @generated from protobuf field: int64 patch = 4;
-     */
-    patch: bigint;
-    /**
-     * @generated from protobuf field: repeated data.ReleasedPatchesReplyPatchChange changes = 5;
-     */
-    changes: ReleasedPatchesReplyPatchChange[];
+    kind: string;
 }
 /**
- * @generated from protobuf message data.ReleasedPatchesReplyPatchChange
+ * @generated from protobuf message data.MostRecentPatchReply
  */
-export interface ReleasedPatchesReplyPatchChange {
+export interface MostRecentPatchReply {
     /**
-     * @generated from protobuf field: int64 id = 1;
+     * @generated from protobuf field: data.Patch patch = 1;
      */
-    id: bigint;
-    /**
-     * @generated from protobuf field: string title = 2;
-     */
-    title: string;
-    /**
-     * @generated from protobuf field: string text = 3;
-     */
-    text: string;
+    patch?: Patch;
 }
+// @generated message type with reflection information, may provide speed optimized methods
+class Patch$Type extends MessageType<Patch> {
+    constructor() {
+        super("data.Patch", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "major", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 3, name: "minor", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 4, name: "patch", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 5, name: "released", kind: "scalar", T: 8 /*ScalarType.BOOL*/ },
+            { no: 6, name: "changes", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => PatchChange }
+        ]);
+    }
+    create(value?: PartialMessage<Patch>): Patch {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        message.major = 0n;
+        message.minor = 0n;
+        message.patch = 0n;
+        message.released = false;
+        message.changes = [];
+        if (value !== undefined)
+            reflectionMergePartial<Patch>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Patch): Patch {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                case /* int64 major */ 2:
+                    message.major = reader.int64().toBigInt();
+                    break;
+                case /* int64 minor */ 3:
+                    message.minor = reader.int64().toBigInt();
+                    break;
+                case /* int64 patch */ 4:
+                    message.patch = reader.int64().toBigInt();
+                    break;
+                case /* bool released */ 5:
+                    message.released = reader.bool();
+                    break;
+                case /* repeated data.PatchChange changes */ 6:
+                    message.changes.push(PatchChange.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Patch, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        /* int64 major = 2; */
+        if (message.major !== 0n)
+            writer.tag(2, WireType.Varint).int64(message.major);
+        /* int64 minor = 3; */
+        if (message.minor !== 0n)
+            writer.tag(3, WireType.Varint).int64(message.minor);
+        /* int64 patch = 4; */
+        if (message.patch !== 0n)
+            writer.tag(4, WireType.Varint).int64(message.patch);
+        /* bool released = 5; */
+        if (message.released !== false)
+            writer.tag(5, WireType.Varint).bool(message.released);
+        /* repeated data.PatchChange changes = 6; */
+        for (let i = 0; i < message.changes.length; i++)
+            PatchChange.internalBinaryWrite(message.changes[i], writer.tag(6, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message data.Patch
+ */
+export const Patch = new Patch$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PatchChange$Type extends MessageType<PatchChange> {
+    constructor() {
+        super("data.PatchChange", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "title", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 3, name: "text", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<PatchChange>): PatchChange {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        message.title = "";
+        message.text = "";
+        if (value !== undefined)
+            reflectionMergePartial<PatchChange>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PatchChange): PatchChange {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                case /* string title */ 2:
+                    message.title = reader.string();
+                    break;
+                case /* string text */ 3:
+                    message.text = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PatchChange, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        /* string title = 2; */
+        if (message.title !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.title);
+        /* string text = 3; */
+        if (message.text !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.text);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message data.PatchChange
+ */
+export const PatchChange = new PatchChange$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class CreatePatchRequest$Type extends MessageType<CreatePatchRequest> {
     constructor() {
@@ -325,6 +533,193 @@ class CreatePatchReply$Type extends MessageType<CreatePatchReply> {
  * @generated MessageType for protobuf message data.CreatePatchReply
  */
 export const CreatePatchReply = new CreatePatchReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PatchRequest$Type extends MessageType<PatchRequest> {
+    constructor() {
+        super("data.PatchRequest", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<PatchRequest>): PatchRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<PatchRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PatchRequest): PatchRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PatchRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message data.PatchRequest
+ */
+export const PatchRequest = new PatchRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PatchReply$Type extends MessageType<PatchReply> {
+    constructor() {
+        super("data.PatchReply", [
+            { no: 1, name: "patch", kind: "message", T: () => Patch }
+        ]);
+    }
+    create(value?: PartialMessage<PatchReply>): PatchReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<PatchReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PatchReply): PatchReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* data.Patch patch */ 1:
+                    message.patch = Patch.internalBinaryRead(reader, reader.uint32(), options, message.patch);
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PatchReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* data.Patch patch = 1; */
+        if (message.patch)
+            Patch.internalBinaryWrite(message.patch, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message data.PatchReply
+ */
+export const PatchReply = new PatchReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PatchesRequest$Type extends MessageType<PatchesRequest> {
+    constructor() {
+        super("data.PatchesRequest", [
+            { no: 1, name: "kind", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<PatchesRequest>): PatchesRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.kind = "";
+        if (value !== undefined)
+            reflectionMergePartial<PatchesRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PatchesRequest): PatchesRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* string kind */ 1:
+                    message.kind = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PatchesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string kind = 1; */
+        if (message.kind !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.kind);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message data.PatchesRequest
+ */
+export const PatchesRequest = new PatchesRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class PatchesReply$Type extends MessageType<PatchesReply> {
+    constructor() {
+        super("data.PatchesReply", [
+            { no: 1, name: "patches", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Patch }
+        ]);
+    }
+    create(value?: PartialMessage<PatchesReply>): PatchesReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.patches = [];
+        if (value !== undefined)
+            reflectionMergePartial<PatchesReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: PatchesReply): PatchesReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated data.Patch patches */ 1:
+                    message.patches.push(Patch.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: PatchesReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated data.Patch patches = 1; */
+        for (let i = 0; i < message.patches.length; i++)
+            Patch.internalBinaryWrite(message.patches[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message data.PatchesReply
+ */
+export const PatchesReply = new PatchesReply$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class DeletePatchRequest$Type extends MessageType<DeletePatchRequest> {
     constructor() {
@@ -878,7 +1273,7 @@ export const ReleasedPatchesRequest = new ReleasedPatchesRequest$Type();
 class ReleasedPatchesReply$Type extends MessageType<ReleasedPatchesReply> {
     constructor() {
         super("data.ReleasedPatchesReply", [
-            { no: 1, name: "patches", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => ReleasedPatchesReplyPatch }
+            { no: 1, name: "patches", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Patch }
         ]);
     }
     create(value?: PartialMessage<ReleasedPatchesReply>): ReleasedPatchesReply {
@@ -893,8 +1288,8 @@ class ReleasedPatchesReply$Type extends MessageType<ReleasedPatchesReply> {
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* repeated data.ReleasedPatchesReplyPatch patches */ 1:
-                    message.patches.push(ReleasedPatchesReplyPatch.internalBinaryRead(reader, reader.uint32(), options));
+                case /* repeated data.Patch patches */ 1:
+                    message.patches.push(Patch.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -908,9 +1303,9 @@ class ReleasedPatchesReply$Type extends MessageType<ReleasedPatchesReply> {
         return message;
     }
     internalBinaryWrite(message: ReleasedPatchesReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* repeated data.ReleasedPatchesReplyPatch patches = 1; */
+        /* repeated data.Patch patches = 1; */
         for (let i = 0; i < message.patches.length; i++)
-            ReleasedPatchesReplyPatch.internalBinaryWrite(message.patches[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+            Patch.internalBinaryWrite(message.patches[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -922,46 +1317,26 @@ class ReleasedPatchesReply$Type extends MessageType<ReleasedPatchesReply> {
  */
 export const ReleasedPatchesReply = new ReleasedPatchesReply$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class ReleasedPatchesReplyPatch$Type extends MessageType<ReleasedPatchesReplyPatch> {
+class MostRecentPatchRequest$Type extends MessageType<MostRecentPatchRequest> {
     constructor() {
-        super("data.ReleasedPatchesReplyPatch", [
-            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 2, name: "major", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 3, name: "minor", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 4, name: "patch", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 5, name: "changes", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => ReleasedPatchesReplyPatchChange }
+        super("data.MostRecentPatchRequest", [
+            { no: 1, name: "kind", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<ReleasedPatchesReplyPatch>): ReleasedPatchesReplyPatch {
+    create(value?: PartialMessage<MostRecentPatchRequest>): MostRecentPatchRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.id = 0n;
-        message.major = 0n;
-        message.minor = 0n;
-        message.patch = 0n;
-        message.changes = [];
+        message.kind = "";
         if (value !== undefined)
-            reflectionMergePartial<ReleasedPatchesReplyPatch>(this, message, value);
+            reflectionMergePartial<MostRecentPatchRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ReleasedPatchesReplyPatch): ReleasedPatchesReplyPatch {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: MostRecentPatchRequest): MostRecentPatchRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* int64 id */ 1:
-                    message.id = reader.int64().toBigInt();
-                    break;
-                case /* int64 major */ 2:
-                    message.major = reader.int64().toBigInt();
-                    break;
-                case /* int64 minor */ 3:
-                    message.minor = reader.int64().toBigInt();
-                    break;
-                case /* int64 patch */ 4:
-                    message.patch = reader.int64().toBigInt();
-                    break;
-                case /* repeated data.ReleasedPatchesReplyPatchChange changes */ 5:
-                    message.changes.push(ReleasedPatchesReplyPatchChange.internalBinaryRead(reader, reader.uint32(), options));
+                case /* string kind */ 1:
+                    message.kind = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -974,22 +1349,10 @@ class ReleasedPatchesReplyPatch$Type extends MessageType<ReleasedPatchesReplyPat
         }
         return message;
     }
-    internalBinaryWrite(message: ReleasedPatchesReplyPatch, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* int64 id = 1; */
-        if (message.id !== 0n)
-            writer.tag(1, WireType.Varint).int64(message.id);
-        /* int64 major = 2; */
-        if (message.major !== 0n)
-            writer.tag(2, WireType.Varint).int64(message.major);
-        /* int64 minor = 3; */
-        if (message.minor !== 0n)
-            writer.tag(3, WireType.Varint).int64(message.minor);
-        /* int64 patch = 4; */
-        if (message.patch !== 0n)
-            writer.tag(4, WireType.Varint).int64(message.patch);
-        /* repeated data.ReleasedPatchesReplyPatchChange changes = 5; */
-        for (let i = 0; i < message.changes.length; i++)
-            ReleasedPatchesReplyPatchChange.internalBinaryWrite(message.changes[i], writer.tag(5, WireType.LengthDelimited).fork(), options).join();
+    internalBinaryWrite(message: MostRecentPatchRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* string kind = 1; */
+        if (message.kind !== "")
+            writer.tag(1, WireType.LengthDelimited).string(message.kind);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -997,40 +1360,29 @@ class ReleasedPatchesReplyPatch$Type extends MessageType<ReleasedPatchesReplyPat
     }
 }
 /**
- * @generated MessageType for protobuf message data.ReleasedPatchesReplyPatch
+ * @generated MessageType for protobuf message data.MostRecentPatchRequest
  */
-export const ReleasedPatchesReplyPatch = new ReleasedPatchesReplyPatch$Type();
+export const MostRecentPatchRequest = new MostRecentPatchRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class ReleasedPatchesReplyPatchChange$Type extends MessageType<ReleasedPatchesReplyPatchChange> {
+class MostRecentPatchReply$Type extends MessageType<MostRecentPatchReply> {
     constructor() {
-        super("data.ReleasedPatchesReplyPatchChange", [
-            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 2, name: "title", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
-            { no: 3, name: "text", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        super("data.MostRecentPatchReply", [
+            { no: 1, name: "patch", kind: "message", T: () => Patch }
         ]);
     }
-    create(value?: PartialMessage<ReleasedPatchesReplyPatchChange>): ReleasedPatchesReplyPatchChange {
+    create(value?: PartialMessage<MostRecentPatchReply>): MostRecentPatchReply {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.id = 0n;
-        message.title = "";
-        message.text = "";
         if (value !== undefined)
-            reflectionMergePartial<ReleasedPatchesReplyPatchChange>(this, message, value);
+            reflectionMergePartial<MostRecentPatchReply>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ReleasedPatchesReplyPatchChange): ReleasedPatchesReplyPatchChange {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: MostRecentPatchReply): MostRecentPatchReply {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* int64 id */ 1:
-                    message.id = reader.int64().toBigInt();
-                    break;
-                case /* string title */ 2:
-                    message.title = reader.string();
-                    break;
-                case /* string text */ 3:
-                    message.text = reader.string();
+                case /* data.Patch patch */ 1:
+                    message.patch = Patch.internalBinaryRead(reader, reader.uint32(), options, message.patch);
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1043,16 +1395,10 @@ class ReleasedPatchesReplyPatchChange$Type extends MessageType<ReleasedPatchesRe
         }
         return message;
     }
-    internalBinaryWrite(message: ReleasedPatchesReplyPatchChange, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* int64 id = 1; */
-        if (message.id !== 0n)
-            writer.tag(1, WireType.Varint).int64(message.id);
-        /* string title = 2; */
-        if (message.title !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.title);
-        /* string text = 3; */
-        if (message.text !== "")
-            writer.tag(3, WireType.LengthDelimited).string(message.text);
+    internalBinaryWrite(message: MostRecentPatchReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* data.Patch patch = 1; */
+        if (message.patch)
+            Patch.internalBinaryWrite(message.patch, writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1060,18 +1406,21 @@ class ReleasedPatchesReplyPatchChange$Type extends MessageType<ReleasedPatchesRe
     }
 }
 /**
- * @generated MessageType for protobuf message data.ReleasedPatchesReplyPatchChange
+ * @generated MessageType for protobuf message data.MostRecentPatchReply
  */
-export const ReleasedPatchesReplyPatchChange = new ReleasedPatchesReplyPatchChange$Type();
+export const MostRecentPatchReply = new MostRecentPatchReply$Type();
 /**
  * @generated ServiceType for protobuf service data.Data
  */
 export const Data = new ServiceType("data.Data", [
     { name: "CreatePatch", options: {}, I: CreatePatchRequest, O: CreatePatchReply },
+    { name: "Patch", options: {}, I: PatchRequest, O: PatchReply },
+    { name: "Patches", options: {}, I: PatchesRequest, O: PatchesReply },
     { name: "DeletePatch", options: {}, I: DeletePatchRequest, O: DeletePatchReply },
     { name: "CreatePatchChange", options: {}, I: CreatePatchChangeRequest, O: CreatePatchChangeReply },
     { name: "DeletePatchChange", options: {}, I: DeletePatchChangeRequest, O: DeletePatchChangeReply },
     { name: "MarkPatchReleased", options: {}, I: MarkPatchReleasedRequest, O: MarkPatchReleasedReply },
     { name: "RevokePatchReleased", options: {}, I: RevokePatchReleasedRequest, O: RevokePatchReleasedReply },
-    { name: "ReleasedPatches", options: {}, I: ReleasedPatchesRequest, O: ReleasedPatchesReply }
+    { name: "ReleasedPatches", options: {}, I: ReleasedPatchesRequest, O: ReleasedPatchesReply },
+    { name: "MostRecentPatch", options: {}, I: MostRecentPatchRequest, O: MostRecentPatchReply }
 ]);

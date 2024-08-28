@@ -4,12 +4,30 @@ option go_package = "/proto";
 
 service Data {
   rpc CreatePatch (CreatePatchRequest) returns (CreatePatchReply);
+  rpc Patch (PatchRequest) returns (PatchReply);
+  rpc Patches (PatchesRequest) returns (PatchesReply);
   rpc DeletePatch (DeletePatchRequest) returns (DeletePatchReply);
   rpc CreatePatchChange (CreatePatchChangeRequest) returns (CreatePatchChangeReply);
   rpc DeletePatchChange (DeletePatchChangeRequest) returns (DeletePatchChangeReply);
   rpc MarkPatchReleased (MarkPatchReleasedRequest) returns (MarkPatchReleasedReply);
   rpc RevokePatchReleased (RevokePatchReleasedRequest) returns (RevokePatchReleasedReply);
   rpc ReleasedPatches (ReleasedPatchesRequest) returns (ReleasedPatchesReply);
+  rpc MostRecentPatch (MostRecentPatchRequest) returns (MostRecentPatchReply);
+}
+
+message Patch {
+  int64 id = 1;
+  int64 major = 2;
+  int64 minor = 3;
+  int64 patch = 4;
+  bool released = 5;
+  repeated PatchChange changes = 6;
+}
+
+message PatchChange {
+  int64 id = 1;
+  string title = 2;
+  string text = 3;
 }
 
 message CreatePatchRequest {
@@ -21,6 +39,22 @@ message CreatePatchRequest {
 
 message CreatePatchReply {
   int64 id = 1;
+}
+
+message PatchRequest {
+  int64 id = 1;
+}
+
+message PatchReply {
+  Patch patch = 1;
+}
+
+message PatchesRequest {
+  string kind = 1;
+}
+ 
+message PatchesReply {
+  repeated Patch patches = 1;
 }
 
 message DeletePatchRequest {
@@ -72,19 +106,13 @@ message ReleasedPatchesRequest {
 }
 
 message ReleasedPatchesReply {
-  repeated ReleasedPatchesReplyPatch patches = 1;
+  repeated Patch patches = 1;
 }
 
-message ReleasedPatchesReplyPatch {
-  int64 id = 1;
-  int64 major = 2;
-  int64 minor = 3;
-  int64 patch = 4;
-  repeated ReleasedPatchesReplyPatchChange changes = 5;
+message MostRecentPatchRequest {
+  string kind = 1;
 }
 
-message ReleasedPatchesReplyPatchChange {
-  int64 id = 1;
-  string title = 2;
-  string text = 3;
+message MostRecentPatchReply {
+  Patch patch = 1;
 }

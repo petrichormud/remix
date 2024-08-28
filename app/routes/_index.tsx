@@ -10,10 +10,7 @@ import { Check, Bell, ArrowRight, Inbox, Users, Trash } from "lucide-react";
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
 import { releasedPatches } from "~/lib/data.server";
-import type {
-  ReleasedPatchesReply,
-  ReleasedPatchesReplyPatch,
-} from "~/proto/data";
+import type { ReleasedPatchesReply, Patch } from "~/proto/data";
 import { PlayerPermissions } from "~/lib/permissions";
 import { Header } from "~/components/header";
 import { Footer } from "~/components/footer";
@@ -252,7 +249,7 @@ function Newsletter() {
 }
 
 type ChangelogPatchSelectProps = {
-  patches: ReleasedPatchesReplyPatch[];
+  patches: Patch[];
   patch: string;
   setPatch: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -287,7 +284,7 @@ function ChangelogPatchSelect({
 
 interface ChangelogProps extends React.ComponentProps<typeof Card> {
   title: string;
-  patches: ReleasedPatchesReplyPatch[];
+  patches: Patch[];
 }
 
 function Changelog({ title, patches, className, ...props }: ChangelogProps) {
@@ -351,7 +348,7 @@ function Changelog({ title, patches, className, ...props }: ChangelogProps) {
   //     when: "2 months ago",
   //   },
   // ];
-  const initialPatchMap: { [index: string]: ReleasedPatchesReplyPatch } = {};
+  const initialPatchMap: { [index: string]: Patch } = {};
   const patchMap = patches.reduce((patchMap, patch) => {
     const version = `${patch.major}.${patch.minor}.${patch.patch}`;
     patchMap[version] = {

@@ -4,6 +4,8 @@
 import { Data } from "./data";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
+import type { MostRecentPatchReply } from "./data";
+import type { MostRecentPatchRequest } from "./data";
 import type { ReleasedPatchesReply } from "./data";
 import type { ReleasedPatchesRequest } from "./data";
 import type { RevokePatchReleasedReply } from "./data";
@@ -16,6 +18,10 @@ import type { CreatePatchChangeReply } from "./data";
 import type { CreatePatchChangeRequest } from "./data";
 import type { DeletePatchReply } from "./data";
 import type { DeletePatchRequest } from "./data";
+import type { PatchesReply } from "./data";
+import type { PatchesRequest } from "./data";
+import type { PatchReply } from "./data";
+import type { PatchRequest } from "./data";
 import type { CreatePatchReply } from "./data";
 import type { CreatePatchRequest } from "./data";
 import * as grpc from "@grpc/grpc-js";
@@ -30,6 +36,20 @@ export interface IDataClient {
     createPatch(input: CreatePatchRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: CreatePatchReply) => void): grpc.ClientUnaryCall;
     createPatch(input: CreatePatchRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: CreatePatchReply) => void): grpc.ClientUnaryCall;
     createPatch(input: CreatePatchRequest, callback: (err: grpc.ServiceError | null, value?: CreatePatchReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: Patch(data.PatchRequest) returns (data.PatchReply);
+     */
+    patch(input: PatchRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PatchReply) => void): grpc.ClientUnaryCall;
+    patch(input: PatchRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: PatchReply) => void): grpc.ClientUnaryCall;
+    patch(input: PatchRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PatchReply) => void): grpc.ClientUnaryCall;
+    patch(input: PatchRequest, callback: (err: grpc.ServiceError | null, value?: PatchReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: Patches(data.PatchesRequest) returns (data.PatchesReply);
+     */
+    patches(input: PatchesRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PatchesReply) => void): grpc.ClientUnaryCall;
+    patches(input: PatchesRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: PatchesReply) => void): grpc.ClientUnaryCall;
+    patches(input: PatchesRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PatchesReply) => void): grpc.ClientUnaryCall;
+    patches(input: PatchesRequest, callback: (err: grpc.ServiceError | null, value?: PatchesReply) => void): grpc.ClientUnaryCall;
     /**
      * @generated from protobuf rpc: DeletePatch(data.DeletePatchRequest) returns (data.DeletePatchReply);
      */
@@ -72,6 +92,13 @@ export interface IDataClient {
     releasedPatches(input: ReleasedPatchesRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: ReleasedPatchesReply) => void): grpc.ClientUnaryCall;
     releasedPatches(input: ReleasedPatchesRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ReleasedPatchesReply) => void): grpc.ClientUnaryCall;
     releasedPatches(input: ReleasedPatchesRequest, callback: (err: grpc.ServiceError | null, value?: ReleasedPatchesReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: MostRecentPatch(data.MostRecentPatchRequest) returns (data.MostRecentPatchReply);
+     */
+    mostRecentPatch(input: MostRecentPatchRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: MostRecentPatchReply) => void): grpc.ClientUnaryCall;
+    mostRecentPatch(input: MostRecentPatchRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: MostRecentPatchReply) => void): grpc.ClientUnaryCall;
+    mostRecentPatch(input: MostRecentPatchRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: MostRecentPatchReply) => void): grpc.ClientUnaryCall;
+    mostRecentPatch(input: MostRecentPatchRequest, callback: (err: grpc.ServiceError | null, value?: MostRecentPatchReply) => void): grpc.ClientUnaryCall;
 }
 /**
  * @generated from protobuf service data.Data
@@ -90,45 +117,66 @@ export class DataClient extends grpc.Client implements IDataClient {
         return this.makeUnaryRequest<CreatePatchRequest, CreatePatchReply>(`/${Data.typeName}/${method.name}`, (value: CreatePatchRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): CreatePatchReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
+     * @generated from protobuf rpc: Patch(data.PatchRequest) returns (data.PatchReply);
+     */
+    patch(input: PatchRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PatchReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PatchReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PatchReply) => void)): grpc.ClientUnaryCall {
+        const method = Data.methods[1];
+        return this.makeUnaryRequest<PatchRequest, PatchReply>(`/${Data.typeName}/${method.name}`, (value: PatchRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PatchReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: Patches(data.PatchesRequest) returns (data.PatchesReply);
+     */
+    patches(input: PatchesRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PatchesReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PatchesReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PatchesReply) => void)): grpc.ClientUnaryCall {
+        const method = Data.methods[2];
+        return this.makeUnaryRequest<PatchesRequest, PatchesReply>(`/${Data.typeName}/${method.name}`, (value: PatchesRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PatchesReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
      * @generated from protobuf rpc: DeletePatch(data.DeletePatchRequest) returns (data.DeletePatchReply);
      */
     deletePatch(input: DeletePatchRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeletePatchReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeletePatchReply) => void), callback?: ((err: grpc.ServiceError | null, value?: DeletePatchReply) => void)): grpc.ClientUnaryCall {
-        const method = Data.methods[1];
+        const method = Data.methods[3];
         return this.makeUnaryRequest<DeletePatchRequest, DeletePatchReply>(`/${Data.typeName}/${method.name}`, (value: DeletePatchRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): DeletePatchReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: CreatePatchChange(data.CreatePatchChangeRequest) returns (data.CreatePatchChangeReply);
      */
     createPatchChange(input: CreatePatchChangeRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CreatePatchChangeReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CreatePatchChangeReply) => void), callback?: ((err: grpc.ServiceError | null, value?: CreatePatchChangeReply) => void)): grpc.ClientUnaryCall {
-        const method = Data.methods[2];
+        const method = Data.methods[4];
         return this.makeUnaryRequest<CreatePatchChangeRequest, CreatePatchChangeReply>(`/${Data.typeName}/${method.name}`, (value: CreatePatchChangeRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): CreatePatchChangeReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: DeletePatchChange(data.DeletePatchChangeRequest) returns (data.DeletePatchChangeReply);
      */
     deletePatchChange(input: DeletePatchChangeRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeletePatchChangeReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeletePatchChangeReply) => void), callback?: ((err: grpc.ServiceError | null, value?: DeletePatchChangeReply) => void)): grpc.ClientUnaryCall {
-        const method = Data.methods[3];
+        const method = Data.methods[5];
         return this.makeUnaryRequest<DeletePatchChangeRequest, DeletePatchChangeReply>(`/${Data.typeName}/${method.name}`, (value: DeletePatchChangeRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): DeletePatchChangeReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: MarkPatchReleased(data.MarkPatchReleasedRequest) returns (data.MarkPatchReleasedReply);
      */
     markPatchReleased(input: MarkPatchReleasedRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: MarkPatchReleasedReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: MarkPatchReleasedReply) => void), callback?: ((err: grpc.ServiceError | null, value?: MarkPatchReleasedReply) => void)): grpc.ClientUnaryCall {
-        const method = Data.methods[4];
+        const method = Data.methods[6];
         return this.makeUnaryRequest<MarkPatchReleasedRequest, MarkPatchReleasedReply>(`/${Data.typeName}/${method.name}`, (value: MarkPatchReleasedRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): MarkPatchReleasedReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: RevokePatchReleased(data.RevokePatchReleasedRequest) returns (data.RevokePatchReleasedReply);
      */
     revokePatchReleased(input: RevokePatchReleasedRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RevokePatchReleasedReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RevokePatchReleasedReply) => void), callback?: ((err: grpc.ServiceError | null, value?: RevokePatchReleasedReply) => void)): grpc.ClientUnaryCall {
-        const method = Data.methods[5];
+        const method = Data.methods[7];
         return this.makeUnaryRequest<RevokePatchReleasedRequest, RevokePatchReleasedReply>(`/${Data.typeName}/${method.name}`, (value: RevokePatchReleasedRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): RevokePatchReleasedReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: ReleasedPatches(data.ReleasedPatchesRequest) returns (data.ReleasedPatchesReply);
      */
     releasedPatches(input: ReleasedPatchesRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ReleasedPatchesReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ReleasedPatchesReply) => void), callback?: ((err: grpc.ServiceError | null, value?: ReleasedPatchesReply) => void)): grpc.ClientUnaryCall {
-        const method = Data.methods[6];
+        const method = Data.methods[8];
         return this.makeUnaryRequest<ReleasedPatchesRequest, ReleasedPatchesReply>(`/${Data.typeName}/${method.name}`, (value: ReleasedPatchesRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): ReleasedPatchesReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: MostRecentPatch(data.MostRecentPatchRequest) returns (data.MostRecentPatchReply);
+     */
+    mostRecentPatch(input: MostRecentPatchRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: MostRecentPatchReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: MostRecentPatchReply) => void), callback?: ((err: grpc.ServiceError | null, value?: MostRecentPatchReply) => void)): grpc.ClientUnaryCall {
+        const method = Data.methods[9];
+        return this.makeUnaryRequest<MostRecentPatchRequest, MostRecentPatchReply>(`/${Data.typeName}/${method.name}`, (value: MostRecentPatchRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): MostRecentPatchReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

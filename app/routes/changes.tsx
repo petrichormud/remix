@@ -1,37 +1,21 @@
-import { useState } from "react";
-import {
-  type LoaderFunctionArgs,
-  type MetaFunction,
-  type LinksFunction,
-  redirect,
+import type {
+  LoaderFunctionArgs,
+  MetaFunction,
+  LinksFunction,
 } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  type DragEndEvent,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  useSortable,
-} from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { GripVertical } from "lucide-react";
+import { redirect } from "@remix-run/node";
+import { Outlet, useLoaderData } from "@remix-run/react";
+import { Check, Ellipsis } from "lucide-react";
 
-import { PlayerPermissions } from "~/lib/permissions";
-import { playerPermissions } from "~/lib/mirror.server";
 import { getSession } from "~/lib/sessions.server";
-import { Button } from "~/components/ui/button";
-import { Card } from "~/components/ui/card";
+import { playerPermissions } from "~/lib/mirror.server";
+import { PlayerPermissions } from "~/lib/permissions";
+import { patches } from "~/lib/data.server";
+import { serializePatch, patchVersion } from "~/lib/patches";
 import { Header } from "~/components/header";
-import { Footer } from "~/components/footer";
+import { Label } from "~/components/ui/label";
+import { SidebarNav } from "~/components/ui/sidebar-nav";
+import { Separator } from "~/components/ui/separator";
 
 import tailwind from "~/styles/tailwind.css?url";
 
@@ -48,144 +32,79 @@ export const links: LinksFunction = () => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await getSession(request.headers.get("Cookie"));
-  if (session.has("pid")) {
-    const pid = session.get("pid");
-    if (!pid) {
-      return {
-        pid: 0,
-        permissionNames: [],
-      };
-    }
-    const permissionsReply = await playerPermissions(pid);
-    const permissions = new PlayerPermissions(permissionsReply.names);
-    if (
-      !permissions ||
-      !(permissions.has("grant-all") && permissions.has("revoke-all"))
-    ) {
-      // TODO: Make this a 404 page instead
-      return redirect("/");
-    }
+  if (!session.has("pid")) return redirect("/");
 
-    return { pid, permissionNames: permissionsReply.names };
-  } else {
-    // TODO: Make this a 404 page instead
+  const pid = session.get("pid");
+  if (!pid) {
     return redirect("/");
   }
+
+  const permissionsReply = await playerPermissions(pid);
+  // TODO: Combine these into a single call
+  const gamePatchesReply = await patches("game");
+  const clientPatchesReply = await patches("client");
+  const gamePatches = gamePatchesReply.patches.map((patch) =>
+    serializePatch(patch)
+  );
+  const clientPatches = clientPatchesReply.patches.map((patch) =>
+    serializePatch(patch)
+  );
+
+  return {
+    pid,
+    permissionNames: permissionsReply.names,
+    patches: {
+      game: gamePatches,
+      client: clientPatches,
+    },
+  };
 }
 
-export default function Changes() {
-  const [changes, setChanges] = useState([
-    {
-      id: 1,
-      title: "Updated movement",
-      description: "Everyone is now red; 10x faster!",
-    },
-    {
-      id: 2,
-      title: "Removed the retroencabulator",
-      description: "It was too confusing, so we took it out.",
-    },
-    {
-      id: 3,
-      title: "Added combat",
-      description: "All your based are belong to us",
-    },
-  ]);
-  const { pid, permissionNames } = useLoaderData<typeof loader>();
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-  const permissions = pid ? new PlayerPermissions(permissionNames) : undefined;
-  if (
-    !permissions ||
-    !(permissions.has("grant-all") && permissions.has("revoke-all"))
-  ) {
-    return (
-      <>
-        <Header pid={pid} permissions={permissions} />
-        <main></main>
-      </>
-    );
-  }
+export default function Changelogs() {
+  const { pid, permissionNames, patches } = useLoaderData<typeof loader>();
+  const permissions = new PlayerPermissions(permissionNames);
+
+  const gamePatchNavItems = patches.game.map((patch) => {
+    return {
+      Icon: patch.released ? Check : Ellipsis,
+      title: `Patch ${patchVersion(patch)}`,
+      to: `/changes/game/${patch.id}`,
+    };
+  });
+  const clientPatchNavItems = patches.client.map((patch) => {
+    return {
+      Icon: patch.released ? Check : Ellipsis,
+      title: `Patch ${patchVersion(patch)}`,
+      to: `/changes/client/${patch.id}`,
+    };
+  });
 
   return (
     <>
       <Header pid={pid} permissions={permissions} />
-      <main>
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={handleDragEnd}
-        >
-          <SortableContext
-            items={changes}
-            strategy={verticalListSortingStrategy}
-          >
-            <section className="mx-auto max-w-screen-2xl flex flex-col items-center gap-4">
-              {changes.map((change) => (
-                <Change key={change.id} {...change} />
-              ))}
-            </section>
-          </SortableContext>
-        </DndContext>
+      <main className="flex justify-center items-center">
+        <div className="w-full max-w-screen-2xl space-y-6 p-10 pb-16">
+          <div className="space-y-0.5">
+            <h2 className="text-2xl font-bold tracking-tight">Changelogs</h2>
+            <p className="text-muted-foreground">
+              View and manage product changelogs
+            </p>
+          </div>
+          <Separator className="my-6" />
+          <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+            <aside className="-mx-4 lg:w-1/5">
+              <Label>Game Changelog</Label>
+              <SidebarNav items={gamePatchNavItems} />
+              <Separator className="my-6" />
+              <Label>Client Changelog</Label>
+              <SidebarNav items={clientPatchNavItems} />
+            </aside>
+            <div className="flex-1 lg:max-w-2xl">
+              <Outlet />
+            </div>
+          </div>
+        </div>
       </main>
-      <Footer />
     </>
-  );
-
-  function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
-
-    if (active.id !== over?.id) {
-      setChanges((changes) => {
-        const oldIndex = changes.findIndex((change) => change.id === active.id);
-        const newIndex = changes.findIndex((change) => change.id === over?.id);
-
-        return arrayMove(changes, oldIndex, newIndex);
-      });
-    }
-  }
-}
-
-type ChangeProps = {
-  id: number;
-  title: string;
-  description: string;
-};
-
-function Change({ id, title, description }: ChangeProps) {
-  const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id });
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
-  return (
-    <Card
-      ref={setNodeRef}
-      style={style}
-      className="w-[450px] px-6 py-3 flex gap-2 justify-between"
-    >
-      <div className="space-y-1">
-        <p className="text-sm font-medium leading-none">{title}</p>
-        <p className="text-sm text-muted-foreground overflow-hidden text-nowrap text-ellipsis">
-          {description}
-        </p>
-      </div>
-      <Button
-        {...attributes}
-        {...listeners}
-        variant="outline"
-        size="icon"
-        className="cursor-grab active:cursor-grabbing"
-      >
-        <GripVertical className="h-6 w-6 text-muted-foreground" />
-      </Button>
-    </Card>
   );
 }
