@@ -53,6 +53,7 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwind }];
 };
 
+// TODO: Share this permissions filtering
 export async function loader({ request }: LoaderFunctionArgs) {
   const gamePatches = await releasedPatches("game");
   const clientPatches = await releasedPatches("client");

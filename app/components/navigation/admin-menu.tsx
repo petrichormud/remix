@@ -51,7 +51,7 @@ export function AdminMenu({ children, permissions }: AccountMenuProps) {
             <>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <Link to="/players">
+                <Link to="/changes">
                   <DropdownMenuItem>
                     <Users className="mr-2 h-4 w-4" />
                     <span>Changelogs</span>
