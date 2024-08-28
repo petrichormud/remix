@@ -1,0 +1,90 @@
+syntax = "proto3";
+package data;
+option go_package = "/proto";
+
+service Data {
+  rpc CreatePatch (CreatePatchRequest) returns (CreatePatchReply);
+  rpc DeletePatch (DeletePatchRequest) returns (DeletePatchReply);
+  rpc CreatePatchChange (CreatePatchChangeRequest) returns (CreatePatchChangeReply);
+  rpc DeletePatchChange (DeletePatchChangeRequest) returns (DeletePatchChangeReply);
+  rpc MarkPatchReleased (MarkPatchReleasedRequest) returns (MarkPatchReleasedReply);
+  rpc RevokePatchReleased (RevokePatchReleasedRequest) returns (RevokePatchReleasedReply);
+  rpc ReleasedPatches (ReleasedPatchesRequest) returns (ReleasedPatchesReply);
+}
+
+message CreatePatchRequest {
+  string kind = 1;
+  int64 major = 2;
+  int64 minor = 3;
+  int64 patch = 4;
+}
+
+message CreatePatchReply {
+  int64 id = 1;
+}
+
+message DeletePatchRequest {
+  int64 id = 1;
+}
+
+message DeletePatchReply {
+  int64 id = 1;
+}
+
+message CreatePatchChangeRequest {
+  int64 pcid = 1;
+  string title = 2;
+  string text = 3;
+}
+
+message CreatePatchChangeReply {
+  int64 id = 1;
+  string title = 2;
+  string text = 3;
+}
+
+message DeletePatchChangeRequest {
+  int64 id = 1;
+}
+
+message DeletePatchChangeReply {
+  int64 id = 1;
+}
+
+message MarkPatchReleasedRequest {
+  int64 id = 1;
+}
+
+message MarkPatchReleasedReply {
+  int64 id = 1;
+}
+
+message RevokePatchReleasedRequest {
+  int64 id = 1;
+}
+
+message RevokePatchReleasedReply {
+  int64 id = 1;
+}
+
+message ReleasedPatchesRequest {
+  string kind = 1;
+}
+
+message ReleasedPatchesReply {
+  repeated ReleasedPatchesReplyPatch patches = 1;
+}
+
+message ReleasedPatchesReplyPatch {
+  int64 id = 1;
+  int64 major = 2;
+  int64 minor = 3;
+  int64 patch = 4;
+  repeated ReleasedPatchesReplyPatchChange changes = 5;
+}
+
+message ReleasedPatchesReplyPatchChange {
+  int64 id = 1;
+  string title = 2;
+  string text = 3;
+}
