@@ -301,16 +301,15 @@ function ChangelogPatchSelect({
 }
 
 interface ChangelogProps extends React.ComponentProps<typeof Card> {
-  // TODO: Move title down into the component so it can be Patch x.y.z
-  title: string;
   patches: Array<SerializedPatch>;
 }
 
-function Changelog({ title, patches, className, ...props }: ChangelogProps) {
+function Changelog({ patches, className, ...props }: ChangelogProps) {
   const [patch, setPatch] = useState(patchVersion(patches[0]));
   const { pid } = useLoaderData<typeof loader>();
 
   if (!patches.length) {
+    const title = "Check Back Soon";
     return (
       <Card className={className} {...props}>
         <CardHeader className="p-4">
@@ -395,7 +394,7 @@ function Changelog({ title, patches, className, ...props }: ChangelogProps) {
   return (
     <Card className={className} {...props}>
       <CardHeader className="p-4">
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>Patch {patch}</CardTitle>
         <CardDescription>Changes for patch {patch}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
