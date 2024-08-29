@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Terminal } from "lucide-react";
 import { useFetcher } from "@remix-run/react";
 import { ClientOnly } from "remix-utils/client-only";
 
@@ -23,7 +23,7 @@ import {
   AlertDialogFooter,
 } from "~/components/ui/alert-dialog";
 import { Separator } from "~/components/ui/separator";
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
@@ -55,75 +55,36 @@ export default function AccountSettings() {
 }
 
 function EmailSettings() {
-  const [addEmailDialogOpen, setAddEmailDialogOpen] = useState(false);
-
-  const emails: Array<{ id: bigint; address: string; verified: boolean }> = [
+  const emails = [
     // { id: 1n, address: "email@web.site", verified: true },
-    { id: 3n, address: "email@web.site", verified: false },
+    // { id: 3n, address: "email@web.site", verified: false },
   ];
-  const verifiedEmailsCount = emails.reduce((count, email) => {
-    return email.verified ? count + 1 : count;
-  }, 0);
   return (
-    <div className="space-y-2 ">
+    <div className="space-y-2 md:w-[24rem]">
       <Label>Emails</Label>
       {emails.length ? (
         <p className="text-xs leading-none text-muted-foreground">
           Click an email to edit, delete, or resend verification emails
         </p>
       ) : null}
-      {emails.length === 0 ? <NoEmailsAlert /> : null}
-      {emails.length && verifiedEmailsCount === 0 ? (
-        <NoVerifiedEmailsAlert />
-      ) : null}
+      {emails.length === 0 ? null : null}
       {emails.length < MAXIMUM_EMAILS_ALLOWED ? (
-        <div>
-          <ClientOnly fallback={<AddEmailButton />}>
-            {() => (
-              <AddEmailDialog
-                dialogOpen={addEmailDialogOpen}
-                setDialogOpen={setAddEmailDialogOpen}
-              >
-                <AddEmailButton />
-              </AddEmailDialog>
-            )}
-          </ClientOnly>
-        </div>
+        <Button>Add Email</Button>
       ) : null}
-      <div className="md:w-[24rem]">
-        {emails.map((email) => {
-          return <Email key={email.id} {...email} />;
-        })}
-      </div>
+      {emails.map((email) => {
+        return <Email key={email.id} {...email} />;
+      })}
     </div>
   );
 }
 
-function AddEmailButton() {
-  return <Button>Add Email</Button>;
-}
-
 function NoEmailsAlert() {
   return (
-    <Alert variant="warning">
-      <CircleAlert className="h-5 w-5" />
-      <AlertTitle>You don&apos;t have any emails!</AlertTitle>
+    <Alert>
+      <Terminal className="h-4 w-4" />
+      <AlertTitle>Heads up!</AlertTitle>
       <AlertDescription>
-        You won&apos;t be able to play without a verified email. Click the
-        button below to add one.
-      </AlertDescription>
-    </Alert>
-  );
-}
-
-function NoVerifiedEmailsAlert() {
-  return (
-    <Alert variant="warning">
-      <CircleAlert className="h-5 w-5" />
-      <AlertTitle>You don&apos;t have any verified emails!</AlertTitle>
-      <AlertDescription>
-        You won&apos;t be able to play without a verified email. Add a new one
-        or resend the verification below.
+        You can add components and dependencies to your app using the cli.
       </AlertDescription>
     </Alert>
   );
@@ -146,7 +107,29 @@ function Email({ address, verified }: EmailProps) {
 
   return (
     <ClientOnly
-      fallback={<EmailButton address={address} verified={verified} />}
+      fallback={
+        <Button
+          variant="outline"
+          className={cn(
+            "w-full md:h-8 justify-start font-normal",
+            verified ? "" : "bg-amber-200 hover:bg-amber-300"
+          )}
+        >
+          {verified ? (
+            address
+          ) : (
+            <>
+              <span className={cn("", verified ? "" : "text-amber-700")}>
+                {address}
+              </span>
+              <div className="ml-auto flex justify-end items-center gap-1 text-amber-700">
+                <CircleAlert className="w-4 h-4" />
+                <span className="text-sm">Unverified</span>
+              </div>
+            </>
+          )}
+        </Button>
+      }
     >
       {() => (
         <>
@@ -161,9 +144,7 @@ function Email({ address, verified }: EmailProps) {
             setResendVerificationEmailDialogOpen={
               setResendVerificationEmailDialogOpen
             }
-          >
-            <EmailButton address={address} verified={verified} />
-          </EditEmailDialog>
+          />
           <DeleteEmailDialog
             dialogOpen={deleteDialogOpen}
             setDialogOpen={setDeleteDialogOpen}
@@ -178,101 +159,7 @@ function Email({ address, verified }: EmailProps) {
   );
 }
 
-interface EmailButtonProps extends React.PropsWithChildren {
-  address: string;
-  verified: boolean;
-}
-
-function EmailButton({ address, verified }: EmailButtonProps) {
-  return (
-    <Button
-      variant="outline"
-      className={cn(
-        "w-full md:w-[24rem] md:h-8 justify-start font-normal",
-        verified ? "" : "bg-amber-200 hover:bg-amber-300"
-      )}
-    >
-      {verified ? (
-        address
-      ) : (
-        <>
-          <span className={cn("", verified ? "" : "text-amber-700")}>
-            {address}
-          </span>
-          <div className="ml-auto flex justify-end items-center gap-1 text-amber-700">
-            <CircleAlert className="w-4 h-4" />
-            <span className="text-sm">Unverified</span>
-          </div>
-        </>
-      )}
-    </Button>
-  );
-}
-
-interface AddEmailDialogProps extends React.PropsWithChildren {
-  dialogOpen: boolean;
-  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function AddEmailDialog({
-  children,
-  dialogOpen,
-  setDialogOpen,
-}: AddEmailDialogProps) {
-  return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] p-6">
-        <DialogHeader>
-          <DialogTitle>Add New Email Address</DialogTitle>
-          <DialogDescription></DialogDescription>
-        </DialogHeader>
-        <AddEmailForm />
-        <DialogFooter className="items-center">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => {
-              setDialogOpen(false);
-            }}
-          >
-            Never Mind
-          </Button>
-          <Button form="add-email" type="submit" disabled>
-            Create
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-function AddEmailForm() {
-  const [address, setAddress] = useState("");
-  const fetcher = useFetcher();
-
-  return (
-    <fetcher.Form
-      method="post"
-      // TODO: Use the pid here
-      action="/players/emails"
-      id="add-email"
-      className="flex flex-col gap-4"
-    >
-      <div className="gap-0">
-        <Input
-          name="address"
-          value={address}
-          onChange={(e) => {
-            setAddress(e.target.value);
-          }}
-        />
-      </div>
-    </fetcher.Form>
-  );
-}
-
-interface EditEmailDialogProps extends React.PropsWithChildren {
+type EditEmailDialogProps = {
   address: string;
   verified: boolean;
   inner: string;
@@ -283,10 +170,9 @@ interface EditEmailDialogProps extends React.PropsWithChildren {
   setResendVerificationEmailDialogOpen: React.Dispatch<
     React.SetStateAction<boolean>
   >;
-}
+};
 
 function EditEmailDialog({
-  children,
   address,
   verified,
   inner,
@@ -298,13 +184,33 @@ function EditEmailDialog({
 }: EditEmailDialogProps) {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger
+        className={cn(
+          buttonVariants({ variant: "outline" }),
+          "w-full md:h-8 justify-start font-normal",
+          verified ? "" : "bg-amber-200 hover:bg-amber-300"
+        )}
+      >
+        {verified ? (
+          address
+        ) : (
+          <>
+            <span className={cn(verified ? "" : "text-amber-700")}>
+              {address}
+            </span>
+            <div className="ml-auto flex justify-end items-center gap-1 text-amber-700">
+              <CircleAlert className="w-4 h-4" />
+              <span className="text-sm">Unverified</span>
+            </div>
+          </>
+        )}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] p-6">
         <DialogHeader>
           <DialogTitle>{address}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
-        <EditEmailForm
+        <EmailForm
           inner={inner}
           setInner={setInner}
           verified={verified}
@@ -335,7 +241,7 @@ function EditEmailDialog({
   );
 }
 
-interface EditEmailFormProps {
+type EmailFormProps = {
   inner: string;
   setInner: React.Dispatch<React.SetStateAction<string>>;
   verified: boolean;
@@ -345,16 +251,16 @@ interface EditEmailFormProps {
   setResendVerificationEmailDialogOpen: React.Dispatch<
     React.SetStateAction<boolean>
   >;
-}
+};
 
-function EditEmailForm({
+export function EmailForm({
   inner,
   setInner,
   verified,
   setDialogOpen,
   setDeleteDialogOpen,
   setResendVerificationEmailDialogOpen,
-}: EditEmailFormProps) {
+}: EmailFormProps) {
   const fetcher = useFetcher();
 
   return (
