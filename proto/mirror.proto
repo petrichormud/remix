@@ -5,6 +5,7 @@ option go_package = "/proto";
 service Mirror {
   rpc Register (RegisterRequest) returns (RegisterReply);
   rpc Login (LoginRequest) returns (LoginReply);
+  rpc PlayerUsername (PlayerUsernameRequest) returns (PlayerUsernameReply);
   rpc PlayerSettings (PlayerSettingsRequest) returns (PlayerSettingsReply);
   rpc SetPlayerSettingsTheme (SetPlayerSettingsThemeRequest) returns (SetPlayerSettingsThemeReply);
   rpc Players (PlayersRequest) returns (PlayersReply);
@@ -34,6 +35,14 @@ message LoginRequest {
 message LoginReply {
   bool verified = 1;
   int64 id = 2;
+}
+
+message PlayerUsernameRequest {
+  int64 pid = 1;
+}
+
+message PlayerUsernameReply {
+  string username = 1;
 }
 
 message PlayerSettingsRequest {

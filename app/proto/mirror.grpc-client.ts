@@ -24,6 +24,8 @@ import type { SetPlayerSettingsThemeReply } from "./mirror";
 import type { SetPlayerSettingsThemeRequest } from "./mirror";
 import type { PlayerSettingsReply } from "./mirror";
 import type { PlayerSettingsRequest } from "./mirror";
+import type { PlayerUsernameReply } from "./mirror";
+import type { PlayerUsernameRequest } from "./mirror";
 import type { LoginReply } from "./mirror";
 import type { LoginRequest } from "./mirror";
 import type { RegisterReply } from "./mirror";
@@ -47,6 +49,13 @@ export interface IMirrorClient {
     login(input: LoginRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: LoginReply) => void): grpc.ClientUnaryCall;
     login(input: LoginRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: LoginReply) => void): grpc.ClientUnaryCall;
     login(input: LoginRequest, callback: (err: grpc.ServiceError | null, value?: LoginReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: PlayerUsername(mirror.PlayerUsernameRequest) returns (mirror.PlayerUsernameReply);
+     */
+    playerUsername(input: PlayerUsernameRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PlayerUsernameReply) => void): grpc.ClientUnaryCall;
+    playerUsername(input: PlayerUsernameRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: PlayerUsernameReply) => void): grpc.ClientUnaryCall;
+    playerUsername(input: PlayerUsernameRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: PlayerUsernameReply) => void): grpc.ClientUnaryCall;
+    playerUsername(input: PlayerUsernameRequest, callback: (err: grpc.ServiceError | null, value?: PlayerUsernameReply) => void): grpc.ClientUnaryCall;
     /**
      * @generated from protobuf rpc: PlayerSettings(mirror.PlayerSettingsRequest) returns (mirror.PlayerSettingsReply);
      */
@@ -142,73 +151,80 @@ export class MirrorClient extends grpc.Client implements IMirrorClient {
         return this.makeUnaryRequest<LoginRequest, LoginReply>(`/${Mirror.typeName}/${method.name}`, (value: LoginRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): LoginReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
+     * @generated from protobuf rpc: PlayerUsername(mirror.PlayerUsernameRequest) returns (mirror.PlayerUsernameReply);
+     */
+    playerUsername(input: PlayerUsernameRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerUsernameReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerUsernameReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PlayerUsernameReply) => void)): grpc.ClientUnaryCall {
+        const method = Mirror.methods[2];
+        return this.makeUnaryRequest<PlayerUsernameRequest, PlayerUsernameReply>(`/${Mirror.typeName}/${method.name}`, (value: PlayerUsernameRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PlayerUsernameReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
      * @generated from protobuf rpc: PlayerSettings(mirror.PlayerSettingsRequest) returns (mirror.PlayerSettingsReply);
      */
     playerSettings(input: PlayerSettingsRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PlayerSettingsReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[2];
+        const method = Mirror.methods[3];
         return this.makeUnaryRequest<PlayerSettingsRequest, PlayerSettingsReply>(`/${Mirror.typeName}/${method.name}`, (value: PlayerSettingsRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PlayerSettingsReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: SetPlayerSettingsTheme(mirror.SetPlayerSettingsThemeRequest) returns (mirror.SetPlayerSettingsThemeReply);
      */
     setPlayerSettingsTheme(input: SetPlayerSettingsThemeRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void), callback?: ((err: grpc.ServiceError | null, value?: SetPlayerSettingsThemeReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[3];
+        const method = Mirror.methods[4];
         return this.makeUnaryRequest<SetPlayerSettingsThemeRequest, SetPlayerSettingsThemeReply>(`/${Mirror.typeName}/${method.name}`, (value: SetPlayerSettingsThemeRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): SetPlayerSettingsThemeReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: Players(mirror.PlayersRequest) returns (mirror.PlayersReply);
      */
     players(input: PlayersRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayersReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayersReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PlayersReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[4];
+        const method = Mirror.methods[5];
         return this.makeUnaryRequest<PlayersRequest, PlayersReply>(`/${Mirror.typeName}/${method.name}`, (value: PlayersRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PlayersReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: PlayerPermissionDefinitions(mirror.PlayerPermissionDefinitionsRequest) returns (mirror.PlayerPermissionDefinitionsReply);
      */
     playerPermissionDefinitions(input: PlayerPermissionDefinitionsRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerPermissionDefinitionsReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerPermissionDefinitionsReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PlayerPermissionDefinitionsReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[5];
+        const method = Mirror.methods[6];
         return this.makeUnaryRequest<PlayerPermissionDefinitionsRequest, PlayerPermissionDefinitionsReply>(`/${Mirror.typeName}/${method.name}`, (value: PlayerPermissionDefinitionsRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PlayerPermissionDefinitionsReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: PlayerPermissions(mirror.PlayerPermissionsRequest) returns (mirror.PlayerPermissionsReply);
      */
     playerPermissions(input: PlayerPermissionsRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerPermissionsReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: PlayerPermissionsReply) => void), callback?: ((err: grpc.ServiceError | null, value?: PlayerPermissionsReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[6];
+        const method = Mirror.methods[7];
         return this.makeUnaryRequest<PlayerPermissionsRequest, PlayerPermissionsReply>(`/${Mirror.typeName}/${method.name}`, (value: PlayerPermissionsRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): PlayerPermissionsReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: GrantPlayerPermission(mirror.GrantPlayerPermissionRequest) returns (mirror.GrantPlayerPermissionReply);
      */
     grantPlayerPermission(input: GrantPlayerPermissionRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GrantPlayerPermissionReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: GrantPlayerPermissionReply) => void), callback?: ((err: grpc.ServiceError | null, value?: GrantPlayerPermissionReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[7];
+        const method = Mirror.methods[8];
         return this.makeUnaryRequest<GrantPlayerPermissionRequest, GrantPlayerPermissionReply>(`/${Mirror.typeName}/${method.name}`, (value: GrantPlayerPermissionRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): GrantPlayerPermissionReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: RevokePlayerPermission(mirror.RevokePlayerPermissionRequest) returns (mirror.RevokePlayerPermissionReply);
      */
     revokePlayerPermission(input: RevokePlayerPermissionRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RevokePlayerPermissionReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RevokePlayerPermissionReply) => void), callback?: ((err: grpc.ServiceError | null, value?: RevokePlayerPermissionReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[8];
+        const method = Mirror.methods[9];
         return this.makeUnaryRequest<RevokePlayerPermissionRequest, RevokePlayerPermissionReply>(`/${Mirror.typeName}/${method.name}`, (value: RevokePlayerPermissionRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): RevokePlayerPermissionReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: ListEmailsForPlayer(mirror.ListEmailsForPlayerRequest) returns (mirror.ListEmailsForPlayerReply);
      */
     listEmailsForPlayer(input: ListEmailsForPlayerRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void), callback?: ((err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[9];
+        const method = Mirror.methods[10];
         return this.makeUnaryRequest<ListEmailsForPlayerRequest, ListEmailsForPlayerReply>(`/${Mirror.typeName}/${method.name}`, (value: ListEmailsForPlayerRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): ListEmailsForPlayerReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: CreateEmail(mirror.CreateEmailRequest) returns (mirror.CreateEmailReply);
      */
     createEmail(input: CreateEmailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CreateEmailReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CreateEmailReply) => void), callback?: ((err: grpc.ServiceError | null, value?: CreateEmailReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[10];
+        const method = Mirror.methods[11];
         return this.makeUnaryRequest<CreateEmailRequest, CreateEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: CreateEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): CreateEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
      * @generated from protobuf rpc: DeleteEmail(mirror.DeleteEmailRequest) returns (mirror.DeleteEmailReply);
      */
     deleteEmail(input: DeleteEmailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void), callback?: ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[11];
+        const method = Mirror.methods[12];
         return this.makeUnaryRequest<DeleteEmailRequest, DeleteEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: DeleteEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): DeleteEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

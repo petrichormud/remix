@@ -5,7 +5,7 @@ import { redirect, type LoaderFunction } from "@remix-run/node";
 import { ClientOnly } from "remix-utils/client-only";
 
 import { getSession } from "~/lib/sessions.server";
-import { listEmailsForPlayer } from "~/lib/mirror.server";
+import { playerUsername, listEmailsForPlayer } from "~/lib/mirror.server";
 import { cn } from "~/lib/utils";
 import { type Theme, THEME_DARK, THEME_LIGHT, useTheme } from "~/lib/theme";
 import {
@@ -44,9 +44,10 @@ export const loader: LoaderFunction = async ({ request }) => {
     return redirect("/");
   }
 
-  const reply = await listEmailsForPlayer(pid);
+  const { username } = await playerUsername(pid);
 
-  const serializedEmails = reply.emails.map(({ id, pid, ...rest }) => {
+  const emailsReply = await listEmailsForPlayer(pid);
+  const serializedEmails = emailsReply.emails.map(({ id, pid, ...rest }) => {
     return {
       id: id.toString(),
       pid: pid.toString(),
@@ -54,10 +55,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     };
   });
 
-  return { emails: serializedEmails };
+  return { username, emails: serializedEmails };
 };
 
 export default function AccountSettings() {
+  const { username } = useLoaderData<typeof loader>();
+
   return (
     <div className="space-y-10 sm:space-y-6">
       <div>
@@ -69,7 +72,7 @@ export default function AccountSettings() {
       </div>
       <div className="space-y-2 md:w-[24rem]">
         <Label>Username</Label>
-        <Input value="test" disabled />
+        <Input value={username} disabled />
         <p className="text-xs leading-none text-muted-foreground">
           Your username cannot be changed.
         </p>

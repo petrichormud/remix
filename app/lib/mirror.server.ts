@@ -2,6 +2,7 @@ import { credentials } from "@grpc/grpc-js";
 
 import { MirrorClient } from "~/proto/mirror.grpc-client";
 import type {
+  PlayerUsernameReply,
   PlayerSettingsReply,
   SetPlayerSettingsThemeReply,
   PlayersReply,
@@ -18,6 +19,25 @@ export const client = new MirrorClient(
   "localhost:8009",
   credentials.createInsecure()
 );
+
+export async function playerUsername(pid: number | string) {
+  return new Promise<PlayerUsernameReply>((resolve, reject) => {
+    client.playerUsername({ pid: BigInt(pid) }, (err, reply) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!reply) {
+        // TODO: Create an error here
+        reject("playerUsernameReply is null");
+        return;
+      }
+
+      resolve(reply);
+    });
+  });
+}
 
 export async function playerSettings(pid: number) {
   return new Promise<PlayerSettingsReply>((resolve, reject) => {
