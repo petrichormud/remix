@@ -1,12 +1,13 @@
 import { credentials } from "@grpc/grpc-js";
 
 import { MirrorClient } from "~/proto/mirror.grpc-client";
-import {
-  type PlayerSettingsReply,
-  type SetPlayerSettingsThemeReply,
-  type PlayersReply,
-  type PlayerPermissionDefinitionsReply,
-  type PlayerPermissionsReply,
+import type {
+  PlayerSettingsReply,
+  SetPlayerSettingsThemeReply,
+  PlayersReply,
+  PlayerPermissionDefinitionsReply,
+  PlayerPermissionsReply,
+  CreateEmailReply,
   GrantPlayerPermissionReply,
 } from "~/proto/mirror";
 import type { Theme } from "~/lib/theme";
@@ -138,8 +139,8 @@ export async function grantPlayerPermission(
 }
 
 export async function revokePlayerPermission(
-  pid: number,
-  ipid: number,
+  pid: number | string,
+  ipid: number | string,
   name: string
 ) {
   return new Promise<GrantPlayerPermissionReply>((resolve, reject) => {
@@ -160,5 +161,24 @@ export async function revokePlayerPermission(
         resolve(reply);
       }
     );
+  });
+}
+
+export async function createEmail(pid: number | string, address: string) {
+  return new Promise<CreateEmailReply>((resolve, reject) => {
+    client.createEmail({ pid: BigInt(pid), address }, (err, reply) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!reply) {
+        // TODO: Create an error here
+        reject("revokePlayerPermissionReply is null");
+        return;
+      }
+
+      resolve(reply);
+    });
   });
 }

@@ -12,6 +12,7 @@ service Mirror {
   rpc PlayerPermissions (PlayerPermissionsRequest) returns (PlayerPermissionsReply);
   rpc GrantPlayerPermission (GrantPlayerPermissionRequest) returns (GrantPlayerPermissionReply);
   rpc RevokePlayerPermission (RevokePlayerPermissionRequest) returns (RevokePlayerPermissionReply);
+  rpc CreateEmail (CreateEmailRequest) returns (CreateEmailReply);
 }
 
 message RegisterRequest {
@@ -105,5 +106,14 @@ message RevokePlayerPermissionRequest {
 }
 
 message RevokePlayerPermissionReply {
+  int64 id = 1;
+}
+
+message CreateEmailRequest {
+  int64 pid = 1;
+  string address = 2;
+}
+
+message CreateEmailReply {
   int64 id = 1;
 }

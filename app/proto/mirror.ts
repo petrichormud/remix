@@ -255,6 +255,28 @@ export interface RevokePlayerPermissionReply {
      */
     id: bigint;
 }
+/**
+ * @generated from protobuf message mirror.CreateEmailRequest
+ */
+export interface CreateEmailRequest {
+    /**
+     * @generated from protobuf field: int64 pid = 1;
+     */
+    pid: bigint;
+    /**
+     * @generated from protobuf field: string address = 2;
+     */
+    address: string;
+}
+/**
+ * @generated from protobuf message mirror.CreateEmailReply
+ */
+export interface CreateEmailReply {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+}
 // @generated message type with reflection information, may provide speed optimized methods
 class RegisterRequest$Type extends MessageType<RegisterRequest> {
     constructor() {
@@ -1295,6 +1317,108 @@ class RevokePlayerPermissionReply$Type extends MessageType<RevokePlayerPermissio
  * @generated MessageType for protobuf message mirror.RevokePlayerPermissionReply
  */
 export const RevokePlayerPermissionReply = new RevokePlayerPermissionReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class CreateEmailRequest$Type extends MessageType<CreateEmailRequest> {
+    constructor() {
+        super("mirror.CreateEmailRequest", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "address", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<CreateEmailRequest>): CreateEmailRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pid = 0n;
+        message.address = "";
+        if (value !== undefined)
+            reflectionMergePartial<CreateEmailRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateEmailRequest): CreateEmailRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 pid */ 1:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                case /* string address */ 2:
+                    message.address = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: CreateEmailRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 pid = 1; */
+        if (message.pid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.pid);
+        /* string address = 2; */
+        if (message.address !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.address);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.CreateEmailRequest
+ */
+export const CreateEmailRequest = new CreateEmailRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class CreateEmailReply$Type extends MessageType<CreateEmailReply> {
+    constructor() {
+        super("mirror.CreateEmailReply", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<CreateEmailReply>): CreateEmailReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<CreateEmailReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: CreateEmailReply): CreateEmailReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: CreateEmailReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.CreateEmailReply
+ */
+export const CreateEmailReply = new CreateEmailReply$Type();
 /**
  * @generated ServiceType for protobuf service mirror.Mirror
  */
@@ -1307,5 +1431,6 @@ export const Mirror = new ServiceType("mirror.Mirror", [
     { name: "PlayerPermissionDefinitions", options: {}, I: PlayerPermissionDefinitionsRequest, O: PlayerPermissionDefinitionsReply },
     { name: "PlayerPermissions", options: {}, I: PlayerPermissionsRequest, O: PlayerPermissionsReply },
     { name: "GrantPlayerPermission", options: {}, I: GrantPlayerPermissionRequest, O: GrantPlayerPermissionReply },
-    { name: "RevokePlayerPermission", options: {}, I: RevokePlayerPermissionRequest, O: RevokePlayerPermissionReply }
+    { name: "RevokePlayerPermission", options: {}, I: RevokePlayerPermissionRequest, O: RevokePlayerPermissionReply },
+    { name: "CreateEmail", options: {}, I: CreateEmailRequest, O: CreateEmailReply }
 ]);
