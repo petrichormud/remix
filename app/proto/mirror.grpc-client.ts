@@ -4,8 +4,12 @@
 import { Mirror } from "./mirror";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
+import type { DeleteEmailReply } from "./mirror";
+import type { DeleteEmailRequest } from "./mirror";
 import type { CreateEmailReply } from "./mirror";
 import type { CreateEmailRequest } from "./mirror";
+import type { ListEmailsForPlayerReply } from "./mirror";
+import type { ListEmailsForPlayerRequest } from "./mirror";
 import type { RevokePlayerPermissionReply } from "./mirror";
 import type { RevokePlayerPermissionRequest } from "./mirror";
 import type { GrantPlayerPermissionReply } from "./mirror";
@@ -93,12 +97,26 @@ export interface IMirrorClient {
     revokePlayerPermission(input: RevokePlayerPermissionRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: RevokePlayerPermissionReply) => void): grpc.ClientUnaryCall;
     revokePlayerPermission(input: RevokePlayerPermissionRequest, callback: (err: grpc.ServiceError | null, value?: RevokePlayerPermissionReply) => void): grpc.ClientUnaryCall;
     /**
+     * @generated from protobuf rpc: ListEmailsForPlayer(mirror.ListEmailsForPlayerRequest) returns (mirror.ListEmailsForPlayerReply);
+     */
+    listEmailsForPlayer(input: ListEmailsForPlayerRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void): grpc.ClientUnaryCall;
+    listEmailsForPlayer(input: ListEmailsForPlayerRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void): grpc.ClientUnaryCall;
+    listEmailsForPlayer(input: ListEmailsForPlayerRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void): grpc.ClientUnaryCall;
+    listEmailsForPlayer(input: ListEmailsForPlayerRequest, callback: (err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void): grpc.ClientUnaryCall;
+    /**
      * @generated from protobuf rpc: CreateEmail(mirror.CreateEmailRequest) returns (mirror.CreateEmailReply);
      */
     createEmail(input: CreateEmailRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: CreateEmailReply) => void): grpc.ClientUnaryCall;
     createEmail(input: CreateEmailRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: CreateEmailReply) => void): grpc.ClientUnaryCall;
     createEmail(input: CreateEmailRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: CreateEmailReply) => void): grpc.ClientUnaryCall;
     createEmail(input: CreateEmailRequest, callback: (err: grpc.ServiceError | null, value?: CreateEmailReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: DeleteEmail(mirror.DeleteEmailRequest) returns (mirror.DeleteEmailReply);
+     */
+    deleteEmail(input: DeleteEmailRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: DeleteEmailReply) => void): grpc.ClientUnaryCall;
+    deleteEmail(input: DeleteEmailRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: DeleteEmailReply) => void): grpc.ClientUnaryCall;
+    deleteEmail(input: DeleteEmailRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: DeleteEmailReply) => void): grpc.ClientUnaryCall;
+    deleteEmail(input: DeleteEmailRequest, callback: (err: grpc.ServiceError | null, value?: DeleteEmailReply) => void): grpc.ClientUnaryCall;
 }
 /**
  * @generated from protobuf service mirror.Mirror
@@ -173,10 +191,24 @@ export class MirrorClient extends grpc.Client implements IMirrorClient {
         return this.makeUnaryRequest<RevokePlayerPermissionRequest, RevokePlayerPermissionReply>(`/${Mirror.typeName}/${method.name}`, (value: RevokePlayerPermissionRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): RevokePlayerPermissionReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
+     * @generated from protobuf rpc: ListEmailsForPlayer(mirror.ListEmailsForPlayerRequest) returns (mirror.ListEmailsForPlayerReply);
+     */
+    listEmailsForPlayer(input: ListEmailsForPlayerRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void), callback?: ((err: grpc.ServiceError | null, value?: ListEmailsForPlayerReply) => void)): grpc.ClientUnaryCall {
+        const method = Mirror.methods[9];
+        return this.makeUnaryRequest<ListEmailsForPlayerRequest, ListEmailsForPlayerReply>(`/${Mirror.typeName}/${method.name}`, (value: ListEmailsForPlayerRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): ListEmailsForPlayerReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
      * @generated from protobuf rpc: CreateEmail(mirror.CreateEmailRequest) returns (mirror.CreateEmailReply);
      */
     createEmail(input: CreateEmailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CreateEmailReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: CreateEmailReply) => void), callback?: ((err: grpc.ServiceError | null, value?: CreateEmailReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[9];
+        const method = Mirror.methods[10];
         return this.makeUnaryRequest<CreateEmailRequest, CreateEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: CreateEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): CreateEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: DeleteEmail(mirror.DeleteEmailRequest) returns (mirror.DeleteEmailReply);
+     */
+    deleteEmail(input: DeleteEmailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void), callback?: ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void)): grpc.ClientUnaryCall {
+        const method = Mirror.methods[11];
+        return this.makeUnaryRequest<DeleteEmailRequest, DeleteEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: DeleteEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): DeleteEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

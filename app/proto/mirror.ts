@@ -256,6 +256,45 @@ export interface RevokePlayerPermissionReply {
     id: bigint;
 }
 /**
+ * @generated from protobuf message mirror.Email
+ */
+export interface Email {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+    /**
+     * @generated from protobuf field: int64 pid = 2;
+     */
+    pid: bigint;
+    /**
+     * @generated from protobuf field: string address = 3;
+     */
+    address: string;
+    /**
+     * @generated from protobuf field: bool verified = 4;
+     */
+    verified: boolean;
+}
+/**
+ * @generated from protobuf message mirror.ListEmailsForPlayerRequest
+ */
+export interface ListEmailsForPlayerRequest {
+    /**
+     * @generated from protobuf field: int64 pid = 1;
+     */
+    pid: bigint;
+}
+/**
+ * @generated from protobuf message mirror.ListEmailsForPlayerReply
+ */
+export interface ListEmailsForPlayerReply {
+    /**
+     * @generated from protobuf field: repeated mirror.Email emails = 1;
+     */
+    emails: Email[];
+}
+/**
  * @generated from protobuf message mirror.CreateEmailRequest
  */
 export interface CreateEmailRequest {
@@ -276,6 +315,24 @@ export interface CreateEmailReply {
      * @generated from protobuf field: int64 id = 1;
      */
     id: bigint;
+}
+/**
+ * @generated from protobuf message mirror.DeleteEmailRequest
+ */
+export interface DeleteEmailRequest {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+    /**
+     * @generated from protobuf field: int64 pid = 2;
+     */
+    pid: bigint;
+}
+/**
+ * @generated from protobuf message mirror.DeleteEmailReply
+ */
+export interface DeleteEmailReply {
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class RegisterRequest$Type extends MessageType<RegisterRequest> {
@@ -1318,6 +1375,171 @@ class RevokePlayerPermissionReply$Type extends MessageType<RevokePlayerPermissio
  */
 export const RevokePlayerPermissionReply = new RevokePlayerPermissionReply$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class Email$Type extends MessageType<Email> {
+    constructor() {
+        super("mirror.Email", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 3, name: "address", kind: "scalar", T: 9 /*ScalarType.STRING*/ },
+            { no: 4, name: "verified", kind: "scalar", T: 8 /*ScalarType.BOOL*/ }
+        ]);
+    }
+    create(value?: PartialMessage<Email>): Email {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        message.pid = 0n;
+        message.address = "";
+        message.verified = false;
+        if (value !== undefined)
+            reflectionMergePartial<Email>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: Email): Email {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                case /* int64 pid */ 2:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                case /* string address */ 3:
+                    message.address = reader.string();
+                    break;
+                case /* bool verified */ 4:
+                    message.verified = reader.bool();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: Email, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        /* int64 pid = 2; */
+        if (message.pid !== 0n)
+            writer.tag(2, WireType.Varint).int64(message.pid);
+        /* string address = 3; */
+        if (message.address !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.address);
+        /* bool verified = 4; */
+        if (message.verified !== false)
+            writer.tag(4, WireType.Varint).bool(message.verified);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.Email
+ */
+export const Email = new Email$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class ListEmailsForPlayerRequest$Type extends MessageType<ListEmailsForPlayerRequest> {
+    constructor() {
+        super("mirror.ListEmailsForPlayerRequest", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<ListEmailsForPlayerRequest>): ListEmailsForPlayerRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pid = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<ListEmailsForPlayerRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ListEmailsForPlayerRequest): ListEmailsForPlayerRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 pid */ 1:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: ListEmailsForPlayerRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 pid = 1; */
+        if (message.pid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.pid);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.ListEmailsForPlayerRequest
+ */
+export const ListEmailsForPlayerRequest = new ListEmailsForPlayerRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class ListEmailsForPlayerReply$Type extends MessageType<ListEmailsForPlayerReply> {
+    constructor() {
+        super("mirror.ListEmailsForPlayerReply", [
+            { no: 1, name: "emails", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => Email }
+        ]);
+    }
+    create(value?: PartialMessage<ListEmailsForPlayerReply>): ListEmailsForPlayerReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.emails = [];
+        if (value !== undefined)
+            reflectionMergePartial<ListEmailsForPlayerReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: ListEmailsForPlayerReply): ListEmailsForPlayerReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* repeated mirror.Email emails */ 1:
+                    message.emails.push(Email.internalBinaryRead(reader, reader.uint32(), options));
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: ListEmailsForPlayerReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated mirror.Email emails = 1; */
+        for (let i = 0; i < message.emails.length; i++)
+            Email.internalBinaryWrite(message.emails[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.ListEmailsForPlayerReply
+ */
+export const ListEmailsForPlayerReply = new ListEmailsForPlayerReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class CreateEmailRequest$Type extends MessageType<CreateEmailRequest> {
     constructor() {
         super("mirror.CreateEmailRequest", [
@@ -1419,6 +1641,86 @@ class CreateEmailReply$Type extends MessageType<CreateEmailReply> {
  * @generated MessageType for protobuf message mirror.CreateEmailReply
  */
 export const CreateEmailReply = new CreateEmailReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class DeleteEmailRequest$Type extends MessageType<DeleteEmailRequest> {
+    constructor() {
+        super("mirror.DeleteEmailRequest", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<DeleteEmailRequest>): DeleteEmailRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        message.pid = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<DeleteEmailRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: DeleteEmailRequest): DeleteEmailRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                case /* int64 pid */ 2:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: DeleteEmailRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        /* int64 pid = 2; */
+        if (message.pid !== 0n)
+            writer.tag(2, WireType.Varint).int64(message.pid);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.DeleteEmailRequest
+ */
+export const DeleteEmailRequest = new DeleteEmailRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class DeleteEmailReply$Type extends MessageType<DeleteEmailReply> {
+    constructor() {
+        super("mirror.DeleteEmailReply", []);
+    }
+    create(value?: PartialMessage<DeleteEmailReply>): DeleteEmailReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<DeleteEmailReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: DeleteEmailReply): DeleteEmailReply {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: DeleteEmailReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.DeleteEmailReply
+ */
+export const DeleteEmailReply = new DeleteEmailReply$Type();
 /**
  * @generated ServiceType for protobuf service mirror.Mirror
  */
@@ -1432,5 +1734,7 @@ export const Mirror = new ServiceType("mirror.Mirror", [
     { name: "PlayerPermissions", options: {}, I: PlayerPermissionsRequest, O: PlayerPermissionsReply },
     { name: "GrantPlayerPermission", options: {}, I: GrantPlayerPermissionRequest, O: GrantPlayerPermissionReply },
     { name: "RevokePlayerPermission", options: {}, I: RevokePlayerPermissionRequest, O: RevokePlayerPermissionReply },
-    { name: "CreateEmail", options: {}, I: CreateEmailRequest, O: CreateEmailReply }
+    { name: "ListEmailsForPlayer", options: {}, I: ListEmailsForPlayerRequest, O: ListEmailsForPlayerReply },
+    { name: "CreateEmail", options: {}, I: CreateEmailRequest, O: CreateEmailReply },
+    { name: "DeleteEmail", options: {}, I: DeleteEmailRequest, O: DeleteEmailReply }
 ]);

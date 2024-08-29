@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { CircleAlert } from "lucide-react";
-import { useFetcher } from "@remix-run/react";
+import { useLoaderData, useFetcher, Form } from "@remix-run/react";
+import { redirect, type LoaderFunction } from "@remix-run/node";
 import { ClientOnly } from "remix-utils/client-only";
 
+import { getSession } from "~/lib/sessions.server";
+import { listEmailsForPlayer } from "~/lib/mirror.server";
 import { cn } from "~/lib/utils";
 import { type Theme, THEME_DARK, THEME_LIGHT, useTheme } from "~/lib/theme";
 import {
@@ -31,6 +34,29 @@ import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 
 const MAXIMUM_EMAILS_ALLOWED = 3;
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  if (!session.has("pid")) {
+    return redirect("/");
+  }
+  const pid = session.get("pid");
+  if (!pid) {
+    return redirect("/");
+  }
+
+  const reply = await listEmailsForPlayer(pid);
+
+  const serializedEmails = reply.emails.map(({ id, pid, ...rest }) => {
+    return {
+      id: id.toString(),
+      pid: pid.toString(),
+      ...rest,
+    };
+  });
+
+  return { emails: serializedEmails };
+};
+
 export default function AccountSettings() {
   return (
     <div className="space-y-10 sm:space-y-6">
@@ -55,15 +81,19 @@ export default function AccountSettings() {
 }
 
 function EmailSettings() {
+  const { emails } = useLoaderData<typeof loader>();
   const [addEmailDialogOpen, setAddEmailDialogOpen] = useState(false);
 
-  const emails: Array<{ id: bigint; address: string; verified: boolean }> = [
-    // { id: 1n, address: "email@web.site", verified: true },
-    { id: 3n, address: "email@web.site", verified: false },
-  ];
-  const verifiedEmailsCount = emails.reduce((count, email) => {
-    return email.verified ? count + 1 : count;
-  }, 0);
+  const verifiedEmailsCount = emails.reduce(
+    (
+      count: number,
+      email: { id: string; pid: string; address: string; verified: boolean }
+    ) => {
+      return email.verified ? count + 1 : count;
+    },
+    0
+  );
+
   return (
     <div className="space-y-2 ">
       <Label>Emails</Label>
@@ -130,12 +160,12 @@ function NoVerifiedEmailsAlert() {
 }
 
 type EmailProps = {
-  id: bigint;
+  id: number | string;
   address: string;
   verified: boolean;
 };
 
-function Email({ address, verified }: EmailProps) {
+function Email({ id, address, verified }: EmailProps) {
   const [inner, setInner] = useState(address);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -165,6 +195,7 @@ function Email({ address, verified }: EmailProps) {
             <EmailButton address={address} verified={verified} />
           </EditEmailDialog>
           <DeleteEmailDialog
+            id={id}
             dialogOpen={deleteDialogOpen}
             setDialogOpen={setDeleteDialogOpen}
           />
@@ -238,7 +269,7 @@ function AddEmailDialog({
           >
             Never Mind
           </Button>
-          <Button form="add-email" type="submit" disabled>
+          <Button form="add-email" type="submit">
             Create
           </Button>
         </DialogFooter>
@@ -249,15 +280,17 @@ function AddEmailDialog({
 
 function AddEmailForm() {
   const [address, setAddress] = useState("");
-  const fetcher = useFetcher();
 
   return (
-    <fetcher.Form
+    <Form
       method="post"
       // TODO: Use the pid here
       action="/players/emails"
       id="add-email"
       className="flex flex-col gap-4"
+      navigate={false}
+      replace
+      reloadDocument
     >
       <div className="gap-0">
         <Input
@@ -268,7 +301,7 @@ function AddEmailForm() {
           }}
         />
       </div>
-    </fetcher.Form>
+    </Form>
   );
 }
 
@@ -403,11 +436,13 @@ function EditEmailForm({
 }
 
 type DeleteEmailDialogProps = {
+  id: number | string;
   dialogOpen: boolean;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function DeleteEmailDialog({
+  id,
   dialogOpen,
   setDialogOpen,
 }: DeleteEmailDialogProps) {
@@ -420,6 +455,15 @@ function DeleteEmailDialog({
             This is permanent and cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
+        <Form
+          className="hidden aria-hidden"
+          id="delete-email"
+          method="post"
+          action={`/players/email/${id}/destroy`}
+          navigate={false}
+          replace
+          reloadDocument
+        />
         <AlertDialogFooter>
           <Button
             type="button"

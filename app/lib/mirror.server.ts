@@ -7,8 +7,10 @@ import type {
   PlayersReply,
   PlayerPermissionDefinitionsReply,
   PlayerPermissionsReply,
-  CreateEmailReply,
   GrantPlayerPermissionReply,
+  ListEmailsForPlayerReply,
+  CreateEmailReply,
+  DeleteEmailReply,
 } from "~/proto/mirror";
 import type { Theme } from "~/lib/theme";
 
@@ -164,9 +166,47 @@ export async function revokePlayerPermission(
   });
 }
 
+export async function listEmailsForPlayer(pid: number | string) {
+  return new Promise<ListEmailsForPlayerReply>((resolve, reject) => {
+    client.listEmailsForPlayer({ pid: BigInt(pid) }, (err, reply) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!reply) {
+        // TODO: Create an error here
+        reject("revokePlayerPermissionReply is null");
+        return;
+      }
+
+      resolve(reply);
+    });
+  });
+}
+
 export async function createEmail(pid: number | string, address: string) {
   return new Promise<CreateEmailReply>((resolve, reject) => {
     client.createEmail({ pid: BigInt(pid), address }, (err, reply) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!reply) {
+        // TODO: Create an error here
+        reject("revokePlayerPermissionReply is null");
+        return;
+      }
+
+      resolve(reply);
+    });
+  });
+}
+
+export async function deleteEmail(pid: number | string, id: number | string) {
+  return new Promise<DeleteEmailReply>((resolve, reject) => {
+    client.deleteEmail({ pid: BigInt(pid), id: BigInt(id) }, (err, reply) => {
       if (err) {
         reject(err);
         return;
