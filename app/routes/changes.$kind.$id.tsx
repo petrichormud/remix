@@ -87,7 +87,7 @@ export default function Changelog() {
         ) : null}
         {permissions.has("release-changelog") && !patch.released ? (
           <ReleasePatchDialog>
-            <Button>
+            <Button disabled={!patch.changes.length}>
               <Send className="mr-2 h-4 w-4" />
               Release Patch
             </Button>

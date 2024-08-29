@@ -337,50 +337,12 @@ function Changelog({ patches, className, ...props }: ChangelogProps) {
           </div>
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button className="px-0" variant="link">
-            <ArrowRight className="mr-2 h-4 w-4" /> View full changelog
-          </Button>
+          <ChangelogLink />
         </CardFooter>
       </Card>
     );
   }
 
-  // const threeChanges = [
-  //   {
-  //     title: "Updated movement",
-  //     description: "Everyone is now red; 10x faster!",
-  //     when: "1 hour ago",
-  //   },
-  //   {
-  //     title: "Removed the retroencabulator",
-  //     description: "It was too confusing, so we took it out.",
-  //     when: "2 hours ago",
-  //   },
-  //   {
-  //     title: "Added combat",
-  //     description: "All your based are belong to us",
-  //     when: "2 hours ago",
-  //   },
-  // ];
-  // const twoChanges = [
-  //   {
-  //     title: "Made rooms",
-  //     description: "Made some rooms",
-  //     when: "2 weeks ago",
-  //   },
-  // ];
-  // const oneChanges = [
-  //   {
-  //     title: "Added movement",
-  //     description: "You can move now",
-  //     when: "1 month ago",
-  //   },
-  //   {
-  //     title: "Added the retroencabulator",
-  //     description: "This won't be confusing at all.",
-  //     when: "2 months ago",
-  //   },
-  // ];
   const initialPatchMap: { [index: string]: SerializedPatch } = {};
   const patchMap = patches.reduce((patchMap, patch) => {
     const version = `${patch.major}.${patch.minor}.${patch.patch}`;
@@ -424,9 +386,7 @@ function Changelog({ patches, className, ...props }: ChangelogProps) {
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button className="px-0" variant="link">
-          <ArrowRight className="mr-2 h-4 w-4" /> View full changelog
-        </Button>
+        <ChangelogLink />
       </CardFooter>
     </Card>
   );
@@ -450,6 +410,16 @@ function ChangelogNotifications({ pid }: ChangelogNotificationsProps) {
       </div>
       <Switch />
     </div>
+  );
+}
+
+function ChangelogLink() {
+  return (
+    <Link to="/changelog">
+      <Button className="px-0" variant="link">
+        <ArrowRight className="mr-2 h-4 w-4" /> View full changelog
+      </Button>
+    </Link>
   );
 }
 
