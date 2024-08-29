@@ -467,7 +467,7 @@ function DeleteEmailDialog({
           className="hidden aria-hidden"
           id="delete-email"
           method="post"
-          action={`/players/email/${id}/destroy`}
+          action={`/players/emails/${id}/destroy`}
           navigate={false}
           replace
           reloadDocument
@@ -482,12 +482,7 @@ function DeleteEmailDialog({
           >
             Never Mind
           </Button>
-          <Button
-            form="delete-email"
-            type="submit"
-            variant="destructive"
-            disabled
-          >
+          <Button form="delete-email" type="submit" variant="destructive">
             I&apos;m Sure, Delete This Email
           </Button>
         </AlertDialogFooter>
