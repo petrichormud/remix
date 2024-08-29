@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-import { Users } from "lucide-react";
+import { Users, ClipboardList } from "lucide-react";
 
 import { PlayerPermissions } from "~/lib/permissions";
 import {
@@ -49,11 +49,10 @@ export function AdminMenu({ children, permissions }: AccountMenuProps) {
           permissions.has("grant-all") &&
           permissions.has("revoke-all") ? (
             <>
-              <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <Link to="/changes">
                   <DropdownMenuItem>
-                    <Users className="mr-2 h-4 w-4" />
+                    <ClipboardList className="mr-2 h-4 w-4" />
                     <span>Changelogs</span>
                   </DropdownMenuItem>
                 </Link>

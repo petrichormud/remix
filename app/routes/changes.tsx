@@ -1,21 +1,39 @@
+import { useState } from "react";
 import type {
-  LoaderFunctionArgs,
   MetaFunction,
   LinksFunction,
+  ActionFunction,
+  LoaderFunction,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData, useFetcher, Form } from "@remix-run/react";
+import { ClientOnly } from "remix-utils/client-only";
 import { Check, Ellipsis } from "lucide-react";
 
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
 import { PlayerPermissions } from "~/lib/permissions";
-import { patches } from "~/lib/data.server";
-import { serializePatch, patchVersion } from "~/lib/patches";
+import { patches, createPatch } from "~/lib/data.server";
+import {
+  serializePatch,
+  patchVersion,
+  type SerializedPatch,
+} from "~/lib/patches";
 import { Header } from "~/components/header";
 import { Label } from "~/components/ui/label";
 import { SidebarNav } from "~/components/ui/sidebar-nav";
 import { Separator } from "~/components/ui/separator";
+import { Button } from "~/components/ui/button";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "~/components/ui/dialog";
+import { Input } from "~/components/ui/input";
 
 import tailwind from "~/styles/tailwind.css?url";
 
@@ -30,7 +48,48 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwind }];
 };
 
-export async function loader({ request }: LoaderFunctionArgs) {
+interface NewPatchActionInput {
+  kind?: string;
+  major?: string;
+  minor?: string;
+  patch?: string;
+}
+
+export const action: ActionFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get("Cookie"));
+  if (!session.has("pid")) {
+    return redirect("/");
+  }
+  const pid = session.get("pid");
+  if (!pid) {
+    return redirect("/");
+  }
+  const permissionsReply = await playerPermissions(pid);
+  const permissions = new PlayerPermissions(permissionsReply.names);
+  if (!permissions.has("create-changelog")) {
+    return { error: "forbidden" };
+  }
+  const form = await request.formData();
+  // TODO: Run some validation here
+  const { kind, major, minor, patch }: NewPatchActionInput =
+    Object.fromEntries(form);
+  if (!kind) {
+    return { error: "patch kind is required" };
+  }
+  if (!major) {
+    return { error: "patch major version is required" };
+  }
+  if (!minor) {
+    return { error: "patch minor version is required" };
+  }
+  if (!patch) {
+    return { error: "patch patch version is required" };
+  }
+  const reply = await createPatch(kind, major, minor, patch);
+  return redirect(`/changes/${kind}/${reply.id}`);
+};
+
+export const loader: LoaderFunction = async ({ request }) => {
   const session = await getSession(request.headers.get("Cookie"));
   if (!session.has("pid")) return redirect("/");
 
@@ -58,20 +117,20 @@ export async function loader({ request }: LoaderFunctionArgs) {
       client: clientPatches,
     },
   };
-}
+};
 
 export default function Changelogs() {
   const { pid, permissionNames, patches } = useLoaderData<typeof loader>();
   const permissions = new PlayerPermissions(permissionNames);
 
-  const gamePatchNavItems = patches.game.map((patch) => {
+  const gamePatchNavItems = patches.game.map((patch: SerializedPatch) => {
     return {
       Icon: patch.released ? Check : Ellipsis,
       title: patchVersion(patch),
       to: `/changes/game/${patch.id}`,
     };
   });
-  const clientPatchNavItems = patches.client.map((patch) => {
+  const clientPatchNavItems = patches.client.map((patch: SerializedPatch) => {
     return {
       Icon: patch.released ? Check : Ellipsis,
       title: patchVersion(patch),
@@ -94,9 +153,19 @@ export default function Changelogs() {
           <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
             <aside className="-mx-4 lg:w-1/5">
               <Label>Game Changelog</Label>
+              <div className="py-6">
+                <NewPatchDialog kind="game">
+                  <Button>New Patch</Button>
+                </NewPatchDialog>
+              </div>
               <SidebarNav items={gamePatchNavItems} />
               <Separator className="my-6" />
               <Label>Client Changelog</Label>
+              <div className="py-6">
+                <NewPatchDialog kind="client">
+                  <Button>New Client Patch</Button>
+                </NewPatchDialog>
+              </div>
               <SidebarNav items={clientPatchNavItems} />
             </aside>
             <div className="flex-1 lg:max-w-2xl">
@@ -106,5 +175,141 @@ export default function Changelogs() {
         </div>
       </main>
     </>
+  );
+}
+
+interface NewPatchDialogProps extends React.PropsWithChildren {
+  kind: string;
+}
+
+function NewPatchDialog({ kind, children }: NewPatchDialogProps) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [major, setMajor] = useState("");
+  const [minor, setMinor] = useState("");
+  const [patch, setPatch] = useState("");
+  const fetcher = useFetcher<typeof action>({
+    key: "new-patch",
+  });
+
+  return (
+    <ClientOnly fallback={children}>
+      {() => (
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>{children}</DialogTrigger>
+          <DialogContent className="sm:max-w-[425px] p-6">
+            <DialogHeader>
+              <DialogTitle>New Patch Change</DialogTitle>
+              <DialogDescription>
+                Enter a title and text for this change
+              </DialogDescription>
+              {fetcher.data?.error ? "Sorry, something went wrong." : null}
+            </DialogHeader>
+            <PatchForm
+              kind={kind}
+              major={major}
+              setMajor={setMajor}
+              minor={minor}
+              setMinor={setMinor}
+              patch={patch}
+              setPatch={setPatch}
+            />
+            <DialogFooter className="gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setDialogOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                form="new-patch-change"
+                type="submit"
+                // TODO: Validate the versions and disable button if needed
+              >
+                Create
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+    </ClientOnly>
+  );
+}
+
+interface PatchFormProps {
+  kind: string;
+  major: string;
+  setMajor: React.Dispatch<React.SetStateAction<string>>;
+  minor: string;
+  setMinor: React.Dispatch<React.SetStateAction<string>>;
+  patch: string;
+  setPatch: React.Dispatch<React.SetStateAction<string>>;
+}
+
+function PatchForm({
+  kind,
+  major,
+  setMajor,
+  minor,
+  setMinor,
+  patch,
+  setPatch,
+}: PatchFormProps) {
+  return (
+    <Form
+      method="post"
+      id="new-patch"
+      className="flex flex-col gap-4"
+      navigate={false}
+      fetcherKey="new-patch"
+      replace
+      reloadDocument
+    >
+      <Input className="hidden aria-hidden" name="kind" value={kind} />
+      <div>
+        <Label htmlFor="new-patch-major" className="text-right">
+          Major Version
+        </Label>
+        <Input
+          id="new-patch-major"
+          name="major"
+          value={major}
+          onChange={(e) => {
+            // TODO: Sanitize this to just numbers
+            setMajor(e.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <Label htmlFor="new-patch-minor" className="text-right">
+          Minor Version
+        </Label>
+        <Input
+          id="new-patch-minor"
+          name="minor"
+          value={minor}
+          onChange={(e) => {
+            // TODO: Sanitize this to just numbers
+            setMinor(e.target.value);
+          }}
+        />
+      </div>
+      <div>
+        <Label htmlFor="new-patch-patch" className="text-right">
+          Patch Version
+        </Label>
+        <Input
+          id="new-patch-patch"
+          name="patch"
+          value={patch}
+          onChange={(e) => {
+            // TODO: Sanitize this to just numbers
+            setPatch(e.target.value);
+          }}
+        />
+      </div>
+    </Form>
   );
 }
