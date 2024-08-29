@@ -2,7 +2,6 @@ import { useState } from "react";
 import type {
   MetaFunction,
   LinksFunction,
-  ActionFunction,
   LoaderFunction,
 } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
@@ -13,7 +12,7 @@ import { Check, Ellipsis } from "lucide-react";
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
 import { PlayerPermissions } from "~/lib/permissions";
-import { patches, createPatch } from "~/lib/data.server";
+import { patches } from "~/lib/data.server";
 import {
   serializePatch,
   patchVersion,
@@ -34,6 +33,7 @@ import {
   DialogFooter,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
+import { action } from "~/routes/changes._index";
 
 import tailwind from "~/styles/tailwind.css?url";
 
@@ -46,47 +46,6 @@ export const meta: MetaFunction = () => {
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: tailwind }];
-};
-
-interface NewPatchActionInput {
-  kind?: string;
-  major?: string;
-  minor?: string;
-  patch?: string;
-}
-
-export const action: ActionFunction = async ({ request }) => {
-  const session = await getSession(request.headers.get("Cookie"));
-  if (!session.has("pid")) {
-    return redirect("/");
-  }
-  const pid = session.get("pid");
-  if (!pid) {
-    return redirect("/");
-  }
-  const permissionsReply = await playerPermissions(pid);
-  const permissions = new PlayerPermissions(permissionsReply.names);
-  if (!permissions.has("create-changelog")) {
-    return { error: "forbidden" };
-  }
-  const form = await request.formData();
-  // TODO: Run some validation here
-  const { kind, major, minor, patch }: NewPatchActionInput =
-    Object.fromEntries(form);
-  if (!kind) {
-    return { error: "patch kind is required" };
-  }
-  if (!major) {
-    return { error: "patch major version is required" };
-  }
-  if (!minor) {
-    return { error: "patch minor version is required" };
-  }
-  if (!patch) {
-    return { error: "patch patch version is required" };
-  }
-  const reply = await createPatch(kind, major, minor, patch);
-  return redirect(`/changes/${kind}/${reply.id}`);
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -224,7 +183,7 @@ function NewPatchDialog({ kind, children }: NewPatchDialogProps) {
                 Cancel
               </Button>
               <Button
-                form="new-patch-change"
+                form="new-patch"
                 type="submit"
                 // TODO: Validate the versions and disable button if needed
               >
@@ -259,6 +218,7 @@ function PatchForm({
 }: PatchFormProps) {
   return (
     <Form
+      action="/changes"
       method="post"
       id="new-patch"
       className="flex flex-col gap-4"
@@ -267,7 +227,7 @@ function PatchForm({
       replace
       reloadDocument
     >
-      <Input className="hidden aria-hidden" name="kind" value={kind} />
+      <Input className="hidden aria-hidden" name="kind" value={kind} readOnly />
       <div>
         <Label htmlFor="new-patch-major" className="text-right">
           Major Version
