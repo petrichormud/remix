@@ -87,6 +87,7 @@ function EmailSettings() {
   const verifiedEmailsCount = emails.reduce(
     (
       count: number,
+      // TODO: SerializedEmail type
       email: { id: string; pid: string; address: string; verified: boolean }
     ) => {
       return email.verified ? count + 1 : count;
@@ -121,9 +122,16 @@ function EmailSettings() {
         </div>
       ) : null}
       <div className="md:w-[24rem]">
-        {emails.map((email) => {
-          return <Email key={email.id} {...email} />;
-        })}
+        {emails.map(
+          (email: {
+            id: string;
+            pid: string;
+            address: string;
+            verified: boolean;
+          }) => {
+            return <Email key={email.id} {...email} />;
+          }
+        )}
       </div>
     </div>
   );
