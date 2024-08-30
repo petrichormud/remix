@@ -6,6 +6,8 @@ import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
 import type { DeleteEmailReply } from "./mirror";
 import type { DeleteEmailRequest } from "./mirror";
+import type { EditEmailReply } from "./mirror";
+import type { EditEmailRequest } from "./mirror";
 import type { CreateEmailReply } from "./mirror";
 import type { CreateEmailRequest } from "./mirror";
 import type { ListEmailsForPlayerReply } from "./mirror";
@@ -120,6 +122,13 @@ export interface IMirrorClient {
     createEmail(input: CreateEmailRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: CreateEmailReply) => void): grpc.ClientUnaryCall;
     createEmail(input: CreateEmailRequest, callback: (err: grpc.ServiceError | null, value?: CreateEmailReply) => void): grpc.ClientUnaryCall;
     /**
+     * @generated from protobuf rpc: EditEmail(mirror.EditEmailRequest) returns (mirror.EditEmailReply);
+     */
+    editEmail(input: EditEmailRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: EditEmailReply) => void): grpc.ClientUnaryCall;
+    editEmail(input: EditEmailRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: EditEmailReply) => void): grpc.ClientUnaryCall;
+    editEmail(input: EditEmailRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: EditEmailReply) => void): grpc.ClientUnaryCall;
+    editEmail(input: EditEmailRequest, callback: (err: grpc.ServiceError | null, value?: EditEmailReply) => void): grpc.ClientUnaryCall;
+    /**
      * @generated from protobuf rpc: DeleteEmail(mirror.DeleteEmailRequest) returns (mirror.DeleteEmailReply);
      */
     deleteEmail(input: DeleteEmailRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: DeleteEmailReply) => void): grpc.ClientUnaryCall;
@@ -221,10 +230,17 @@ export class MirrorClient extends grpc.Client implements IMirrorClient {
         return this.makeUnaryRequest<CreateEmailRequest, CreateEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: CreateEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): CreateEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
+     * @generated from protobuf rpc: EditEmail(mirror.EditEmailRequest) returns (mirror.EditEmailReply);
+     */
+    editEmail(input: EditEmailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: EditEmailReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: EditEmailReply) => void), callback?: ((err: grpc.ServiceError | null, value?: EditEmailReply) => void)): grpc.ClientUnaryCall {
+        const method = Mirror.methods[12];
+        return this.makeUnaryRequest<EditEmailRequest, EditEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: EditEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): EditEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
      * @generated from protobuf rpc: DeleteEmail(mirror.DeleteEmailRequest) returns (mirror.DeleteEmailReply);
      */
     deleteEmail(input: DeleteEmailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void), callback?: ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void)): grpc.ClientUnaryCall {
-        const method = Mirror.methods[12];
+        const method = Mirror.methods[13];
         return this.makeUnaryRequest<DeleteEmailRequest, DeleteEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: DeleteEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): DeleteEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

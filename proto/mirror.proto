@@ -15,6 +15,7 @@ service Mirror {
   rpc RevokePlayerPermission (RevokePlayerPermissionRequest) returns (RevokePlayerPermissionReply);
   rpc ListEmailsForPlayer (ListEmailsForPlayerRequest) returns (ListEmailsForPlayerReply);
   rpc CreateEmail (CreateEmailRequest) returns (CreateEmailReply);
+  rpc EditEmail (EditEmailRequest) returns (EditEmailReply);
   rpc DeleteEmail (DeleteEmailRequest) returns (DeleteEmailReply);
 }
 
@@ -143,6 +144,14 @@ message CreateEmailRequest {
 message CreateEmailReply {
   int64 id = 1;
 }
+
+message EditEmailRequest {
+  int64 pid = 1;
+  int64 id = 2;
+  string address = 3;
+}
+
+message EditEmailReply {}
 
 message DeleteEmailRequest {
   int64 id = 1;

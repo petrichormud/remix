@@ -335,6 +335,28 @@ export interface CreateEmailReply {
     id: bigint;
 }
 /**
+ * @generated from protobuf message mirror.EditEmailRequest
+ */
+export interface EditEmailRequest {
+    /**
+     * @generated from protobuf field: int64 pid = 1;
+     */
+    pid: bigint;
+    /**
+     * @generated from protobuf field: int64 id = 2;
+     */
+    id: bigint;
+    /**
+     * @generated from protobuf field: string address = 3;
+     */
+    address: string;
+}
+/**
+ * @generated from protobuf message mirror.EditEmailReply
+ */
+export interface EditEmailReply {
+}
+/**
  * @generated from protobuf message mirror.DeleteEmailRequest
  */
 export interface DeleteEmailRequest {
@@ -1754,6 +1776,94 @@ class CreateEmailReply$Type extends MessageType<CreateEmailReply> {
  */
 export const CreateEmailReply = new CreateEmailReply$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class EditEmailRequest$Type extends MessageType<EditEmailRequest> {
+    constructor() {
+        super("mirror.EditEmailRequest", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 3, name: "address", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<EditEmailRequest>): EditEmailRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pid = 0n;
+        message.id = 0n;
+        message.address = "";
+        if (value !== undefined)
+            reflectionMergePartial<EditEmailRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: EditEmailRequest): EditEmailRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 pid */ 1:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                case /* int64 id */ 2:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                case /* string address */ 3:
+                    message.address = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: EditEmailRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 pid = 1; */
+        if (message.pid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.pid);
+        /* int64 id = 2; */
+        if (message.id !== 0n)
+            writer.tag(2, WireType.Varint).int64(message.id);
+        /* string address = 3; */
+        if (message.address !== "")
+            writer.tag(3, WireType.LengthDelimited).string(message.address);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.EditEmailRequest
+ */
+export const EditEmailRequest = new EditEmailRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class EditEmailReply$Type extends MessageType<EditEmailReply> {
+    constructor() {
+        super("mirror.EditEmailReply", []);
+    }
+    create(value?: PartialMessage<EditEmailReply>): EditEmailReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<EditEmailReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: EditEmailReply): EditEmailReply {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: EditEmailReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.EditEmailReply
+ */
+export const EditEmailReply = new EditEmailReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class DeleteEmailRequest$Type extends MessageType<DeleteEmailRequest> {
     constructor() {
         super("mirror.DeleteEmailRequest", [
@@ -1849,5 +1959,6 @@ export const Mirror = new ServiceType("mirror.Mirror", [
     { name: "RevokePlayerPermission", options: {}, I: RevokePlayerPermissionRequest, O: RevokePlayerPermissionReply },
     { name: "ListEmailsForPlayer", options: {}, I: ListEmailsForPlayerRequest, O: ListEmailsForPlayerReply },
     { name: "CreateEmail", options: {}, I: CreateEmailRequest, O: CreateEmailReply },
+    { name: "EditEmail", options: {}, I: EditEmailRequest, O: EditEmailReply },
     { name: "DeleteEmail", options: {}, I: DeleteEmailRequest, O: DeleteEmailReply }
 ]);

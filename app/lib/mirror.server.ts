@@ -11,6 +11,7 @@ import type {
   GrantPlayerPermissionReply,
   ListEmailsForPlayerReply,
   CreateEmailReply,
+  EditEmailReply,
   DeleteEmailReply,
 } from "~/proto/mirror";
 import type { Theme } from "~/lib/theme";
@@ -215,12 +216,38 @@ export async function createEmail(pid: number | string, address: string) {
 
       if (!reply) {
         // TODO: Create an error here
-        reject("revokePlayerPermissionReply is null");
+        reject("createEmailReply is null");
         return;
       }
 
       resolve(reply);
     });
+  });
+}
+
+export async function editEmail(
+  pid: number | string,
+  id: number | string,
+  address: string
+) {
+  return new Promise<EditEmailReply>((resolve, reject) => {
+    client.editEmail(
+      { pid: BigInt(pid), id: BigInt(id), address },
+      (err, reply) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (!reply) {
+          // TODO: Create an error here
+          reject("editEmailReply is null");
+          return;
+        }
+
+        resolve(reply);
+      }
+    );
   });
 }
 
