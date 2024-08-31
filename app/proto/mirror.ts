@@ -335,6 +335,8 @@ export interface CreateEmailReply {
     id: bigint;
 }
 /**
+ * TODO: Put id at the top here
+ *
  * @generated from protobuf message mirror.EditEmailRequest
  */
 export interface EditEmailRequest {
@@ -373,6 +375,42 @@ export interface DeleteEmailRequest {
  * @generated from protobuf message mirror.DeleteEmailReply
  */
 export interface DeleteEmailReply {
+}
+/**
+ * @generated from protobuf message mirror.SendVerificationEmailRequest
+ */
+export interface SendVerificationEmailRequest {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
+    /**
+     * @generated from protobuf field: int64 pid = 2;
+     */
+    pid: bigint;
+}
+/**
+ * @generated from protobuf message mirror.SendVerificationEmailReply
+ */
+export interface SendVerificationEmailReply {
+}
+/**
+ * @generated from protobuf message mirror.VerifyEmailRequest
+ */
+export interface VerifyEmailRequest {
+    /**
+     * @generated from protobuf field: int64 pid = 1;
+     */
+    pid: bigint;
+    /**
+     * @generated from protobuf field: string token = 2;
+     */
+    token: string;
+}
+/**
+ * @generated from protobuf message mirror.VerifyEmailReply
+ */
+export interface VerifyEmailReply {
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class RegisterRequest$Type extends MessageType<RegisterRequest> {
@@ -1943,6 +1981,166 @@ class DeleteEmailReply$Type extends MessageType<DeleteEmailReply> {
  * @generated MessageType for protobuf message mirror.DeleteEmailReply
  */
 export const DeleteEmailReply = new DeleteEmailReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SendVerificationEmailRequest$Type extends MessageType<SendVerificationEmailRequest> {
+    constructor() {
+        super("mirror.SendVerificationEmailRequest", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<SendVerificationEmailRequest>): SendVerificationEmailRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        message.pid = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<SendVerificationEmailRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SendVerificationEmailRequest): SendVerificationEmailRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                case /* int64 pid */ 2:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: SendVerificationEmailRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        /* int64 pid = 2; */
+        if (message.pid !== 0n)
+            writer.tag(2, WireType.Varint).int64(message.pid);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.SendVerificationEmailRequest
+ */
+export const SendVerificationEmailRequest = new SendVerificationEmailRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class SendVerificationEmailReply$Type extends MessageType<SendVerificationEmailReply> {
+    constructor() {
+        super("mirror.SendVerificationEmailReply", []);
+    }
+    create(value?: PartialMessage<SendVerificationEmailReply>): SendVerificationEmailReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<SendVerificationEmailReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: SendVerificationEmailReply): SendVerificationEmailReply {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: SendVerificationEmailReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.SendVerificationEmailReply
+ */
+export const SendVerificationEmailReply = new SendVerificationEmailReply$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class VerifyEmailRequest$Type extends MessageType<VerifyEmailRequest> {
+    constructor() {
+        super("mirror.VerifyEmailRequest", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "token", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        ]);
+    }
+    create(value?: PartialMessage<VerifyEmailRequest>): VerifyEmailRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pid = 0n;
+        message.token = "";
+        if (value !== undefined)
+            reflectionMergePartial<VerifyEmailRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: VerifyEmailRequest): VerifyEmailRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 pid */ 1:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                case /* string token */ 2:
+                    message.token = reader.string();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: VerifyEmailRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 pid = 1; */
+        if (message.pid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.pid);
+        /* string token = 2; */
+        if (message.token !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.token);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.VerifyEmailRequest
+ */
+export const VerifyEmailRequest = new VerifyEmailRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class VerifyEmailReply$Type extends MessageType<VerifyEmailReply> {
+    constructor() {
+        super("mirror.VerifyEmailReply", []);
+    }
+    create(value?: PartialMessage<VerifyEmailReply>): VerifyEmailReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        if (value !== undefined)
+            reflectionMergePartial<VerifyEmailReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: VerifyEmailReply): VerifyEmailReply {
+        return target ?? this.create();
+    }
+    internalBinaryWrite(message: VerifyEmailReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message mirror.VerifyEmailReply
+ */
+export const VerifyEmailReply = new VerifyEmailReply$Type();
 /**
  * @generated ServiceType for protobuf service mirror.Mirror
  */
@@ -1960,5 +2158,7 @@ export const Mirror = new ServiceType("mirror.Mirror", [
     { name: "ListEmailsForPlayer", options: {}, I: ListEmailsForPlayerRequest, O: ListEmailsForPlayerReply },
     { name: "CreateEmail", options: {}, I: CreateEmailRequest, O: CreateEmailReply },
     { name: "EditEmail", options: {}, I: EditEmailRequest, O: EditEmailReply },
-    { name: "DeleteEmail", options: {}, I: DeleteEmailRequest, O: DeleteEmailReply }
+    { name: "DeleteEmail", options: {}, I: DeleteEmailRequest, O: DeleteEmailReply },
+    { name: "SendVerificationEmail", options: {}, I: SendVerificationEmailRequest, O: SendVerificationEmailReply },
+    { name: "VerifyEmail", options: {}, I: VerifyEmailRequest, O: VerifyEmailReply }
 ]);

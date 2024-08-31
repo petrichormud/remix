@@ -1,6 +1,6 @@
 syntax = "proto3";
 package mirror;
-option go_package = "/proto";
+option go_package = "/proto/gen/go/mirror";
 
 service Mirror {
   rpc Register (RegisterRequest) returns (RegisterReply);
@@ -17,6 +17,8 @@ service Mirror {
   rpc CreateEmail (CreateEmailRequest) returns (CreateEmailReply);
   rpc EditEmail (EditEmailRequest) returns (EditEmailReply);
   rpc DeleteEmail (DeleteEmailRequest) returns (DeleteEmailReply);
+  rpc SendVerificationEmail (SendVerificationEmailRequest) returns (SendVerificationEmailReply);
+  rpc VerifyEmail (VerifyEmailRequest) returns (VerifyEmailReply);
 }
 
 message RegisterRequest {
@@ -145,6 +147,7 @@ message CreateEmailReply {
   int64 id = 1;
 }
 
+// TODO: Put id at the top here
 message EditEmailRequest {
   int64 pid = 1;
   int64 id = 2;
@@ -159,3 +162,18 @@ message DeleteEmailRequest {
 }
 
 message DeleteEmailReply {}
+
+message SendVerificationEmailRequest {
+  int64 id = 1;
+  int64 pid = 2;
+}
+
+message SendVerificationEmailReply {}
+
+message VerifyEmailRequest {
+  int64 pid = 1;
+  string token = 2;
+}
+
+message VerifyEmailReply {}
+

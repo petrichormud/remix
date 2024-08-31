@@ -4,6 +4,10 @@
 import { Mirror } from "./mirror";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
+import type { VerifyEmailReply } from "./mirror";
+import type { VerifyEmailRequest } from "./mirror";
+import type { SendVerificationEmailReply } from "./mirror";
+import type { SendVerificationEmailRequest } from "./mirror";
 import type { DeleteEmailReply } from "./mirror";
 import type { DeleteEmailRequest } from "./mirror";
 import type { EditEmailReply } from "./mirror";
@@ -135,6 +139,20 @@ export interface IMirrorClient {
     deleteEmail(input: DeleteEmailRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: DeleteEmailReply) => void): grpc.ClientUnaryCall;
     deleteEmail(input: DeleteEmailRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: DeleteEmailReply) => void): grpc.ClientUnaryCall;
     deleteEmail(input: DeleteEmailRequest, callback: (err: grpc.ServiceError | null, value?: DeleteEmailReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: SendVerificationEmail(mirror.SendVerificationEmailRequest) returns (mirror.SendVerificationEmailReply);
+     */
+    sendVerificationEmail(input: SendVerificationEmailRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: SendVerificationEmailReply) => void): grpc.ClientUnaryCall;
+    sendVerificationEmail(input: SendVerificationEmailRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: SendVerificationEmailReply) => void): grpc.ClientUnaryCall;
+    sendVerificationEmail(input: SendVerificationEmailRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: SendVerificationEmailReply) => void): grpc.ClientUnaryCall;
+    sendVerificationEmail(input: SendVerificationEmailRequest, callback: (err: grpc.ServiceError | null, value?: SendVerificationEmailReply) => void): grpc.ClientUnaryCall;
+    /**
+     * @generated from protobuf rpc: VerifyEmail(mirror.VerifyEmailRequest) returns (mirror.VerifyEmailReply);
+     */
+    verifyEmail(input: VerifyEmailRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: VerifyEmailReply) => void): grpc.ClientUnaryCall;
+    verifyEmail(input: VerifyEmailRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: VerifyEmailReply) => void): grpc.ClientUnaryCall;
+    verifyEmail(input: VerifyEmailRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: VerifyEmailReply) => void): grpc.ClientUnaryCall;
+    verifyEmail(input: VerifyEmailRequest, callback: (err: grpc.ServiceError | null, value?: VerifyEmailReply) => void): grpc.ClientUnaryCall;
 }
 /**
  * @generated from protobuf service mirror.Mirror
@@ -242,5 +260,19 @@ export class MirrorClient extends grpc.Client implements IMirrorClient {
     deleteEmail(input: DeleteEmailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void), callback?: ((err: grpc.ServiceError | null, value?: DeleteEmailReply) => void)): grpc.ClientUnaryCall {
         const method = Mirror.methods[13];
         return this.makeUnaryRequest<DeleteEmailRequest, DeleteEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: DeleteEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): DeleteEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: SendVerificationEmail(mirror.SendVerificationEmailRequest) returns (mirror.SendVerificationEmailReply);
+     */
+    sendVerificationEmail(input: SendVerificationEmailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: SendVerificationEmailReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: SendVerificationEmailReply) => void), callback?: ((err: grpc.ServiceError | null, value?: SendVerificationEmailReply) => void)): grpc.ClientUnaryCall {
+        const method = Mirror.methods[14];
+        return this.makeUnaryRequest<SendVerificationEmailRequest, SendVerificationEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: SendVerificationEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): SendVerificationEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
+     * @generated from protobuf rpc: VerifyEmail(mirror.VerifyEmailRequest) returns (mirror.VerifyEmailReply);
+     */
+    verifyEmail(input: VerifyEmailRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: VerifyEmailReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: VerifyEmailReply) => void), callback?: ((err: grpc.ServiceError | null, value?: VerifyEmailReply) => void)): grpc.ClientUnaryCall {
+        const method = Mirror.methods[15];
+        return this.makeUnaryRequest<VerifyEmailRequest, VerifyEmailReply>(`/${Mirror.typeName}/${method.name}`, (value: VerifyEmailRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): VerifyEmailReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

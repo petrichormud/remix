@@ -1,3 +1,4 @@
+import { Form } from "@remix-run/react";
 import {
   redirect,
   type LoaderFunction,
@@ -7,7 +8,7 @@ import {
 } from "@remix-run/node";
 
 import { getSession } from "~/lib/sessions.server";
-import { playerPermissions } from "~/lib/mirror.server";
+import { playerPermissions, verifyEmail } from "~/lib/mirror.server";
 import {
   Card,
   CardHeader,
@@ -66,6 +67,8 @@ export const action: ActionFunction = async ({ request }) => {
     throw redirect("/");
   }
 
+  await verifyEmail(pid, token);
+
   return redirect("/verify/success");
 };
 
@@ -81,7 +84,9 @@ export default function Verify() {
             </CardDescription>
           </CardHeader>
           <CardFooter className="flex justify-end">
-            <Button>Verify Email</Button>
+            <Form method="post">
+              <Button>Verify Email</Button>
+            </Form>
           </CardFooter>
         </Card>
       </main>

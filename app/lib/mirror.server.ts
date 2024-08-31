@@ -13,6 +13,8 @@ import type {
   CreateEmailReply,
   EditEmailReply,
   DeleteEmailReply,
+  SendVerificationEmailReply,
+  VerifyEmailReply,
 } from "~/proto/mirror";
 import type { Theme } from "~/lib/theme";
 
@@ -262,6 +264,50 @@ export async function deleteEmail(pid: number | string, id: number | string) {
       if (!reply) {
         // TODO: Create an error here
         reject("revokePlayerPermissionReply is null");
+        return;
+      }
+
+      resolve(reply);
+    });
+  });
+}
+
+export async function sendVerificationEmail(
+  pid: number | string,
+  id: number | string
+) {
+  return new Promise<SendVerificationEmailReply>((resolve, reject) => {
+    client.sendVerificationEmail(
+      { pid: BigInt(pid), id: BigInt(id) },
+      (err, reply) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+
+        if (!reply) {
+          // TODO: Create an error here
+          reject("sendVerificationEmailReply is null");
+          return;
+        }
+
+        resolve(reply);
+      }
+    );
+  });
+}
+
+export async function verifyEmail(pid: number | string, token: string) {
+  return new Promise<VerifyEmailReply>((resolve, reject) => {
+    client.verifyEmail({ pid: BigInt(pid), token }, (err, reply) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!reply) {
+        // TODO: Create an error here
+        reject("verifyEmailReply is null");
         return;
       }
 
