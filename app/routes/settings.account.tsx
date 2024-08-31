@@ -192,6 +192,7 @@ function Email({ id, address, verified }: EmailProps) {
       {() => (
         <>
           <EditEmailDialog
+            id={id}
             address={address}
             verified={verified}
             inner={inner}
@@ -317,6 +318,7 @@ function AddEmailForm() {
 }
 
 interface EditEmailDialogProps extends React.PropsWithChildren {
+  id: number | string;
   address: string;
   verified: boolean;
   inner: string;
@@ -331,6 +333,7 @@ interface EditEmailDialogProps extends React.PropsWithChildren {
 
 function EditEmailDialog({
   children,
+  id,
   address,
   verified,
   inner,
@@ -349,6 +352,7 @@ function EditEmailDialog({
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <EditEmailForm
+          id={id}
           inner={inner}
           setInner={setInner}
           verified={verified}
@@ -370,7 +374,7 @@ function EditEmailDialog({
           >
             Never Mind
           </Button>
-          <Button form="email" type="submit" disabled>
+          <Button form="email" type="submit" disabled={inner === address}>
             Save
           </Button>
         </DialogFooter>
@@ -380,6 +384,7 @@ function EditEmailDialog({
 }
 
 interface EditEmailFormProps {
+  id: number | string;
   inner: string;
   setInner: React.Dispatch<React.SetStateAction<string>>;
   verified: boolean;
@@ -392,6 +397,7 @@ interface EditEmailFormProps {
 }
 
 function EditEmailForm({
+  id,
   inner,
   setInner,
   verified,
@@ -399,19 +405,18 @@ function EditEmailForm({
   setDeleteDialogOpen,
   setResendVerificationEmailDialogOpen,
 }: EditEmailFormProps) {
-  const fetcher = useFetcher();
-
   return (
-    <fetcher.Form
-      method="post"
-      // TODO: Use the pid here
-      action="/players/emails"
+    <Form
       id="email"
-      className="flex flex-col gap-4"
+      method="post"
+      action={`/players/emails/${id}`}
+      navigate={false}
+      replace
+      reloadDocument
     >
       <div className="gap-0">
         <Input
-          name="email"
+          name="address"
           value={inner}
           onChange={(e) => {
             setInner(e.target.value);
@@ -442,7 +447,7 @@ function EditEmailForm({
           Want to delete this email? Click here
         </Button>
       </div>
-    </fetcher.Form>
+    </Form>
   );
 }
 
