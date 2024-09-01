@@ -52,6 +52,15 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        incomplete: { DEFAULT: "hsl(var(--incomplete))" },
+        ready: { DEFAULT: "hsl(var(--ready))" },
+        submitted: { DEFAULT: "hsl(var(--submitted))" },
+        inreview: { DEFAULT: "hsl(var(--in-review))" },
+        reviewed: { DEFAULT: "hsl(var(--reviewed))" },
+        approved: { DEFAULT: "hsl(var(--approved))" },
+        rejected: { DEFAULT: "hsl(var(--rejected))" },
+        fulfilled: { DEFAULT: "hsl(var(--fulfilled))" },
+        canceled: { DEFAULT: "hsl(var(--canceled))" },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -78,4 +87,3 @@ const config = {
 } satisfies Config;
 
 export default config;
-
