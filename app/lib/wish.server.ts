@@ -1,6 +1,6 @@
 import { credentials } from "@grpc/grpc-js";
 
-import { DataClient } from "~/proto/data.grpc-client";
+import { WishClient } from "~/proto/wish.grpc-client";
 import type {
   CreatePatchReply,
   CreatePatchChangeReply,
@@ -10,9 +10,9 @@ import type {
   MostRecentPatchReply,
   PatchReply,
   MarkPatchReleasedReply,
-} from "~/proto/data";
+} from "~/proto/wish";
 
-export const client = new DataClient(
+export const client = new WishClient(
   "localhost:8008",
   credentials.createInsecure()
 );

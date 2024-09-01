@@ -9,7 +9,7 @@ import { Check, Bell, ArrowRight, Inbox, Users, Trash } from "lucide-react";
 
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
-import { releasedPatches } from "~/lib/data.server";
+import { releasedPatches } from "~/lib/wish.server";
 import type { SerializedPatch } from "~/lib/patches";
 import { PlayerPermissions } from "~/lib/permissions";
 import { serializePatch, patchVersion } from "~/lib/patches";

@@ -12,7 +12,7 @@ import { Check, Ellipsis } from "lucide-react";
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
 import { PlayerPermissions } from "~/lib/permissions";
-import { patches } from "~/lib/data.server";
+import { patches } from "~/lib/wish.server";
 import {
   serializePatch,
   patchVersion,

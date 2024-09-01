@@ -1,8 +1,8 @@
 syntax = "proto3";
 package data;
-option go_package = "/proto";
+option go_package = "/proto/gen/go/wish";
 
-service Data {
+service Wish {
   rpc CreatePatch (CreatePatchRequest) returns (CreatePatchReply);
   rpc Patch (PatchRequest) returns (PatchReply);
   rpc Patches (PatchesRequest) returns (PatchesReply);

@@ -1,7 +1,7 @@
 import { type LoaderFunction, redirect } from "@remix-run/node";
 
 import { getSession } from "~/lib/sessions.server";
-import { mostRecentPatch } from "~/lib/data.server";
+import { mostRecentPatch } from "~/lib/wish.server";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));

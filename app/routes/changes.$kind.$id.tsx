@@ -7,7 +7,7 @@ import { CirclePlus, Check, Send } from "lucide-react";
 import { PlayerPermissions } from "~/lib/permissions";
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
-import { patchByID } from "~/lib/data.server";
+import { patchByID } from "~/lib/wish.server";
 import {
   patchVersion,
   serializePatch,

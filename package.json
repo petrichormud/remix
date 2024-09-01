@@ -11,7 +11,7 @@
     "typecheck": "tsc",
     "shadcn": "npx shadcn-ui@latest",
     "test": "vitest run",
-    "proto": "cp ../mirror/proto/mirror.proto ./proto/mirror.proto && cp ../sending/proto/sending.proto ./proto/sending.proto",
+    "proto": "cp ../mirror/proto/mirror.proto ./proto/mirror.proto && cp ../wish/proto/wish.proto ./proto/wish.proto",
     "protoc": "npx protoc --proto_path proto --ts_out app/proto --ts_opt client_grpc1 proto/*.proto"
   },
   "dependencies": {

@@ -3,7 +3,7 @@ import { redirect } from "@remix-run/node";
 
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
-import { mostRecentPatch, createPatch } from "~/lib/data.server";
+import { mostRecentPatch, createPatch } from "~/lib/wish.server";
 import { PlayerPermissions } from "~/lib/permissions";
 
 interface NewPatchActionInput {

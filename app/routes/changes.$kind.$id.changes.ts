@@ -2,7 +2,7 @@ import { type ActionFunction, redirect, json } from "@remix-run/node";
 
 import { PlayerPermissions } from "~/lib/permissions";
 import { getSession } from "~/lib/sessions.server";
-import { createPatchChange, patchByID } from "~/lib/data.server";
+import { createPatchChange, patchByID } from "~/lib/wish.server";
 import { playerPermissions } from "~/lib/mirror.server";
 
 interface NewChangeActionInput {

@@ -8,7 +8,7 @@ import { Check } from "lucide-react";
 
 import { getSession } from "~/lib/sessions.server";
 import { playerPermissions } from "~/lib/mirror.server";
-import { releasedPatches } from "~/lib/data.server";
+import { releasedPatches } from "~/lib/wish.server";
 import { PlayerPermissions } from "~/lib/permissions";
 import {
   patchVersion,
