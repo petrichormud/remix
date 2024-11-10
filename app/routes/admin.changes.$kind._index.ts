@@ -21,5 +21,5 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     return redirect("/");
   }
 
-  return redirect(`/changes/${params.kind}/${reply.patch.id}`);
+  return redirect(`/admin/changes/${params.kind}/${reply.patch.id}`);
 };

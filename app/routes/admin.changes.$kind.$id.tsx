@@ -27,7 +27,7 @@ import {
 } from "~/components/ui/dialog";
 import { Label } from "~/components/ui/label";
 import { Input } from "~/components/ui/input";
-import { action as newChangeAction } from "~/routes/changes.$kind.$id.changes";
+import { action as newChangeAction } from "~/routes/admin.changes.$kind.$id.changes";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));

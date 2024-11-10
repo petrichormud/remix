@@ -44,7 +44,7 @@ export const action: ActionFunction = async ({ request }) => {
     return { error: "patch patch version is required" };
   }
   const reply = await createPatch(kind, major, minor, patch);
-  return redirect(`/changes/${kind}/${reply.id}`);
+  return redirect(`/admin/changes/${kind}/${reply.id}`);
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -60,5 +60,5 @@ export const loader: LoaderFunction = async ({ request }) => {
     return redirect("/");
   }
 
-  return redirect(`/changes/game/${reply.patch.id}`);
+  return redirect(`/admin/changes/game/${reply.patch.id}`);
 };

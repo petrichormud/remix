@@ -33,7 +33,7 @@ import {
   DialogFooter,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
-import { action } from "~/routes/changes._index";
+import { action } from "~/routes/admin.changes._index";
 
 import tailwind from "~/styles/tailwind.css?url";
 
@@ -86,14 +86,14 @@ export default function Changelogs() {
     return {
       Icon: patch.released ? Check : Ellipsis,
       title: patchVersion(patch),
-      to: `/changes/game/${patch.id}`,
+      to: `/admin/changes/game/${patch.id}`,
     };
   });
   const clientPatchNavItems = patches.client.map((patch: SerializedPatch) => {
     return {
       Icon: patch.released ? Check : Ellipsis,
       title: patchVersion(patch),
-      to: `/changes/client/${patch.id}`,
+      to: `/admin/changes/client/${patch.id}`,
     };
   });
 
@@ -218,7 +218,7 @@ function PatchForm({
 }: PatchFormProps) {
   return (
     <Form
-      action="/changes"
+      action="/admin/changes"
       method="post"
       id="new-patch"
       className="flex flex-col gap-4"

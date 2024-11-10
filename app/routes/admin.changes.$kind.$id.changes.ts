@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const patchReply = await patchByID(parseInt(params.id));
   if (!patchReply.patch) {
     // TODO: Render a 500 page instead?
-    return redirect("/changes");
+    return redirect("/admin/changes");
   }
   const form = await request.formData();
   const { title, text }: NewChangeActionInput = Object.fromEntries(form);
@@ -42,5 +42,5 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
   await createPatchChange(params.id, title, text);
 
-  return redirect(`/changes/${params.kind}/${params.id}`);
+  return redirect(`/admin/changes/${params.kind}/${params.id}`);
 };

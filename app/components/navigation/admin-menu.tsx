@@ -60,7 +60,7 @@ export function AdminMenu({ children, permissions }: AccountMenuProps) {
           permissions.has("revoke-all") ? (
             <>
               <DropdownMenuGroup>
-                <Link to="/changes">
+                <Link to="/admin/changes">
                   <DropdownMenuItem>
                     <ClipboardList className="mr-2 h-4 w-4" />
                     <span>Changelogs</span>

@@ -2,12 +2,8 @@ import { type ActionFunction, redirect, json } from "@remix-run/node";
 
 import { PlayerPermissions } from "~/lib/permissions";
 import { getSession } from "~/lib/sessions.server";
-import { deletePatchChange, patchByID } from "~/lib/wish.server";
+import { markPatchReleased, patchByID } from "~/lib/wish.server";
 import { playerPermissions } from "~/lib/mirror.server";
-
-interface DeleteChangeActionInput {
-  id?: string;
-}
 
 export const action: ActionFunction = async ({ request, params }) => {
   const session = await getSession(request.headers.get("Cookie"));
@@ -20,24 +16,18 @@ export const action: ActionFunction = async ({ request, params }) => {
   }
   const permissionsReply = await playerPermissions(pid);
   const permissions = new PlayerPermissions(permissionsReply.names);
-  if (!params.pcid || !params.kind || !params.id) {
+  if (!params.id || !params.kind) {
     return redirect("/");
   }
-  const patchReply = await patchByID(parseInt(params.pcid));
-  // TODO: Do some validation on the patch here
+  const patchReply = await patchByID(parseInt(params.id));
   if (!patchReply.patch) {
     // TODO: Render a 500 page instead?
-    return redirect("/changes");
+    return redirect("/admin/changes");
   }
-  const form = await request.formData();
-  const { id }: DeleteChangeActionInput = Object.fromEntries(form);
-  if (!id) {
-    return json({ error: "change ID is required" });
-  }
-  if (!permissions.has("create-changelog-change")) {
+  if (!permissions.has("release-changelog")) {
     return json({ error: "forbidden" });
   }
-  await deletePatchChange(id);
+  await markPatchReleased(params.id);
 
-  return redirect(`/changes/${params.kind}/${params.pcid}`);
+  return redirect(`/admin/changes/${params.kind}/${params.id}`);
 };
