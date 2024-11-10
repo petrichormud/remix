@@ -10,7 +10,7 @@ import {
   useParams,
 } from "@remix-run/react";
 
-import { loader as rootPlayersLoader } from "~/routes/players.$id";
+import { loader as rootPlayersLoader } from "~/routes/admin.players.$id";
 import { getSession } from "~/lib/sessions.server";
 import { PlayerPermissions } from "~/lib/permissions";
 import {
