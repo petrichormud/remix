@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@remix-run/react";
-import { LogOut, Settings } from "lucide-react";
+import { LogOut, VenetianMask, UserCog, Bell, Lock } from "lucide-react";
 
 import { PlayerPermissions } from "~/lib/permissions";
 import {
@@ -27,12 +27,33 @@ export function AccountMenu({ children }: AccountMenuProps) {
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent className="w-56 mr-6">
           <DropdownMenuLabel>Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <Link to="/settings">
+            <Link to="/characters">
               <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
+                <VenetianMask className="mr-2 h-4 w-4" />
+                <span>Characters</span>
+              </DropdownMenuItem>
+            </Link>
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuLabel>Settings</DropdownMenuLabel>
+          <DropdownMenuGroup>
+            <Link to="/settings/account">
+              <DropdownMenuItem>
+                <UserCog className="mr-2 h-4 w-4" />
+                <span>Account</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link to="/settings/notifications">
+              <DropdownMenuItem>
+                <Bell className="mr-2 h-4 w-4" />
+                <span>Notifications</span>
+              </DropdownMenuItem>
+            </Link>
+            <Link to="/settings/passphrase">
+              <DropdownMenuItem>
+                <Lock className="mr-2 h-4 w-4" />
+                <span>Passphrase</span>
               </DropdownMenuItem>
             </Link>
           </DropdownMenuGroup>
