@@ -13,8 +13,9 @@ service Wish {
   rpc RevokePatchReleased (RevokePatchReleasedRequest) returns (RevokePatchReleasedReply);
   rpc ReleasedPatches (ReleasedPatchesRequest) returns (ReleasedPatchesReply);
   rpc MostRecentPatch (MostRecentPatchRequest) returns (MostRecentPatchReply);
+  rpc NewRequest (NewRequestRequest) returns (NewRequestReply);
   rpc AllRequestSummaries (AllRequestSummariesRequest) returns (AllRequestSummariesReply);
-  rpc RequestSummaryForPlayer (RequestSummaryForPlayerRequest) returns (RequestSummaryForPlayerReply);
+  rpc RequestSummariesForPlayer (RequestSummariesForPlayerRequest) returns (RequestSummariesForPlayerReply);
 }
 
 message Patch {
@@ -120,8 +121,13 @@ message MostRecentPatchReply {
   Patch patch = 1;
 }
 
-message AllRequestSummariesRequest {
+message NewRequestRequest {
   int64 pid = 1;
+  string type = 2;
+}
+
+message NewRequestReply {
+  int64 id = 1;
 }
 
 message RequestSummary {
@@ -132,18 +138,19 @@ message RequestSummary {
   string reviewer = 5;
 }
 
+message AllRequestSummariesRequest {
+  int64 pid = 1;
+}
+
 message AllRequestSummariesReply {
   repeated RequestSummary summaries = 1;
 }
 
-message RequestSummaryForPlayerRequest {
+message RequestSummariesForPlayerRequest {
   int64 pid = 1;
 }
 
-message RequestSummaryForPlayer {
-  int64 id = 1;
-  string status = 2;
+message RequestSummariesForPlayerReply {
+  repeated RequestSummary summaries = 1;
 }
 
-message RequestSummaryForPlayerReply {
-}

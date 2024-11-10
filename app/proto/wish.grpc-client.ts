@@ -4,10 +4,12 @@
 import { Wish } from "./wish";
 import type { BinaryWriteOptions } from "@protobuf-ts/runtime";
 import type { BinaryReadOptions } from "@protobuf-ts/runtime";
-import type { RequestSummaryForPlayerReply } from "./wish";
-import type { RequestSummaryForPlayerRequest } from "./wish";
+import type { RequestSummariesForPlayerReply } from "./wish";
+import type { RequestSummariesForPlayerRequest } from "./wish";
 import type { AllRequestSummariesReply } from "./wish";
 import type { AllRequestSummariesRequest } from "./wish";
+import type { NewRequestReply } from "./wish";
+import type { NewRequestRequest } from "./wish";
 import type { MostRecentPatchReply } from "./wish";
 import type { MostRecentPatchRequest } from "./wish";
 import type { ReleasedPatchesReply } from "./wish";
@@ -104,6 +106,13 @@ export interface IWishClient {
     mostRecentPatch(input: MostRecentPatchRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: MostRecentPatchReply) => void): grpc.ClientUnaryCall;
     mostRecentPatch(input: MostRecentPatchRequest, callback: (err: grpc.ServiceError | null, value?: MostRecentPatchReply) => void): grpc.ClientUnaryCall;
     /**
+     * @generated from protobuf rpc: NewRequest(data.NewRequestRequest) returns (data.NewRequestReply);
+     */
+    newRequest(input: NewRequestRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: NewRequestReply) => void): grpc.ClientUnaryCall;
+    newRequest(input: NewRequestRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: NewRequestReply) => void): grpc.ClientUnaryCall;
+    newRequest(input: NewRequestRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: NewRequestReply) => void): grpc.ClientUnaryCall;
+    newRequest(input: NewRequestRequest, callback: (err: grpc.ServiceError | null, value?: NewRequestReply) => void): grpc.ClientUnaryCall;
+    /**
      * @generated from protobuf rpc: AllRequestSummaries(data.AllRequestSummariesRequest) returns (data.AllRequestSummariesReply);
      */
     allRequestSummaries(input: AllRequestSummariesRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: AllRequestSummariesReply) => void): grpc.ClientUnaryCall;
@@ -111,12 +120,12 @@ export interface IWishClient {
     allRequestSummaries(input: AllRequestSummariesRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: AllRequestSummariesReply) => void): grpc.ClientUnaryCall;
     allRequestSummaries(input: AllRequestSummariesRequest, callback: (err: grpc.ServiceError | null, value?: AllRequestSummariesReply) => void): grpc.ClientUnaryCall;
     /**
-     * @generated from protobuf rpc: RequestSummaryForPlayer(data.RequestSummaryForPlayerRequest) returns (data.RequestSummaryForPlayerReply);
+     * @generated from protobuf rpc: RequestSummariesForPlayer(data.RequestSummariesForPlayerRequest) returns (data.RequestSummariesForPlayerReply);
      */
-    requestSummaryForPlayer(input: RequestSummaryForPlayerRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: RequestSummaryForPlayerReply) => void): grpc.ClientUnaryCall;
-    requestSummaryForPlayer(input: RequestSummaryForPlayerRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: RequestSummaryForPlayerReply) => void): grpc.ClientUnaryCall;
-    requestSummaryForPlayer(input: RequestSummaryForPlayerRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: RequestSummaryForPlayerReply) => void): grpc.ClientUnaryCall;
-    requestSummaryForPlayer(input: RequestSummaryForPlayerRequest, callback: (err: grpc.ServiceError | null, value?: RequestSummaryForPlayerReply) => void): grpc.ClientUnaryCall;
+    requestSummariesForPlayer(input: RequestSummariesForPlayerRequest, metadata: grpc.Metadata, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: RequestSummariesForPlayerReply) => void): grpc.ClientUnaryCall;
+    requestSummariesForPlayer(input: RequestSummariesForPlayerRequest, metadata: grpc.Metadata, callback: (err: grpc.ServiceError | null, value?: RequestSummariesForPlayerReply) => void): grpc.ClientUnaryCall;
+    requestSummariesForPlayer(input: RequestSummariesForPlayerRequest, options: grpc.CallOptions, callback: (err: grpc.ServiceError | null, value?: RequestSummariesForPlayerReply) => void): grpc.ClientUnaryCall;
+    requestSummariesForPlayer(input: RequestSummariesForPlayerRequest, callback: (err: grpc.ServiceError | null, value?: RequestSummariesForPlayerReply) => void): grpc.ClientUnaryCall;
 }
 /**
  * @generated from protobuf service data.Wish
@@ -198,17 +207,24 @@ export class WishClient extends grpc.Client implements IWishClient {
         return this.makeUnaryRequest<MostRecentPatchRequest, MostRecentPatchReply>(`/${Wish.typeName}/${method.name}`, (value: MostRecentPatchRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): MostRecentPatchReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
+     * @generated from protobuf rpc: NewRequest(data.NewRequestRequest) returns (data.NewRequestReply);
+     */
+    newRequest(input: NewRequestRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: NewRequestReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: NewRequestReply) => void), callback?: ((err: grpc.ServiceError | null, value?: NewRequestReply) => void)): grpc.ClientUnaryCall {
+        const method = Wish.methods[10];
+        return this.makeUnaryRequest<NewRequestRequest, NewRequestReply>(`/${Wish.typeName}/${method.name}`, (value: NewRequestRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): NewRequestReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    }
+    /**
      * @generated from protobuf rpc: AllRequestSummaries(data.AllRequestSummariesRequest) returns (data.AllRequestSummariesReply);
      */
     allRequestSummaries(input: AllRequestSummariesRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: AllRequestSummariesReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: AllRequestSummariesReply) => void), callback?: ((err: grpc.ServiceError | null, value?: AllRequestSummariesReply) => void)): grpc.ClientUnaryCall {
-        const method = Wish.methods[10];
+        const method = Wish.methods[11];
         return this.makeUnaryRequest<AllRequestSummariesRequest, AllRequestSummariesReply>(`/${Wish.typeName}/${method.name}`, (value: AllRequestSummariesRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): AllRequestSummariesReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
     /**
-     * @generated from protobuf rpc: RequestSummaryForPlayer(data.RequestSummaryForPlayerRequest) returns (data.RequestSummaryForPlayerReply);
+     * @generated from protobuf rpc: RequestSummariesForPlayer(data.RequestSummariesForPlayerRequest) returns (data.RequestSummariesForPlayerReply);
      */
-    requestSummaryForPlayer(input: RequestSummaryForPlayerRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RequestSummaryForPlayerReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RequestSummaryForPlayerReply) => void), callback?: ((err: grpc.ServiceError | null, value?: RequestSummaryForPlayerReply) => void)): grpc.ClientUnaryCall {
-        const method = Wish.methods[11];
-        return this.makeUnaryRequest<RequestSummaryForPlayerRequest, RequestSummaryForPlayerReply>(`/${Wish.typeName}/${method.name}`, (value: RequestSummaryForPlayerRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): RequestSummaryForPlayerReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
+    requestSummariesForPlayer(input: RequestSummariesForPlayerRequest, metadata: grpc.Metadata | grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RequestSummariesForPlayerReply) => void), options?: grpc.CallOptions | ((err: grpc.ServiceError | null, value?: RequestSummariesForPlayerReply) => void), callback?: ((err: grpc.ServiceError | null, value?: RequestSummariesForPlayerReply) => void)): grpc.ClientUnaryCall {
+        const method = Wish.methods[12];
+        return this.makeUnaryRequest<RequestSummariesForPlayerRequest, RequestSummariesForPlayerReply>(`/${Wish.typeName}/${method.name}`, (value: RequestSummariesForPlayerRequest): Buffer => Buffer.from(method.I.toBinary(value, this._binaryOptions)), (value: Buffer): RequestSummariesForPlayerReply => method.O.fromBinary(value, this._binaryOptions), input, (metadata as any), (options as any), (callback as any));
     }
 }

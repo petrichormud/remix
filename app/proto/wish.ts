@@ -270,13 +270,26 @@ export interface MostRecentPatchReply {
     patch?: Patch;
 }
 /**
- * @generated from protobuf message data.AllRequestSummariesRequest
+ * @generated from protobuf message data.NewRequestRequest
  */
-export interface AllRequestSummariesRequest {
+export interface NewRequestRequest {
     /**
      * @generated from protobuf field: int64 pid = 1;
      */
     pid: bigint;
+    /**
+     * @generated from protobuf field: string type = 2;
+     */
+    type: string;
+}
+/**
+ * @generated from protobuf message data.NewRequestReply
+ */
+export interface NewRequestReply {
+    /**
+     * @generated from protobuf field: int64 id = 1;
+     */
+    id: bigint;
 }
 /**
  * @generated from protobuf message data.RequestSummary
@@ -304,6 +317,15 @@ export interface RequestSummary {
     reviewer: string;
 }
 /**
+ * @generated from protobuf message data.AllRequestSummariesRequest
+ */
+export interface AllRequestSummariesRequest {
+    /**
+     * @generated from protobuf field: int64 pid = 1;
+     */
+    pid: bigint;
+}
+/**
  * @generated from protobuf message data.AllRequestSummariesReply
  */
 export interface AllRequestSummariesReply {
@@ -313,31 +335,22 @@ export interface AllRequestSummariesReply {
     summaries: RequestSummary[];
 }
 /**
- * @generated from protobuf message data.RequestSummaryForPlayerRequest
+ * @generated from protobuf message data.RequestSummariesForPlayerRequest
  */
-export interface RequestSummaryForPlayerRequest {
+export interface RequestSummariesForPlayerRequest {
     /**
      * @generated from protobuf field: int64 pid = 1;
      */
     pid: bigint;
 }
 /**
- * @generated from protobuf message data.RequestSummaryForPlayer
+ * @generated from protobuf message data.RequestSummariesForPlayerReply
  */
-export interface RequestSummaryForPlayer {
+export interface RequestSummariesForPlayerReply {
     /**
-     * @generated from protobuf field: int64 id = 1;
+     * @generated from protobuf field: repeated data.RequestSummary summaries = 1;
      */
-    id: bigint;
-    /**
-     * @generated from protobuf field: string status = 2;
-     */
-    status: string;
-}
-/**
- * @generated from protobuf message data.RequestSummaryForPlayerReply
- */
-export interface RequestSummaryForPlayerReply {
+    summaries: RequestSummary[];
 }
 // @generated message type with reflection information, may provide speed optimized methods
 class Patch$Type extends MessageType<Patch> {
@@ -1492,26 +1505,31 @@ class MostRecentPatchReply$Type extends MessageType<MostRecentPatchReply> {
  */
 export const MostRecentPatchReply = new MostRecentPatchReply$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class AllRequestSummariesRequest$Type extends MessageType<AllRequestSummariesRequest> {
+class NewRequestRequest$Type extends MessageType<NewRequestRequest> {
     constructor() {
-        super("data.AllRequestSummariesRequest", [
-            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        super("data.NewRequestRequest", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
+            { no: 2, name: "type", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
         ]);
     }
-    create(value?: PartialMessage<AllRequestSummariesRequest>): AllRequestSummariesRequest {
+    create(value?: PartialMessage<NewRequestRequest>): NewRequestRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.pid = 0n;
+        message.type = "";
         if (value !== undefined)
-            reflectionMergePartial<AllRequestSummariesRequest>(this, message, value);
+            reflectionMergePartial<NewRequestRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: AllRequestSummariesRequest): AllRequestSummariesRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: NewRequestRequest): NewRequestRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
                 case /* int64 pid */ 1:
                     message.pid = reader.int64().toBigInt();
+                    break;
+                case /* string type */ 2:
+                    message.type = reader.string();
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1524,10 +1542,13 @@ class AllRequestSummariesRequest$Type extends MessageType<AllRequestSummariesReq
         }
         return message;
     }
-    internalBinaryWrite(message: AllRequestSummariesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: NewRequestRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* int64 pid = 1; */
         if (message.pid !== 0n)
             writer.tag(1, WireType.Varint).int64(message.pid);
+        /* string type = 2; */
+        if (message.type !== "")
+            writer.tag(2, WireType.LengthDelimited).string(message.type);
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1535,9 +1556,56 @@ class AllRequestSummariesRequest$Type extends MessageType<AllRequestSummariesReq
     }
 }
 /**
- * @generated MessageType for protobuf message data.AllRequestSummariesRequest
+ * @generated MessageType for protobuf message data.NewRequestRequest
  */
-export const AllRequestSummariesRequest = new AllRequestSummariesRequest$Type();
+export const NewRequestRequest = new NewRequestRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
+class NewRequestReply$Type extends MessageType<NewRequestReply> {
+    constructor() {
+        super("data.NewRequestReply", [
+            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<NewRequestReply>): NewRequestReply {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.id = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<NewRequestReply>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: NewRequestReply): NewRequestReply {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 id */ 1:
+                    message.id = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: NewRequestReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 id = 1; */
+        if (message.id !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.id);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message data.NewRequestReply
+ */
+export const NewRequestReply = new NewRequestReply$Type();
 // @generated message type with reflection information, may provide speed optimized methods
 class RequestSummary$Type extends MessageType<RequestSummary> {
     constructor() {
@@ -1618,6 +1686,53 @@ class RequestSummary$Type extends MessageType<RequestSummary> {
  */
 export const RequestSummary = new RequestSummary$Type();
 // @generated message type with reflection information, may provide speed optimized methods
+class AllRequestSummariesRequest$Type extends MessageType<AllRequestSummariesRequest> {
+    constructor() {
+        super("data.AllRequestSummariesRequest", [
+            { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
+        ]);
+    }
+    create(value?: PartialMessage<AllRequestSummariesRequest>): AllRequestSummariesRequest {
+        const message = globalThis.Object.create((this.messagePrototype!));
+        message.pid = 0n;
+        if (value !== undefined)
+            reflectionMergePartial<AllRequestSummariesRequest>(this, message, value);
+        return message;
+    }
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: AllRequestSummariesRequest): AllRequestSummariesRequest {
+        let message = target ?? this.create(), end = reader.pos + length;
+        while (reader.pos < end) {
+            let [fieldNo, wireType] = reader.tag();
+            switch (fieldNo) {
+                case /* int64 pid */ 1:
+                    message.pid = reader.int64().toBigInt();
+                    break;
+                default:
+                    let u = options.readUnknownField;
+                    if (u === "throw")
+                        throw new globalThis.Error(`Unknown field ${fieldNo} (wire type ${wireType}) for ${this.typeName}`);
+                    let d = reader.skip(wireType);
+                    if (u !== false)
+                        (u === true ? UnknownFieldHandler.onRead : u)(this.typeName, message, fieldNo, wireType, d);
+            }
+        }
+        return message;
+    }
+    internalBinaryWrite(message: AllRequestSummariesRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* int64 pid = 1; */
+        if (message.pid !== 0n)
+            writer.tag(1, WireType.Varint).int64(message.pid);
+        let u = options.writeUnknownFields;
+        if (u !== false)
+            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
+        return writer;
+    }
+}
+/**
+ * @generated MessageType for protobuf message data.AllRequestSummariesRequest
+ */
+export const AllRequestSummariesRequest = new AllRequestSummariesRequest$Type();
+// @generated message type with reflection information, may provide speed optimized methods
 class AllRequestSummariesReply$Type extends MessageType<AllRequestSummariesReply> {
     constructor() {
         super("data.AllRequestSummariesReply", [
@@ -1665,20 +1780,20 @@ class AllRequestSummariesReply$Type extends MessageType<AllRequestSummariesReply
  */
 export const AllRequestSummariesReply = new AllRequestSummariesReply$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class RequestSummaryForPlayerRequest$Type extends MessageType<RequestSummaryForPlayerRequest> {
+class RequestSummariesForPlayerRequest$Type extends MessageType<RequestSummariesForPlayerRequest> {
     constructor() {
-        super("data.RequestSummaryForPlayerRequest", [
+        super("data.RequestSummariesForPlayerRequest", [
             { no: 1, name: "pid", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ }
         ]);
     }
-    create(value?: PartialMessage<RequestSummaryForPlayerRequest>): RequestSummaryForPlayerRequest {
+    create(value?: PartialMessage<RequestSummariesForPlayerRequest>): RequestSummariesForPlayerRequest {
         const message = globalThis.Object.create((this.messagePrototype!));
         message.pid = 0n;
         if (value !== undefined)
-            reflectionMergePartial<RequestSummaryForPlayerRequest>(this, message, value);
+            reflectionMergePartial<RequestSummariesForPlayerRequest>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RequestSummaryForPlayerRequest): RequestSummaryForPlayerRequest {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RequestSummariesForPlayerRequest): RequestSummariesForPlayerRequest {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
@@ -1697,7 +1812,7 @@ class RequestSummaryForPlayerRequest$Type extends MessageType<RequestSummaryForP
         }
         return message;
     }
-    internalBinaryWrite(message: RequestSummaryForPlayerRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+    internalBinaryWrite(message: RequestSummariesForPlayerRequest, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
         /* int64 pid = 1; */
         if (message.pid !== 0n)
             writer.tag(1, WireType.Varint).int64(message.pid);
@@ -1708,35 +1823,30 @@ class RequestSummaryForPlayerRequest$Type extends MessageType<RequestSummaryForP
     }
 }
 /**
- * @generated MessageType for protobuf message data.RequestSummaryForPlayerRequest
+ * @generated MessageType for protobuf message data.RequestSummariesForPlayerRequest
  */
-export const RequestSummaryForPlayerRequest = new RequestSummaryForPlayerRequest$Type();
+export const RequestSummariesForPlayerRequest = new RequestSummariesForPlayerRequest$Type();
 // @generated message type with reflection information, may provide speed optimized methods
-class RequestSummaryForPlayer$Type extends MessageType<RequestSummaryForPlayer> {
+class RequestSummariesForPlayerReply$Type extends MessageType<RequestSummariesForPlayerReply> {
     constructor() {
-        super("data.RequestSummaryForPlayer", [
-            { no: 1, name: "id", kind: "scalar", T: 3 /*ScalarType.INT64*/, L: 0 /*LongType.BIGINT*/ },
-            { no: 2, name: "status", kind: "scalar", T: 9 /*ScalarType.STRING*/ }
+        super("data.RequestSummariesForPlayerReply", [
+            { no: 1, name: "summaries", kind: "message", repeat: 1 /*RepeatType.PACKED*/, T: () => RequestSummary }
         ]);
     }
-    create(value?: PartialMessage<RequestSummaryForPlayer>): RequestSummaryForPlayer {
+    create(value?: PartialMessage<RequestSummariesForPlayerReply>): RequestSummariesForPlayerReply {
         const message = globalThis.Object.create((this.messagePrototype!));
-        message.id = 0n;
-        message.status = "";
+        message.summaries = [];
         if (value !== undefined)
-            reflectionMergePartial<RequestSummaryForPlayer>(this, message, value);
+            reflectionMergePartial<RequestSummariesForPlayerReply>(this, message, value);
         return message;
     }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RequestSummaryForPlayer): RequestSummaryForPlayer {
+    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RequestSummariesForPlayerReply): RequestSummariesForPlayerReply {
         let message = target ?? this.create(), end = reader.pos + length;
         while (reader.pos < end) {
             let [fieldNo, wireType] = reader.tag();
             switch (fieldNo) {
-                case /* int64 id */ 1:
-                    message.id = reader.int64().toBigInt();
-                    break;
-                case /* string status */ 2:
-                    message.status = reader.string();
+                case /* repeated data.RequestSummary summaries */ 1:
+                    message.summaries.push(RequestSummary.internalBinaryRead(reader, reader.uint32(), options));
                     break;
                 default:
                     let u = options.readUnknownField;
@@ -1749,13 +1859,10 @@ class RequestSummaryForPlayer$Type extends MessageType<RequestSummaryForPlayer> 
         }
         return message;
     }
-    internalBinaryWrite(message: RequestSummaryForPlayer, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        /* int64 id = 1; */
-        if (message.id !== 0n)
-            writer.tag(1, WireType.Varint).int64(message.id);
-        /* string status = 2; */
-        if (message.status !== "")
-            writer.tag(2, WireType.LengthDelimited).string(message.status);
+    internalBinaryWrite(message: RequestSummariesForPlayerReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
+        /* repeated data.RequestSummary summaries = 1; */
+        for (let i = 0; i < message.summaries.length; i++)
+            RequestSummary.internalBinaryWrite(message.summaries[i], writer.tag(1, WireType.LengthDelimited).fork(), options).join();
         let u = options.writeUnknownFields;
         if (u !== false)
             (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
@@ -1763,34 +1870,9 @@ class RequestSummaryForPlayer$Type extends MessageType<RequestSummaryForPlayer> 
     }
 }
 /**
- * @generated MessageType for protobuf message data.RequestSummaryForPlayer
+ * @generated MessageType for protobuf message data.RequestSummariesForPlayerReply
  */
-export const RequestSummaryForPlayer = new RequestSummaryForPlayer$Type();
-// @generated message type with reflection information, may provide speed optimized methods
-class RequestSummaryForPlayerReply$Type extends MessageType<RequestSummaryForPlayerReply> {
-    constructor() {
-        super("data.RequestSummaryForPlayerReply", []);
-    }
-    create(value?: PartialMessage<RequestSummaryForPlayerReply>): RequestSummaryForPlayerReply {
-        const message = globalThis.Object.create((this.messagePrototype!));
-        if (value !== undefined)
-            reflectionMergePartial<RequestSummaryForPlayerReply>(this, message, value);
-        return message;
-    }
-    internalBinaryRead(reader: IBinaryReader, length: number, options: BinaryReadOptions, target?: RequestSummaryForPlayerReply): RequestSummaryForPlayerReply {
-        return target ?? this.create();
-    }
-    internalBinaryWrite(message: RequestSummaryForPlayerReply, writer: IBinaryWriter, options: BinaryWriteOptions): IBinaryWriter {
-        let u = options.writeUnknownFields;
-        if (u !== false)
-            (u == true ? UnknownFieldHandler.onWrite : u)(this.typeName, message, writer);
-        return writer;
-    }
-}
-/**
- * @generated MessageType for protobuf message data.RequestSummaryForPlayerReply
- */
-export const RequestSummaryForPlayerReply = new RequestSummaryForPlayerReply$Type();
+export const RequestSummariesForPlayerReply = new RequestSummariesForPlayerReply$Type();
 /**
  * @generated ServiceType for protobuf service data.Wish
  */
@@ -1805,6 +1887,7 @@ export const Wish = new ServiceType("data.Wish", [
     { name: "RevokePatchReleased", options: {}, I: RevokePatchReleasedRequest, O: RevokePatchReleasedReply },
     { name: "ReleasedPatches", options: {}, I: ReleasedPatchesRequest, O: ReleasedPatchesReply },
     { name: "MostRecentPatch", options: {}, I: MostRecentPatchRequest, O: MostRecentPatchReply },
+    { name: "NewRequest", options: {}, I: NewRequestRequest, O: NewRequestReply },
     { name: "AllRequestSummaries", options: {}, I: AllRequestSummariesRequest, O: AllRequestSummariesReply },
-    { name: "RequestSummaryForPlayer", options: {}, I: RequestSummaryForPlayerRequest, O: RequestSummaryForPlayerReply }
+    { name: "RequestSummariesForPlayer", options: {}, I: RequestSummariesForPlayerRequest, O: RequestSummariesForPlayerReply }
 ]);
